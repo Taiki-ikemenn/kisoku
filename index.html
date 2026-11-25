@@ -116,6 +116,10 @@ h1{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 .ver{font:500 11px var(--mono);letter-spacing:.14em;color:var(--mute)}
 .gh{width:100%;display:flex;align-items:center;gap:10px;margin:8px 0 6px;padding:11px 14px;background:rgba(21,24,27,.9);border:1px solid var(--line);color:var(--paper);font:700 15px var(--sans);text-align:left;border-radius:3px}.gh b{margin-left:auto;font:500 12px var(--mono);color:var(--mute)}.gh svg{transition:transform .25s}.gh.open svg{transform:rotate(180deg)}.gh:hover{border-color:var(--mute)}
 #listQ{width:100%;margin:6px 0 10px;padding:11px 14px;background:var(--bg);border:2px solid var(--line);color:var(--paper);font:500 15px var(--sans);border-radius:3px;outline:none}#listQ:focus{border-color:var(--paper)}
+.mcard{display:flex;gap:14px;align-items:center;width:100%;text-align:left;padding:14px 16px;margin:8px 0;background:rgba(21,24,27,.92);border:1px solid var(--line);color:var(--paper);border-radius:3px;font-family:var(--sans)}.mcard:hover{border-color:var(--paper);transform:translateY(-2px)}.mcard>div{flex:1}.mcard b{display:block;font:900 17px var(--sans);letter-spacing:.08em}.mcard span{display:block;font-size:12.5px;color:#b9c1c6;line-height:1.6;margin-top:2px}.mcard em{display:block;font:500 12px var(--mono);color:#e0a63a;font-style:normal;margin-top:4px}
+.agrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.ach{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);background:rgba(21,24,27,.9);border-radius:3px}.ach.lock{opacity:.38}.ach b{display:block;font:700 14px var(--sans)}.ach span{font-size:12px;color:#b9c1c6;line-height:1.5}.ach.got{border-color:#e0a63a}
+@media(max-width:560px){.agrid{grid-template-columns:1fr}}
+.newa{margin:10px 0 0;text-align:left;font-size:13px;color:#e0a63a;line-height:1.8}
 .hint2{font:500 12px var(--mono);letter-spacing:.06em;color:var(--mute);margin:6px 0 10px}
 .rc{cursor:pointer;transition:transform .15s,box-shadow .15s}.rc:hover{transform:translateX(3px);box-shadow:-3px 0 0 rgba(233,229,218,.35)}
 .banall{position:relative;display:inline-flex;align-items:center;gap:3px}.banall::after{content:"";position:absolute;left:-5px;right:-5px;top:50%;height:4px;background:var(--red);border-radius:2px;transform:rotate(-14deg)}
@@ -207,7 +211,7 @@ h1 span{color:var(--red)}
 <body>
 <div id="app">
   <div id="bar">
-    <span class="zone">規則を守れ!</span><span class="ver">v2.1.0</span><span id="info"></span><span class="sp"></span>
+    <span class="zone">規則を守れ!</span><span class="ver">v2.2.0</span><span id="info"></span><span class="sp"></span>
     <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
   </div>
   <div id="main">
@@ -225,8 +229,8 @@ h1 span{color:var(--red)}
   <div class="sub">規則を守って1Fに着け!</div>
   <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
   <div class="how" id="how"></div>
-  <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
-  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><div class="ver" style="text-align:center">v2.1.0</div>
+  <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="modeBtn">モード</button><button class="btn ghost" id="achBtn">実績</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><p class="lead" style="margin-top:6px;font-size:13px;color:#e9e5da" id="rank"></p><div class="ver" style="text-align:center">v2.2.0</div>
 </div></section>
 
 <section id="brief" class="screen"><div class="box">
@@ -236,13 +240,17 @@ h1 span{color:var(--red)}
   <p style="text-align:center;color:#8d979e;font-size:12px;margin-top:12px;letter-spacing:.08em" id="bHint"></p>
 </div></section>
 
+<section id="modes" class="screen"><div class="box"><div class="k" style="text-align:center">MODE</div><h2 style="text-align:center;margin:4px 0 6px">モードをえらぶ</h2><p class="lead" style="text-align:center;font-size:13px">どのモードも、規則は毎回ランダム。</p><div id="modeList"></div><div class="row" style="margin-top:14px"><button class="btn ghost" id="modesClose">戻る</button></div></div></section>
+
+<section id="ach" class="screen"><div class="box"><div class="k" style="text-align:center">RECORD</div><h2 style="text-align:center;margin:4px 0 6px" id="achTitle"></h2><p class="lead" style="text-align:center;font-size:13px" id="achSub"></p><div class="agrid" id="achList"></div><div class="row" style="margin-top:14px"><button class="btn ghost" id="achClose">戻る</button></div></div></section>
+
 <section id="dead" class="screen"><div class="box">
   <p class="big">違反</p><div id="dRule"></div><div class="why" id="dWhy"></div>
   <div class="row"><button class="btn red" id="retryBtn">この階をやり直す</button><button class="btn ghost" id="newBtn">最初から（新しい規則）</button></div>
 </div></section>
 
 <section id="end" class="screen"><div class="box">
-  <h2>脱出</h2><p id="endText"></p>
+  <h2 id="endH">脱出</h2><p id="endText"></p>
   <div class="row" style="margin-top:20px"><button class="btn red" id="againBtn">もう一度（新しい規則）</button><button class="btn ghost" id="endMenu">タイトル</button></div>
 </div></section>
 
@@ -264,7 +272,7 @@ h1 span{color:var(--red)}
   <div id="sndList"></div>
   <div class="hdr">キーボード / コントローラー</div>
   <div class="keys" id="keyHelp"></div>
-  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.1.0</div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.2.0</div>
 </div></section>
 
 <script>
@@ -706,7 +714,7 @@ function solve(fl){
 
 function genFloor(n,seed,rulesMust){
   const rng=mulberry(seed);
-  const count=clamp(2+Math.floor((10-n)/3)+(n===10?1:0)+1,3,6);
+  const count=clamp(clamp(2+Math.floor((10-n)/3)+(n===10?1:0)+1,3,6)+(G.extra||0),3,9);
   for(let attempt=0;attempt<40;attempt++){
     const cnt=attempt>25?Math.max(2,count-2):attempt>14?count-1:count;
     const rules=pickRules(cnt,rng,n,null);
@@ -720,7 +728,7 @@ function genFloor(n,seed,rulesMust){
 }
 
 /* ================= ゲーム状態 ================= */
-const G={mode:"title",run:null,floor:10,seed:0,deaths:store.get("kd_deaths",0),best:store.get("kd_best",11),fl:null};
+const G={mode:"title",gm:"normal",lap:0,lives:3,desc:0,miss:0,runT:0,run:null,floor:10,seed:0,deaths:store.get("kd_deaths",0),best:store.get("kd_best",11),fl:null};
 const cv=$("#stage"),ctx=cv.getContext("2d");
 let sc=1,ox=0,oy=0,dpr=1;
 function fit(){ const r=cv.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2); cv.width=Math.max(10,Math.floor(r.width*dpr)); cv.height=Math.max(10,Math.floor(r.height*dpr)); sc=Math.min(cv.width/DW,cv.height/DH); ox=(cv.width-DW*sc)/2; oy=(cv.height-DH*sc)/2; }
@@ -750,16 +758,123 @@ function renderSheet(bad){
     <div style="font-size:13px;line-height:1.9;color:#b9c1c6">${S.ctl==="tap"?"行き先を1回タップ：経路を表示<br>もう1回タップ：出発<br>":""}下のボタン：歩く / 走る / しゃがむ<br>設定から操作方法を変えられる</div>`;
 }
 
+/* ---- 記録・実績・モード ---- */
+const PROF=(()=>{ const p=store.get("ks_prof",null)||{}; return {ach:p.ach||{},seen:p.seen||{},st:Object.assign({runs:0,clears:0,floors:0,deaths:0,items:0,kinds:{},modes:{}},p.st||{}),rec:Object.assign({ta:null,one:0,endless:0,daily:{},streak:{last:"",n:0}},p.rec||{})}; })();
+const saveProf=()=>store.set("ks_prof",PROF);
+const pad2=n=>String(n).padStart(2,"0");
+const dstr=d=>d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+const todayStr=()=>dstr(new Date());
+const dailySeed=()=>(parseInt(todayStr().replace(/-/g,""),10)*37+12345)%1000000007;
+const fmtT=t=>{ t=Math.max(0,t); const m=Math.floor(t/60),x=t-m*60; return m+":"+(x<10?"0":"")+x.toFixed(1); };
+const MODES=[
+ {id:"normal",n:"ふつう",ic:"stairs",d:"10Fから1Fへ。違反したらその階をやり直せる。「続きから」も使える。"},
+ {id:"daily",n:"今日の挑戦",ic:"clock",d:"その日は全員が同じ規則・同じ階。日付が変わると新しい挑戦になる。"},
+ {id:"time",n:"タイムアタック",ic:"timer",d:"10Fから1Fまでの合計タイムを競う。やり直した時間も加算される。"},
+ {id:"oneshot",n:"一発勝負",ic:"bolt",d:"違反したらその場で終了。何階まで降りられるか挑戦。"},
+ {id:"endless",n:"耐久",ic:"down",d:"1Fに着いたら10Fに戻る。1周ごとに規則が1つ増える。ライフは3つ。"}];
+const ACH=[
+ {id:"first",n:"はじめの一歩",d:"階段を1回降りる",ic:"down"},
+ {id:"clear1",n:"脱出",d:"1Fの出口に着く",ic:"exit"},
+ {id:"clean",n:"完全従順",d:"違反0回で1Fに着く",ic:"check"},
+ {id:"t10",n:"急ぎ足",d:"タイムアタックか今日の挑戦を10分以内でクリア",ic:"timer"},
+ {id:"t6",n:"神速",d:"タイムアタックか今日の挑戦を6分以内でクリア",ic:"run"},
+ {id:"daily1",n:"今日の一歩",d:"今日の挑戦をクリア",ic:"clock"},
+ {id:"streak3",n:"3日連続",d:"今日の挑戦を3日続けてクリア",ic:"clock"},
+ {id:"streak7",n:"1週間皆勤",d:"今日の挑戦を7日続けてクリア",ic:"clock"},
+ {id:"one5",n:"慎重派",d:"一発勝負で5階降りる",ic:"bolt"},
+ {id:"one10",n:"一発で脱出",d:"一発勝負で1Fに着く",ic:"bolt"},
+ {id:"end2",n:"二周目",d:"耐久で2周目に入る",ic:"down"},
+ {id:"end3",n:"三周目",d:"耐久で3周目に入る",ic:"down"},
+ {id:"it10",n:"拾い物",d:"アイテムを10個拾う",ic:"hand"},
+ {id:"it100",n:"拾い集め",d:"アイテムを100個拾う",ic:"box"},
+ {id:"kinds",n:"コレクター",d:"10種類のアイテムをすべて拾う",ic:"diamond"},
+ {id:"umb",n:"傘で降りた",d:"傘を持ったまま階段を降りる",ic:"umbrella"},
+ {id:"s50",n:"規則50",d:"50種類の規則に出会う",ic:"map"},
+ {id:"s150",n:"規則150",d:"150種類の規則に出会う",ic:"map"},
+ {id:"s300",n:"規則300",d:"300種類の規則に出会う",ic:"map"},
+ {id:"s500",n:"規則図鑑完成",d:"500種類すべての規則に出会う",ic:"map"},
+ {id:"d10",n:"違反10回",d:"通算10回違反する",ic:"bolt"},
+ {id:"d100",n:"違反の達人",d:"通算100回違反する",ic:"bolt"},
+ {id:"f100",n:"100階降りた",d:"通算100階降りる",ic:"stairs"},
+ {id:"f1000",n:"1000階降りた",d:"通算1000階降りる",ic:"stairs"},
+ {id:"modes",n:"全モード体験",d:"5つのモードをすべて遊ぶ",ic:"gear"}];
+const TITLES=[[0,"新入り"],[3,"見習い"],[6,"規則に慣れた人"],[10,"規則通"],[14,"優等生"],[19,"規則の達人"],[ACH.length,"規則そのもの"]];
+const titleOf=()=>{ const n=Object.keys(PROF.ach).length; let t=TITLES[0][1]; TITLES.forEach(([k,v])=>{ if(n>=k) t=v; }); return t; };
+const tq=[]; let tb=false;
+function tnext(){ const a=tq.shift(); if(!a){ tb=false; return; } tb=true; say("実績「"+a.n+"」を達成","check"); setTimeout(tnext,2800); }
+function unlock(id){ if(PROF.ach[id]) return; PROF.ach[id]=Date.now(); const a=ACH.find(x=>x.id===id); (G.newAch=G.newAch||[]).push(a); tq.push(a); if(!tb) tnext(); }
+function checkAch(){
+  const st=PROF.st,seen=Object.keys(PROF.seen).length;
+  if(st.floors>=1) unlock("first"); if(st.clears>=1) unlock("clear1");
+  if(st.items>=10) unlock("it10"); if(st.items>=100) unlock("it100"); if(Object.keys(st.kinds).length>=10) unlock("kinds");
+  [50,150,300,500].forEach(k=>{ if(seen>=k) unlock("s"+k); });
+  if(st.deaths>=10) unlock("d10"); if(st.deaths>=100) unlock("d100");
+  if(st.floors>=100) unlock("f100"); if(st.floors>=1000) unlock("f1000");
+  if(MODES.every(m=>st.modes[m.id])) unlock("modes");
+  if(PROF.rec.streak.n>=3) unlock("streak3"); if(PROF.rec.streak.n>=7) unlock("streak7");
+  saveProf();
+}
+function infoText(){
+  const gm=G.gm||"normal"; if(gm==="normal") return `違反 ${G.deaths}`;
+  const t=(G.runT||0)+((G.run&&!G.run.over&&G.mode==="play")?G.run.t:0), nm=MODES.find(m=>m.id===gm).n;
+  return nm+"　"+(gm==="endless"?`${G.lap+1}周目　ライフ ${G.lives}`:gm==="oneshot"?`降りた ${G.desc}階`:`TIME ${fmtT(t)}`)+`　違反 ${G.miss}`;
+}
+function refreshInfo(){ const t=infoText(); if(refreshInfo.l!==t){ refreshInfo.l=t; $("#info").textContent=t; } }
+function initRun(gm){ G.gm=gm; G.runT=0; G.miss=0; G.lap=0; G.lives=3; G.desc=0; G.newAch=[]; G.dieEnd=false; PROF.st.runs++; PROF.st.modes[gm]=1; saveProf(); }
+function modeRecord(id){
+  const r=PROF.rec;
+  if(id==="daily"){ const d=r.daily[todayStr()]; return d?(d.clear?`今日：クリア ${fmtT(d.time)}　違反${d.miss}回`:`今日：${d.reached}階まで降りた`):"今日：まだ挑戦していない"; }
+  if(id==="time") return r.ta!=null?`ベスト ${fmtT(r.ta)}`:"ベスト：まだ記録なし";
+  if(id==="oneshot") return r.one?`最高 ${r.one}階降りた`:"最高：まだ記録なし";
+  if(id==="endless") return r.endless?`最高 ${r.endless}階降りた`:"最高：まだ記録なし";
+  return PROF.st.clears?`クリア ${PROF.st.clears}回`:"";
+}
+function buildModes(){
+  $("#modeList").innerHTML=MODES.map(m=>`<button class="mcard" data-m="${m.id}" type="button">${svg(m.ic,{size:34,color:"#e9e5da"})}<div><b>${m.n}</b><span>${m.d}</span><em>${modeRecord(m.id)}${m.id==="daily"?"　（"+todayStr()+"）":""}</em></div></button>`).join("");
+  $("#modeList").querySelectorAll(".mcard").forEach(b=>b.addEventListener("click",()=>{ audio(); newRun(b.dataset.m); }));
+}
+function buildAch(){
+  const n=Object.keys(PROF.ach).length, seen=Object.keys(PROF.seen).length, st=PROF.st;
+  $("#achTitle").textContent="称号：「"+titleOf()+"」";
+  $("#achSub").innerHTML=`実績 ${n} / ${ACH.length}　／　出会った規則 ${seen} / ${RULES.length}<br>プレイ ${st.runs}回　クリア ${st.clears}回　降りた階 ${st.floors}　違反 ${st.deaths}回　拾った物 ${st.items}`;
+  $("#achList").innerHTML=ACH.map(a=>{ const g=!!PROF.ach[a.id]; return `<div class="ach ${g?"got":"lock"}">${svg(g?a.ic:"wall",{size:28,color:g?"#e0a63a":"#8d979e"})}<div><b>${g?a.n:"？？？"}</b><span>${a.d}</span></div></div>`; }).join("");
+}
+function showResult(clear){
+  const gm=G.gm,t=G.runT; let h=clear?"脱出":"終了", lines=[];
+  const rec=[];
+  if(clear){
+    PROF.st.clears++; lines.push("1階の出口に到達した。<br>あなたは、すべての階の規則に従った。");
+    if(G.miss===0) unlock("clean");
+    if(gm==="time"||gm==="daily"){ if(t<=600) unlock("t10"); if(t<=360) unlock("t6"); }
+    if(gm==="time"&&(PROF.rec.ta==null||t<PROF.rec.ta)){ PROF.rec.ta=t; rec.push("タイム新記録"); }
+    if(gm==="oneshot"){ PROF.rec.one=Math.max(PROF.rec.one,10); unlock("one10"); }
+    if(gm==="daily"){ const d=PROF.rec.daily[todayStr()]||{reached:0}; if(!d.clear||t<d.time){ d.time=t; d.miss=G.miss; rec.push("今日の最短記録"); } d.clear=true; d.reached=10; PROF.rec.daily[todayStr()]=d; unlock("daily1");
+      const y=new Date(); y.setDate(y.getDate()-1); const sk=PROF.rec.streak; if(sk.last!==todayStr()){ sk.n=(sk.last===dstr(y))?sk.n+1:1; sk.last=todayStr(); rec.push(sk.n+"日連続クリア"); } }
+  } else {
+    lines.push(gm==="endless"?`ライフがなくなった。<br>${G.desc}階降りた（${G.lap+1}周目）。`:`違反でゲームオーバー。<br>${G.desc}階降りた。`);
+    if(gm==="oneshot"){ if(G.desc>PROF.rec.one){ PROF.rec.one=G.desc; rec.push("最高記録"); } if(G.desc>=5) unlock("one5"); }
+  }
+  if(gm==="endless"&&G.desc>PROF.rec.endless){ PROF.rec.endless=G.desc; rec.push("耐久の最高記録"); }
+  const chips=clear?[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<span style="--i:${i}">${f}F</span>`).join(""):"";
+  const meta=[]; if(gm!=="normal"&&gm!=="oneshot"&&gm!=="endless") meta.push("タイム "+fmtT(t)); meta.push("違反 "+G.miss+"回");
+  checkAch(); saveProf();
+  $("#endH").textContent=h;
+  $("#endText").innerHTML=lines.join("")+(clear?`<div class="chips">${chips}</div>`:"<br>")+`<span style="color:#8d979e">${MODES.find(m=>m.id===gm).n}　${meta.join("　")}</span>`
+    +(rec.length?`<div class="newa">${rec.map(x=>"★ "+x).join("<br>")}</div>`:"")+((G.newAch||[]).length?`<div class="newa">${G.newAch.map(a=>"実績「"+a.n+"」").join("<br>")}</div>`:"");
+  G.newAch=[]; showScreen("end"); G.mode="end";
+}
+
 /* ---- ランの開始 ---- */
-function newRun(){ G.seed=(Math.random()*1e9)|0; G.floor=10; G.mode="fade"; doors("10F","",()=>enterFloor(10)); }
+function newRun(gm){ gm=gm||G.gm||"normal"; initRun(gm); G.seed=gm==="daily"?dailySeed():(Math.random()*1e9)|0; G.floor=10; G.mode="fade"; refreshInfo(); doors("10F","",()=>enterFloor(10)); }
 function enterFloor(n){
-  store.set("ks_save",{v:VERSION,seed:G.seed,floor:n});
-  G.floor=n; G.fl=genFloor(n,G.seed*7+n*131);
+  if(G.gm==="normal") store.set("ks_save",{v:VERSION,seed:G.seed,floor:n});
+  G.floor=n; G.extra=G.gm==="endless"?G.lap:0; G.fl=genFloor(n,G.seed*7+n*131+G.lap*977);
+  G.fl.rules.forEach(r=>{ PROF.seen[r.id]=1; }); checkAch();
   buildRun(); G.mode="brief";
   $("#bFloor").textContent=n+"F"; $("#bSub").textContent=n===1?"出口の階":"出口は 1F"; $("#bMap").innerHTML=svg("map",{size:18,color:"#8d979e"})+"マップ："+(G.fl.map?G.fl.map.name:"");
   $("#bHint").textContent={tap:"移動：行き先を1回タップで経路を表示、もう1回タップで出発",stick:"移動：ジョイスティックを倒す",dpad:"移動：方向ボタンを押す",gamepad:"移動：左スティックか十字キー",keyboard:"移動：矢印キーかWASD"}[S.ctl];
   $("#bRules").innerHTML=G.fl.rules.map((r,i)=>cardHTML(r,G.fl,"",i)).join("");
-  $("#info").textContent=`違反 ${G.deaths}`;
+  refreshInfo();
   renderSheet(); showScreen("brief");
 }
 function buildRun(){
@@ -905,9 +1020,9 @@ function mkCtx(r){
   return c;
 }
 function die(rule,why){
-  const r=G.run; if(!r||r.over) return; G.lastWhy=why+"@"+rule.id+" t="+r.t.toFixed(2)+" px="+r.px.toFixed(0)+","+r.py.toFixed(0)+" st="+r.st; r.over=true; G.mode="dead"; G.deaths++; store.set("kd_deaths",G.deaths); $("#info").textContent=`違反 ${G.deaths}`;
+  const r=G.run; if(!r||r.over) return; G.lastWhy=why+"@"+rule.id+" t="+r.t.toFixed(2)+" px="+r.px.toFixed(0)+","+r.py.toFixed(0)+" st="+r.st; r.over=true; G.mode="dead"; G.deaths++; store.set("kd_deaths",G.deaths); G.miss++; G.runT+=r.t; PROF.st.deaths++; if(G.gm==="oneshot") G.dieEnd=true; if(G.gm==="endless"){ G.lives--; if(G.lives<=0) G.dieEnd=true; } checkAch(); refreshInfo();
   sfx.die(); renderSheet(rule.id);
-  setTimeout(()=>{ if(G.run!==r) return; $("#dRule").innerHTML=cardHTML(rule,G.fl,"bad"); $("#dWhy").textContent=why; showScreen("dead"); },800);
+  setTimeout(()=>{ if(G.run!==r) return; $("#dRule").innerHTML=cardHTML(rule,G.fl,"bad"); $("#dWhy").textContent=why; $("#retryBtn").style.display=G.dieEnd?"none":""; $("#newBtn").textContent=G.dieEnd?"結果を見る":"最初から（新しい規則）"; showScreen("dead"); },800);
 }
 function doors(from,to,cb){
   const d=$("#doors"),n=$("#dNum"); n.textContent=from; d.classList.add("closed");
@@ -916,17 +1031,18 @@ function doors(from,to,cb){
 }
 function descend(){
   const r=G.run; r.over=true; G.mode="fade"; sfx.down();
-  if(G.floor<G.best){ G.best=G.floor; store.set("kd_best",G.best); }
-  const from=G.floor;
+  if(G.gm==="normal"&&G.floor<G.best){ G.best=G.floor; store.set("kd_best",G.best); }
+  const from=G.floor; G.runT+=r.t; G.desc++; PROF.st.floors++; if(r.inv.includes(4)) unlock("umb");
+  if(G.gm==="daily"){ const d=PROF.rec.daily[todayStr()]||{reached:0}; d.reached=Math.max(d.reached,G.desc); PROF.rec.daily[todayStr()]=d; }
+  if(G.gm==="endless"&&G.desc>PROF.rec.endless) PROF.rec.endless=G.desc;
+  checkAch(); refreshInfo();
+  if(from===1&&G.gm==="endless"){ G.lap++; if(G.lap>=1) unlock("end2"); if(G.lap>=2) unlock("end3"); checkAch(); doors("1F","10F",()=>enterFloor(10)); return; }
   if(from===1) doors("1F","出口",()=>{ sfx.clear(); ending(); });
   else doors(from+"F",(from-1)+"F",()=>enterFloor(from-1));
 }
 function ending(){
-  store.set("ks_save",null);
-  G.best=0; store.set("kd_best",0);
-  const chips=[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<span style="--i:${i}">${f}F</span>`).join("");
-  $("#endText").innerHTML=`1階の出口に到達した。<br>あなたは、すべての階の規則に従った。<div class="chips">${chips}</div><span style="color:#8d979e">総違反回数：${G.deaths}</span>`;
-  showScreen("end"); G.mode="end";
+  if(G.gm==="normal"){ store.set("ks_save",null); G.best=0; store.set("kd_best",0); }
+  showResult(true);
 }
 
 /* ---- 1フレームの更新 ---- */
@@ -936,7 +1052,7 @@ function onEnterTile(r,t){
   if(it>=2){
     { const w0=checkFrame(mkCtxMoving(r,true)); if(w0) return die(w0[0],w0[1]); }
     if(r.inv.length>=CAP) say("持ち物がいっぱいで拾えない","hand");
-    else { r.inv.push(it); fl.itemGrid[i]=0; fl.items=fl.items.filter(o=>!(o.x===t.x&&o.y===t.y)); say(ITK[ITC[it]].n+"を拾った",ITC[it]); sfx.pick(); }
+    else { r.inv.push(it); fl.itemGrid[i]=0; fl.items=fl.items.filter(o=>!(o.x===t.x&&o.y===t.y)); say(ITK[ITC[it]].n+"を拾った",ITC[it]); sfx.pick(); PROF.st.items++; PROF.st.kinds[ITC[it]]=1; if(PROF.st.items%5===0||Object.keys(PROF.st.kinds).length>=10) checkAch(); }
   }
   const st=fl.stairs.find(s=>s.x===t.x&&s.y===t.y);
   if(st){ const c=mkCtx(r); for(const q of fl.rules){ if(q.stair){ const w=q.stair(c,st); if(w) return die(q,w); } } descend(); }
@@ -965,7 +1081,7 @@ function mkCtxMoving(r,m){ const c=mkCtx(r); c.moving=m; c.dir=(m&&r.dirNow!==un
 function checkFrame(c){ for(const q of G.fl.rules){ if(q.frame){ const w=q.frame(c); if(w) return [q,w]; } } return null; }
 function update(dt){
   const r=G.run,fl=G.fl; if(!r||!r.started||r.over||G.paused||G.mode!=="play") return;
-  moveStep(r); r.t+=dt; advance(r,dt); if(r.over) return;
+  moveStep(r); r.t+=dt; advance(r,dt); if(G.gm!=="normal") refreshInfo(); if(r.over) return;
   if(!r.seg&&!r.route.length) r.still+=dt; else r.still=0;
   const c=mkCtx(r); const w=checkFrame(c); if(w) return die(w[0],w[1]);
   // 演出の補間（ゆっくり）
@@ -1079,7 +1195,7 @@ let last=0;
 function loop(ts){ requestAnimationFrame(loop); const dt=Math.min(.05,(ts-last)/1000||0); last=ts; AT=ts/1000; pollPad(); update(dt); draw(); }
 
 /* ================= ヘルプ ================= */
-const VERSION="2.1.0";
+const VERSION="2.2.0";
 const OBJDESC={pc:"モニターの絵",printer:"紙が出る箱の絵",water:"背の高いタンクの絵",tv:"アンテナの付いた画面の絵",desk:"天板と脚の絵",plant:"葉っぱの絵",vending:"窓とボタンの絵",door:"ドアノブの付いた長方形の絵",clock:"丸い文字盤の絵",switch:"縦長の板の絵",bin:"ふたの付いたかごの絵",locker:"真ん中に線の入った長方形の絵",sofa:"ひじ掛けの付いた椅子の絵",lamp:"電球の絵"};
 const LAMPX="フロアライトとは、床に立てる背の高い照明のこと。「フロアライトの光の中に入ってはならない」規則のときだけ、まわりに黄色い点線の光の円が出る。";
 const PT={r:"赤いタイル（斜線）",b:"青いタイル（ドット）",y:"黄色いタイル（横線）",g:"緑のタイル（格子）"};
@@ -1440,7 +1556,7 @@ function buildHow(){
 }
 function buildList(){
   const groups={}; RULES.forEach(r=>{(groups[r.g]=groups[r.g]||[]).push(r);});
-  $("#listK").textContent=`全${RULES.length}種の規則`;
+  $("#listK").textContent=`全${RULES.length}種の規則（出会った規則 ${Object.keys(PROF.seen).length}）`;
   const q=($("#listQ").value||"").trim(), body=$("#listBody");
   if(q){
     const m=RULES.filter(r=>r.text.includes(q)||(HELP[r.id]&&HELP[r.id].w.includes(q)));
@@ -1451,17 +1567,21 @@ function buildList(){
   body.querySelectorAll(".gh").forEach(h=>h.addEventListener("click",()=>{ const g=h.dataset.g,box=body.querySelector(`[data-gg="${g}"]`); const open=box.style.display==="none"; box.style.display=open?"grid":"none"; h.classList.toggle("open",open); if(open&&!box.innerHTML) box.innerHTML=(groups[g]||[]).map(r=>cardHTML(r,null)).join(""); }));
 }
 $("#listQ").addEventListener("input",buildList);
-$("#startBtn").addEventListener("click",()=>{ audio(); newRun(); });
-$("#contBtn").addEventListener("click",()=>{ const sv=store.get("ks_save",null); if(!sv) return; audio(); G.seed=sv.seed; G.floor=sv.floor; G.mode="fade"; doors(sv.floor+"F","",()=>enterFloor(sv.floor)); });
+$("#startBtn").addEventListener("click",()=>{ audio(); newRun("normal"); });
+$("#modeBtn").addEventListener("click",()=>{ buildModes(); showScreen("modes"); });
+$("#achBtn").addEventListener("click",()=>{ buildAch(); showScreen("ach"); });
+$("#modesClose").addEventListener("click",()=>{ titleInfo(); showScreen("title"); });
+$("#achClose").addEventListener("click",()=>{ titleInfo(); showScreen("title"); });
+$("#contBtn").addEventListener("click",()=>{ const sv=store.get("ks_save",null); if(!sv) return; audio(); initRun("normal"); G.seed=sv.seed; G.floor=sv.floor; G.mode="fade"; doors(sv.floor+"F","",()=>enterFloor(sv.floor)); });
 $("#allBtn").addEventListener("click",()=>{ $("#listQ").value=""; buildList(); showScreen("list"); G._back="title"; });
 $("#listBtn").addEventListener("click",()=>{ $("#listQ").value=""; buildList(); G._back=G.mode; if(G.mode==="play") G.paused=true; showScreen("list"); });
 $("#listClose").addEventListener("click",()=>{ if(G._back==="title"||!G.run) showScreen("title"); else if(G._back==="play"){ G.paused=false; showScreen(null); } else if(G._back==="brief") showScreen("brief"); else if(G._back==="dead") showScreen("dead"); else showScreen("title"); });
-$("#menuBtn").addEventListener("click",()=>{ G.mode="title"; titleInfo(); showScreen("title"); });
+$("#menuBtn").addEventListener("click",()=>{ G.mode="title"; G.gm="normal"; refreshInfo(); titleInfo(); showScreen("title"); });
 $("#rulesBtn").addEventListener("click",()=>$("#sheet").classList.toggle("show"));
 $("#retryBtn").addEventListener("click",()=>{ audio(); enterFloor(G.floor); });
-$("#newBtn").addEventListener("click",()=>{ audio(); newRun(); });
+$("#newBtn").addEventListener("click",()=>{ audio(); if(G.dieEnd){ G.dieEnd=false; showResult(false); } else newRun(); });
 $("#againBtn").addEventListener("click",()=>{ audio(); newRun(); });
-$("#endMenu").addEventListener("click",()=>{ G.mode="title"; titleInfo(); showScreen("title"); });
+$("#endMenu").addEventListener("click",()=>{ G.mode="title"; G.gm="normal"; refreshInfo(); titleInfo(); showScreen("title"); });
 /* ---- 設定画面 ---- */
 function dropdown(el,opts,get,set){
   el.classList.add("dd");
@@ -1510,6 +1630,7 @@ function titleInfo(){
   const sv=store.get("ks_save",null), ok=sv&&sv.v===VERSION&&sv.floor>=1&&sv.floor<=10;
   const cb=$("#contBtn"); cb.style.display=ok?"":"none"; if(ok) cb.textContent=`続きから（${sv.floor}F）`;
   $("#startBtn").textContent=ok?"最初から":"スタート"; $("#startBtn").className=ok?"btn ghost":"btn red";
+  { const n=Object.keys(PROF.ach).length, d=PROF.rec.daily[todayStr()]; $("#rank").textContent=`称号：${titleOf()}　実績 ${n}/${ACH.length}　図鑑 ${Object.keys(PROF.seen).length}/${RULES.length}`+(d&&d.clear?"":"　今日の挑戦：未クリア"); }
   $("#best").textContent=G.best<=10?(G.best===0?"最高記録：脱出済み":`最高記録：${G.best}F まで到達`):"規則は全部で"+RULES.length+"種類。毎回ランダムに選ばれる。"; }
 
 applyCalm(); applyCtl(); buildTower(); fit(); buildHow(); titleInfo(); renderStance(); requestAnimationFrame(loop);
