@@ -113,6 +113,44 @@ h1{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 #doors.closed .dl,#doors.closed .dr{transform:none}
 #dNum{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);font:900 clamp(48px,11vw,110px) var(--sans);letter-spacing:.06em;opacity:0;transition:opacity .3s .35s,transform .5s .35s;color:var(--paper);white-space:nowrap}
 #doors.closed #dNum{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.ver{font:500 11px var(--mono);letter-spacing:.14em;color:var(--mute)}
+.hint2{font:500 12px var(--mono);letter-spacing:.06em;color:var(--mute);margin:6px 0 10px}
+.rc{cursor:pointer;transition:transform .15s,box-shadow .15s}.rc:hover{transform:translateX(3px);box-shadow:-3px 0 0 rgba(233,229,218,.35)}
+.rc .q{position:absolute;right:7px;bottom:5px;width:18px;height:18px;border:2px solid #8a8f93;border-radius:50%;font:700 11px var(--mono);display:flex;align-items:center;justify-content:center;color:#6a6f73}
+#help{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
+#help.on{display:flex}
+#hbk{position:absolute;inset:0;background:rgba(5,6,7,.78);animation:fadeIn .25s both}
+#hbox{position:relative;width:min(680px,100%);max-height:100%;overflow:auto;background:#12161a;border:1px solid var(--line);border-top:6px solid var(--red);padding:20px;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+#hx{position:absolute;right:10px;top:10px;width:38px;height:38px;border:1px solid var(--line);background:transparent;border-radius:3px;z-index:2}
+#hx::before,#hx::after{content:"";position:absolute;left:10px;right:10px;top:17px;height:3px;background:var(--paper);transform:rotate(45deg)}
+#hx::after{transform:rotate(-45deg)}
+.hhead{display:flex;gap:14px;align-items:center;background:var(--paper);color:var(--ink);padding:14px;border-left:8px solid var(--red);margin:0 44px 14px 0}
+.hhead.must{border-left-color:var(--blue)}
+.hico{display:flex;align-items:center;gap:4px;flex:none}.hico .plus{font:700 18px var(--mono);color:#777}.hico .sw{width:30px;height:30px}
+.htt{font-weight:900;font-size:18px;line-height:1.5}
+.htag{font:700 11px var(--mono);letter-spacing:.2em;color:var(--red2);margin-right:8px}.must .htag{color:var(--blue)}
+.hgrp{display:inline-block;font:500 11px var(--mono);border:1px solid #9a9a92;padding:0 6px;margin-top:4px;color:#555}
+.hsec{border:1px solid var(--line);padding:12px 14px;margin:10px 0;background:rgba(21,24,27,.8);animation:rise .45s both}
+.hsec.ng{border-color:#6b2a24;background:rgba(80,20,16,.35)}.hsec.ok{border-color:#27466f;background:rgba(30,60,110,.22)}.hsec.base{opacity:.8}
+.hh{display:flex;align-items:center;gap:8px;font-weight:900;font-size:14px;letter-spacing:.08em;margin-bottom:6px}
+.hsec p{margin:0;line-height:1.85;font-size:14.5px;color:#d7dde1}
+.hnow{display:flex;align-items:center;gap:8px;background:#f0e3a8;color:var(--ink);padding:9px 12px;font-size:14px;margin:10px 0}
+.sees{display:flex;flex-wrap:wrap;gap:8px}
+.see{display:flex;align-items:center;gap:8px;background:var(--paper);color:var(--ink);padding:6px 10px;border-radius:3px;font-size:13px;font-weight:700}
+.see .ic{flex:none}
+.vt{display:inline-block;width:30px;height:30px;border:2px solid #15171a;border-radius:3px}
+.t-r{background:repeating-linear-gradient(135deg,#c9453a 0 5px,#a0352c 5px 8px)}
+.t-b{background:radial-gradient(#27508f 2.5px,transparent 3px) 0 0/9px 9px,#3a6fc9}
+.t-y{background:repeating-linear-gradient(0deg,#d6b13a 0 5px,#a98a28 5px 8px)}
+.t-g{background:linear-gradient(90deg,#2a7a49 2px,transparent 2px) 0 0/9px 9px,linear-gradient(#2a7a49 2px,transparent 2px) 0 0/9px 9px,#3f9b62}
+.vf{display:inline-block;width:28px;height:28px;border:5px solid;border-radius:7px;background:#2a3036}
+.vb{display:inline-block;width:46px;height:10px;border-radius:2px}
+.poses{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.pose{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:86px;padding:8px 10px;border:2px solid var(--line);border-radius:4px;font-size:12px}
+.pose b{font-size:13px}.pose i{font:700 11px var(--mono);font-style:normal;letter-spacing:.1em}
+.pose.o{color:#9aa4ab}.pose.n{color:#f0867a;border-color:#6b2a24;background:rgba(80,20,16,.35)}.pose.m{color:#9ec5ff;border-color:#2f6fb3;background:rgba(47,111,179,.25)}
+.zmap{margin:10px 0}.zmap small{display:block;color:var(--mute);font-size:12px;margin-top:4px}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 /* building meter */
 #meter{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-bottom:12px}
 #meter div{height:26px;display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);border:1px solid var(--line);color:var(--mute)}
@@ -166,7 +204,7 @@ h1 span{color:var(--red)}
 <body>
 <div id="app">
   <div id="bar">
-    <span class="zone">規則を守れ!</span><span id="info"></span><span class="sp"></span>
+    <span class="zone">規則を守れ!</span><span class="ver">v2.0.0</span><span id="info"></span><span class="sp"></span>
     <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
   </div>
   <div id="main">
@@ -184,13 +222,13 @@ h1 span{color:var(--red)}
   <div class="sub">規則を守って1Fに着け!</div>
   <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
   <div class="how" id="how"></div>
-  <div class="row"><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
-  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p>
+  <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><div class="ver" style="text-align:center">v2.0.0</div>
 </div></section>
 
 <section id="brief" class="screen"><div class="box">
   <div class="big"><b id="bFloor">10F</b><span id="bSub">出口は 1F</span></div><div class="mapchip" id="bMap"></div>
-  <div id="bRules"></div>
+  <div id="bRules"></div><p class="hint2" style="text-align:center">規則カードをタップすると、くわしい説明が出る</p>
   <div class="row" style="margin-top:14px"><button class="btn" id="goBtn">この階に入る</button></div>
   <p style="text-align:center;color:#8d979e;font-size:12px;margin-top:12px;letter-spacing:.08em" id="bHint"></p>
 </div></section>
@@ -206,10 +244,11 @@ h1 span{color:var(--red)}
 </div></section>
 
 <section id="list" class="screen"><div class="box">
-  <div class="k" style="text-align:center" id="listK"></div>
+  <div class="k" style="text-align:center" id="listK"></div><p class="hint2" style="text-align:center">規則カードをタップすると、くわしい説明が出る</p>
   <div id="listBody"></div>
   <div class="row" style="margin:14px 0"><button class="btn ghost" id="listClose">閉じる</button></div>
 </div></section>
+<div id="help"><div id="hbk"></div><div id="hbox"><button id="hx" type="button" aria-label="閉じる"></button><div id="hbody"></div></div></div>
 <div id="doors"><div class="dl"></div><div class="dr"></div><div id="dNum"></div></div>
 <section id="settings" class="screen"><div class="box wide">
   <div class="k" style="text-align:center">SETTINGS</div>
@@ -222,7 +261,7 @@ h1 span{color:var(--red)}
   <div id="sndList"></div>
   <div class="hdr">キーボード / コントローラー</div>
   <div class="keys" id="keyHelp"></div>
-  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.0.0</div>
 </div></section>
 
 <script>
@@ -389,7 +428,7 @@ R({id:"noEdge",g:"zone",text:"壁際を歩いてはならない",ic:["edge"],ban
 R({id:"noCorner",g:"zone",text:"四隅に入ってはならない",ic:["corner"],ban:true,zone:"corner",frame:c=>(c.tx<=1||c.tx>=GW-2)&&(c.ty<=1||c.ty>=GH-2)?"四隅に入った。":null});
 R({id:"noLeft",g:"zone",text:"左半分に入ってはならない",ic:["left"],ban:true,zone:"left",conf:["noRight"],frame:c=>c.tx<=7?"左半分に入った。":null});
 R({id:"noRight",g:"zone",text:"右半分に入ってはならない",ic:["right"],ban:true,zone:"right",conf:["noLeft"],frame:c=>c.tx>=8?"右半分に入った。":null});
-R({id:"lampLight",g:"zone",text:"照明の光の中に入ってはならない",ic:["lamp"],ban:true,need:["lamp"],frame:c=>{ for(const l of c.fl.lamps){ if(Math.hypot(c.px-l.px,c.py-l.py)<(1.8+(c.m?.25:0))*TS) return "照明の光の中に入った。"; } return null; }});
+R({id:"lampLight",g:"zone",text:"フロアライトの光の中に入ってはならない",ic:["lamp"],ban:true,need:["lamp"],frame:c=>{ for(const l of c.fl.lamps){ if(Math.hypot(c.px-l.px,c.py-l.py)<(1.8+(c.m?.25:0))*TS) return "照明の光の中に入った。"; } return null; }});
 // 時間
 R({id:"alarmFreeze",g:"time",text:"警報が鳴っている間は、動いてはならない",ic:["walk","bell"],ban:true,need:["ev:alarm"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.moving?"警報の間に動いた。":null});
 R({id:"alarmCrouch",g:"time",text:"警報が鳴っている間は、しゃがむこと",ic:["crouch","bell"],ban:false,need:["ev:alarm"],conf:["noCrouch","alarmFreeze"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.stance!=="crouch"?"警報の間に、しゃがんでいなかった。":null});
@@ -666,13 +705,13 @@ function cardHTML(r,fl,cls,i){
   if(r.sw) ico+=(ctxIc?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join("");
   if(!r.ban) ico=ico;
   const text=r.text.replace("{lim}",fl?fl.limit:"--");
-  return `<div class="rc ${r.ban?"":"must"} ${cls||""}" data-id="${r.id}"${i===undefined?"":` style="--i:${i}"`}><div class="ico">${ico}</div><div class="tx">${text}</div><span class="tag">${r.ban?"禁止":"必須"}</span></div>`;
+  return `<div class="rc ${r.ban?"":"must"} ${cls||""}" data-id="${r.id}"${i===undefined?"":` style="--i:${i}"`}><div class="ico">${ico}</div><div class="tx">${text}</div><span class="tag">${r.ban?"禁止":"必須"}</span><span class="q">?</span></div>`;
 }
 function renderSheet(bad){
   const sh=$("#sheet"), fl=G.fl;
   if(!fl){ sh.innerHTML=""; return; }
   let m=""; for(let f=10;f>=1;f--) m+=`<div class="${f===fl.n?"cur":(f>fl.n?"done":"")}">${f}</div>`;
-  sh.innerHTML=`<div id="meter">${m}</div><div id="floorBig"><b>${fl.n}F</b><span>${fl.n===1?"出口の階":"出口は 1F"}</span></div>`+
+  sh.innerHTML=`<div id="meter">${m}</div><div id="floorBig"><b>${fl.n}F</b><span>${fl.n===1?"出口の階":"出口は 1F"}</span></div><div class="hint2">規則をタップすると、くわしい説明が出る</div>`+
     fl.rules.map((r,i)=>cardHTML(r,fl,bad===r.id?"bad":"",bad?undefined:i)).join("")+`<div class="hdr">操作</div>
     <div style="font-size:13px;line-height:1.9;color:#b9c1c6">${S.ctl==="tap"?"行き先を1回タップ：経路を表示<br>もう1回タップ：出発<br>":""}下のボタン：歩く / 走る / しゃがむ<br>設定から操作方法を変えられる</div>`;
 }
@@ -680,6 +719,7 @@ function renderSheet(bad){
 /* ---- ランの開始 ---- */
 function newRun(){ G.seed=(Math.random()*1e9)|0; G.floor=10; G.mode="fade"; doors("10F","",()=>enterFloor(10)); }
 function enterFloor(n){
+  store.set("ks_save",{v:VERSION,seed:G.seed,floor:n});
   G.floor=n; G.fl=genFloor(n,G.seed*7+n*131);
   buildRun(); G.mode="brief";
   $("#bFloor").textContent=n+"F"; $("#bSub").textContent=n===1?"出口の階":"出口は 1F"; $("#bMap").innerHTML=svg("map",{size:18,color:"#8d979e"})+"マップ："+(G.fl.map?G.fl.map.name:"");
@@ -811,6 +851,7 @@ function pollPad(){
   if(Math.hypot(ax,ay)>.5){ if(Math.abs(ax)>Math.abs(ay)) dx=Math.sign(ax); else dy=Math.sign(ay); }
   const B=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed); if(B(14)) dx=-1; if(B(15)) dx=1; if(B(12)) dy=-1; if(B(13)) dy=1; IN.gp=[dx,dy];
   const pr=i=>B(i)&&!padPrev[i];
+  if($("#help").classList.contains("on")){ if(pr(0)||pr(1)||pr(9)) closeHelp(); padPrev=gp.buttons.map((b,i)=>B(i)); return; }
   if(G.mode==="play"&&G.run&&!G.paused&&!document.querySelector(".screen.on")){
     if(pr(0)) setStance(0); if(pr(1)) setStance(1); if(pr(2)) setStance(2); if(pr(4)) setStance((G.run.st+2)%3); if(pr(5)) setStance((G.run.st+1)%3); if(pr(9)) $("#sheet").classList.toggle("show");
   } else if(pr(0)||pr(9)) primaryClick();
@@ -839,6 +880,7 @@ function descend(){
   else doors(from+"F",(from-1)+"F",()=>enterFloor(from-1));
 }
 function ending(){
+  store.set("ks_save",null);
   G.best=0; store.set("kd_best",0);
   const chips=[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<span style="--i:${i}">${f}F</span>`).join("");
   $("#endText").innerHTML=`1階の出口に到達した。<br>あなたは、すべての階の規則に従った。<div class="chips">${chips}</div><span style="color:#8d979e">総違反回数：${G.deaths}</span>`;
@@ -987,6 +1029,194 @@ function draw(){
 let last=0;
 function loop(ts){ requestAnimationFrame(loop); const dt=Math.min(.05,(ts-last)/1000||0); last=ts; AT=ts/1000; pollPad(); update(dt); draw(); }
 
+/* ================= ヘルプ ================= */
+const VERSION="2.0.0";
+const OBJDESC={pc:"モニターの絵",printer:"紙が出る箱の絵",water:"背の高いタンクの絵",tv:"アンテナの付いた画面の絵",desk:"天板と脚の絵",plant:"葉っぱの絵",vending:"窓とボタンの絵",door:"ドアノブの付いた長方形の絵",clock:"丸い文字盤の絵",switch:"縦長の板の絵",bin:"ふたの付いたかごの絵",locker:"真ん中に線の入った長方形の絵",sofa:"ひじ掛けの付いた椅子の絵",lamp:"電球の絵"};
+const LAMPX="フロアライトとは、床に立てる背の高い照明のこと。「フロアライトの光の中に入ってはならない」規則のときだけ、まわりに黄色い点線の光の円が出る。";
+const PT={r:"赤いタイル（斜線）",b:"青いタイル（ドット）",y:"黄色いタイル（横線）",g:"緑のタイル（格子）"};
+const CTX={
+ cam:{nm:"カメラの視界の中",d:"監視カメラ（画面の端にあるカメラのアイコン）は首をゆっくり振って、扇形の光を出している。その光が当たっている範囲が視界で、壁や物の陰には届かない。",see:[["camera","監視カメラ"],["sw:cone","扇形の光＝視界"]],tip:"視界は6秒か12秒の周期で行ったり来たりする。外れているすきに進むのが基本。"},
+ guard:{nm:"警備員の3マス以内",d:"警備員（盾のアイコン）は決まった線の上を往復している。そのまわりの点線の円が「3マス以内」の範囲で、警備員と一緒に動く。",see:[["guard","警備員"],["sw:dash","点線の円＝範囲"]],tip:"往復の周期を見て、警備員が離れている間に通ると楽。"},
+ alarm:{nm:"警報が鳴っている間",d:"12秒ごとに約4秒間、警報が鳴る。鳴っている間は画面が赤みを帯びて、右上にベルのマークが出る。上のタイムラインでは赤い帯の部分で、白い縦線が「今」を表す。",see:[["bell","警報"],["sw:tlr","タイムラインの赤い帯"]],tip:"帯が近づいたら、手前で姿勢を整えるか止まっておく。帯が終われば普通に戻る。"},
+ black:{nm:"停電している間",d:"12秒ごとに約4秒間、停電する。画面が暗くなって右上に稲妻のマークが出る。上のタイムラインでは灰色の帯の部分。暗くなっても、物や壁の位置は見える。",see:[["bolt","停電"],["sw:tlg","タイムラインの灰色の帯"]],tip:"帯が近づいたら、手前で姿勢を整えるか止まっておく。"},
+ chime:{nm:"チャイムが鳴ってから3秒間",d:"12秒ごとにチャイムが鳴り、鳴った瞬間から3秒間が対象になる。画面は変わらないが、上のタイムラインでは黄色い帯の部分。",see:[["speaker","チャイム"],["sw:tly","タイムラインの黄色い帯"]],tip:"タイムラインの帯が来る前に準備しておく。"},
+ tileR:{nm:"赤いタイルの上",d:"赤いタイルは床の色付きマスで、斜線の模様。",see:[["sw:tile-r","赤＝斜線"]],tip:"タイルは色だけでなく模様でも見分けられる。"},
+ tileB:{nm:"青いタイルの上",d:"青いタイルは床の色付きマスで、ドットの模様。",see:[["sw:tile-b","青＝ドット"]],tip:"タイルは色だけでなく模様でも見分けられる。"},
+ tileY:{nm:"黄色いタイルの上",d:"黄色いタイルは床の色付きマスで、横線の模様。",see:[["sw:tile-y","黄＝横線"]],tip:"タイルは色だけでなく模様でも見分けられる。"},
+ tileG:{nm:"緑のタイルの上",d:"緑のタイルは床の色付きマスで、格子の模様。",see:[["sw:tile-g","緑＝格子"]],tip:"タイルは色だけでなく模様でも見分けられる。"},
+ tileAny:{nm:"色付きタイルの上",d:"色付きタイルは床の色付きマス（赤＝斜線、青＝ドット、黄＝横線、緑＝格子）。",see:[["sw:tile-r","赤"],["sw:tile-b","青"],["sw:tile-y","黄"],["sw:tile-g","緑"]],tip:"白（無地）の床は何をしても大丈夫。"},
+ stairs:{nm:"階段に入る瞬間",d:"階段は下へ向かうマス（青い枠、階段のアイコン。赤い枠は非常階段）。そのマスに入る瞬間の姿勢が判定される。",see:[["stairs","階段"],["emerg","非常階段"]],tip:"階段の1マス手前で、先に姿勢を切り替えておく。"},
+ any:{nm:"",d:"この規則は場所や時間に関係なく、いつでも守らなければならない。",see:[],tip:"姿勢ボタンは、画面下か、キーボードの1・2・3で切り替える。"}
+};
+const ACT={
+ runNot:{w:"そこでは、走って移動してはならない。",ng:"走る姿勢のまま移動した。",tip:"歩くかしゃがむにしておく。走る姿勢で止まっているだけなら違反にならない。",p:"ono"},
+ runMust:{w:"そこでは、姿勢を「走る」にしておかなければならない。",ng:"走る以外の姿勢でいた（止まっていても、姿勢が違えば違反）。",tip:"入る前に「走る」を選んでおく。範囲の中で切り替える余裕はない。",p:"nmn"},
+ crouchMust:{w:"そこでは、姿勢を「しゃがむ」にしておかなければならない。",ng:"しゃがむ以外の姿勢でいた（止まっていても、姿勢が違えば違反）。",tip:"入る前に「しゃがむ」を選んでおく。しゃがむと1マス進むのに1秒かかるので、余裕を持つ。",p:"nnm"},
+ crouchNot:{w:"そこでは、しゃがんではならない。",ng:"しゃがむ姿勢でいた（止まっていても違反）。",tip:"歩くか走るに切り替えてから入る。",p:"oon"},
+ walkMust:{w:"そこでは、姿勢を「歩く」にしておかなければならない。",ng:"歩く以外の姿勢でいた（止まっていても、姿勢が違えば違反）。",tip:"入る前に「歩く」を選んでおく。",p:"mnn"},
+ still:{w:"そこでは、動いてはならない（止まっていること）。",ng:"そこで移動した（経路で進む、スティックを倒す、キーを押す、など）。止まっている間は何も起きない。",tip:"自分から歩いて入ると、入る最後の1歩が「動いている」扱いで違反になる。時間で範囲が自分の上に来る場合は、止まって待つ。",mv:"n"},
+ stopNot:{w:"そこでは、立ち止まってはならない。",ng:"0.5秒以上、止まっていた。",tip:"止まらずに通り抜ける。姿勢ボタンを押して止まるのも立ち止まりになる。",stop:"n"}
+};
+const mk=(c,a,extra)=>Object.assign({w:c.d+" "+a.w,n:(c.nm?c.nm+"で、":"")+a.ng,t:a.tip+" "+c.tip,p:a.p,mv:a.mv,stop:a.stop,see:c.see},extra||{});
+const HELP={};
+const H=(id,o)=>{HELP[id]=o;};
+// カメラ
+const CAMV=["camera","監視カメラ"],CONE=["sw:cone","扇形の光＝視界"];
+H("camAll",{w:CTX.cam.d+" どの色のカメラにも見つかってはならない。",n:"視界の扇の中に、体が入った瞬間（色は問わない）。",t:"視界は6秒か12秒の周期で行ったり来たりする。外れているすきに進む。物や壁の陰は安全。走れば視界を素早く抜けられる。",see:CTX.cam.see});
+[["r","赤","camR"],["b","青","camB"],["g","緑","camG"]].forEach(([k,n,id])=>H(id,{w:CTX.cam.d+` この規則で見られてはいけないのは、ランプが${n}色のカメラだけ。`,n:`${n}いカメラの視界の中に入った。`,t:`他の色のカメラは光が点線の弱い表示になっていて、見られても大丈夫。${n}いカメラの周期だけ見ればよい。`,see:[["camera",`${n}いランプのカメラ`],CONE]}));
+H("camCrouch",mk(CTX.cam,ACT.crouchMust));
+H("camStill",mk(CTX.cam,ACT.still));
+H("camNoRun",mk(CTX.cam,ACT.runNot));
+H("camRun",mk(CTX.cam,ACT.runMust));
+// 警備員
+H("guardNear",{w:CTX.guard.d.replace("3マス","2マス")+" 警備員に近づきすぎてはならない。",n:"警備員のまわり2マス（赤い点線の円）に入った。警備員の方から近づいてきた場合も違反。",t:"警備員は端から端まで往復して戻ってくる。通路の端に着いて向きを変えるタイミングで横切るのが安全。",see:[["guard","警備員"],["sw:dash","赤い点線の円＝2マス"]]});
+H("guardSight",{w:"警備員が向いている方向には、赤い扇形の光（正面）が出ている。その中に入ってはならない。",n:"警備員の正面（約4マス先まで、左右35度ずつ）に入った。背中側や真横は安全。",t:"警備員は進行方向を向いている。すれ違うときは背後から回り込む。往復して向きが変わると正面も反転する。",see:[["guard","警備員"],["eye","視線"]]});
+H("guardNear3",{w:CTX.guard.d+" 警備員に近づきすぎてはならない。",n:"警備員のまわり3マスの円に入った。",t:CTX.guard.tip+" 円は2マスのときより広いので、早めに離れる。",see:CTX.guard.see});
+H("guardCrouch",mk(CTX.guard,ACT.crouchMust));
+H("guardStill",mk(CTX.guard,ACT.still));
+H("guardNoRun",mk(CTX.guard,ACT.runNot));
+H("guardRun",mk(CTX.guard,ACT.runMust));
+// 触れる
+const TOUCHHOW="「触れる」とは、そのマスをタップ（クリック）すること。歩いて近づいただけでは触れたことにならない。";
+H("touchAny",{w:"床以外のものは、すべて触れてはならない。物（机、ロッカーなど）も、壁も対象になる。"+TOUCHHOW,n:"物や壁のマスをタップした。",t:"物と壁は通り抜けられないので、避けて歩けば自然に触れない。タップで移動するときは、行き先に物のマスを選ばないよう注意。スティックやキーボードなら、うっかりタップしにくい。",see:[["hand","触れる＝タップ"],["wall","壁"]]});
+OBJT.forEach(([t,n])=>H("touch_"+t,{w:`${n}に触れてはならない。画面では${OBJDESC[t]}のアイコンで描かれている。${t==="lamp"?LAMPX:""}${TOUCHHOW}`,n:`${n}のマスをタップした。他の物なら大丈夫。`,t:"物は壁と同じで通り抜けられない。物の枠の色はバラバラだが、この規則では種類（アイコン）だけで判断する。",see:[[t,n]]}));
+[["r","赤"],["b","青"],["y","黄"],["g","緑"],["w","白（灰色）"]].forEach(([k,n])=>H("touchc_"+k,{w:`枠が${n}い物に触れてはならない。物の種類は関係なく、枠の色で決まる。床のタイルの色とは別のもの。${TOUCHHOW}`,n:`枠が${n}い物のマスをタップした。`,t:"物のアイコンの周りの枠を見る。他の色の物は触れても大丈夫。",see:[["sw:frame-"+k,`${n}い枠の物`]]}));
+H("touchOnlyB",{w:"触れてよいのは、枠が青い物だけ。それ以外の物や壁に触れたら違反になる。"+TOUCHHOW,n:"青くない物や、壁のマスをタップした。",t:"青い物をタップする必要はない。何にも触れなければ、守っていることになる。",see:[["sw:frame-b","青い枠の物だけOK"]]});
+H("touchOnlyR",{w:"触れてよいのは、枠が赤い物だけ。それ以外の物や壁に触れたら違反になる。"+TOUCHHOW,n:"赤くない物や、壁のマスをタップした。",t:"赤い物をタップする必要はない。何にも触れなければ、守っていることになる。",see:[["sw:frame-r","赤い枠の物だけOK"]]});
+H("alarmNoTouch",{w:CTX.alarm.d+" その間は、物に触れてはならない。"+TOUCHHOW,n:"警報が鳴っている間に、物のマスをタップした。鳴っていない間は大丈夫。",t:"警報の帯の間は、画面をタップしないでおく。",see:CTX.alarm.see});
+H("blackNoTouch",{w:CTX.black.d+" その間は、物に触れてはならない。"+TOUCHHOW,n:"停電している間に、物のマスをタップした。停電していない間は大丈夫。",t:"停電の帯の間は、画面をタップしないでおく。",see:CTX.black.see});
+// タイル
+["r","b","y","g"].forEach(k=>H("step_"+k,{w:`${PT[k]}を踏んではならない。タイルは床の色付きマスで、色ごとに模様が違う。`,n:`${PT[k]}のマスの上に入った（通り抜けるだけでも違反）。`,t:"タイルは避けて歩く。道がふさがれているように見えても、必ず踏まずに降りられる道がある。",see:CTX["tile"+k.toUpperCase()].see}));
+H("tileOnlyW",{w:"白いタイル（無地の床）以外を踏んではならない。色付きタイルは全部だめ。",n:"赤・青・黄・緑のどれかのタイルに入った。",t:"白い床の道だけを選ぶ。物や壁に加えて色タイルも通れないので、経路プレビューをよく見る。",see:CTX.tileAny.see});
+H("colorStop",mk(CTX.tileAny,ACT.stopNot));
+H("redCrouch",mk(CTX.tileR,ACT.crouchMust));
+H("blueRun",mk(CTX.tileB,ACT.runMust));
+H("yellowNoRun",mk(CTX.tileY,ACT.runNot));
+H("greenWalk",mk(CTX.tileG,ACT.walkMust));
+H("yellowCrouch",mk(CTX.tileY,ACT.crouchMust));
+H("greenRun",mk(CTX.tileG,ACT.runMust));
+H("redNoRun",mk(CTX.tileR,ACT.runNot));
+H("blueCrouch",mk(CTX.tileB,ACT.crouchMust));
+H("greenNoCrouch",mk(CTX.tileG,ACT.crouchNot));
+H("redStop",mk(CTX.tileR,ACT.stopNot));
+H("stepRB",{w:"赤いタイル（斜線）と青いタイル（ドット）の両方を踏んではならない。",n:"赤か青のタイルの上に入った。",t:"黄・緑・白の床は通ってよい。",see:[["sw:tile-r","赤＝斜線"],["sw:tile-b","青＝ドット"]]});
+H("stepYG",{w:"黄色いタイル（横線）と緑のタイル（格子）の両方を踏んではならない。",n:"黄色か緑のタイルの上に入った。",t:"赤・青・白の床は通ってよい。",see:[["sw:tile-y","黄＝横線"],["sw:tile-g","緑＝格子"]]});
+// 動き方
+H("noRun",mk(CTX.any,ACT.runNot,{w:"この階では、走って移動してはならない。"}));
+H("noCrouch",mk(CTX.any,ACT.crouchNot,{w:"この階では、しゃがんではならない。"}));
+H("noWalk",mk(CTX.any,{w:"",ng:"歩く姿勢のまま移動した。",tip:"走るかしゃがむで移動する。歩く姿勢で止まっているだけなら違反にならない。",p:"noo"},{w:"この階では、歩いて移動してはならない。走るか、しゃがんで動く。"}));
+H("crouchNoMove",{w:"しゃがんだまま、移動してはならない。しゃがむ姿勢は、止まっているときだけ使える。",n:"しゃがむ姿勢で移動した。",t:"動くときは、歩くか走るに切り替える。しゃがむのは立ち止まって隠れるとき用。",p:"ooo",see:[["crouch","しゃがむ"]]});
+// 場所
+const ZNOTE="禁止の区域は、赤く塗られて薄くアイコンが出る。体の中心がマスの境目を越えた瞬間に「入った」扱いになる。";
+const zoneH=(w,n,t)=>({w:w+" "+ZNOTE,n,t:t||"区域のへりを歩くときも、1マス余裕を見ておく。区域をよけても必ず降りられる道がある。",see:[["map","赤い範囲＝禁止区域"]],zmap:1});
+H("noCenter",zoneH("中央の区域（左から7〜10列目、上から4〜6行目の4×3マス）に入ってはならない。","中央の区域に入った。"));
+H("noEdge",zoneH("壁際（いちばん外側の1周）を歩いてはならない。","いちばん外側のマスに入った。","階段やスタート地点が壁際にあるときも、そこに着く直前まで1マス内側を通る。"));
+H("noCorner",zoneH("四隅（各隅の2×2マス）に入ってはならない。","四隅の区域に入った。"));
+H("noLeft",zoneH("左半分（左から1〜8列目）に入ってはならない。","左半分に入った。"));
+H("noRight",zoneH("右半分（左から9〜16列目）に入ってはならない。","右半分に入った。"));
+H("noTop",zoneH("上半分（上から1〜4行目）に入ってはならない。","上半分に入った。","中央の1行（5行目）は入ってよい。"));
+H("noBottom",zoneH("下半分（上から6〜9行目）に入ってはならない。","下半分に入った。","中央の1行（5行目）は入ってよい。"));
+H("noMidRow",zoneH("中央の横ライン（上から5行目）に入ってはならない。","中央の横ラインに入った。","この線を横切る場所は、ライン上のどこでも違反になる。通り道が上下に分かれていることがある。"));
+H("noMidCol",zoneH("中央の縦ライン（左から8〜9列目）に入ってはならない。","中央の縦ラインに入った。","この線を横切る場所は、ライン上のどこでも違反になる。"));
+H("noTopLeft",zoneH("左上の区域（左から1〜8列目、上から1〜4行目）に入ってはならない。","左上の区域に入った。"));
+H("noBottomRight",zoneH("右下の区域（左から9〜16列目、上から6〜9行目）に入ってはならない。","右下の区域に入った。"));
+H("lampLight",{w:"フロアライト（電球のアイコンの物）のまわりには、黄色い点線の光の円が出る。その光の中に入ってはならない。フロアライトは床に立てる背の高い照明のこと。",n:"フロアライトのまわり約1.8マスの光の円に入った。",t:"光の円はフロアライトごとに出ていて、動かない。2つの円の間を通れることが多い。本体に触れるかどうかは、この規則とは別。",see:[["lamp","フロアライト"],["sw:lamp","黄色い光の円＝入ってはいけない"]]});
+H("noNearObj",{w:"物や壁のすぐ隣（上下左右の4マス）を歩いてはならない。ななめ隣は大丈夫。",n:"物や壁と上下左右で接しているマスに入った。",t:"赤く薄く塗られたマスが禁止の範囲。広い空きスペースの中央を通る。",see:[["near","物や壁の隣＝禁止"]],near:1});
+// 時間
+H("alarmFreeze",mk(CTX.alarm,ACT.still));
+H("alarmCrouch",mk(CTX.alarm,ACT.crouchMust));
+H("alarmRun",mk(CTX.alarm,ACT.runMust));
+H("alarmNoRun",mk(CTX.alarm,ACT.runNot));
+H("blackFreeze",mk(CTX.black,ACT.still));
+H("blackCrouch",mk(CTX.black,ACT.crouchMust));
+H("blackNoRun",mk(CTX.black,ACT.runNot));
+H("chimeFreeze",mk(CTX.chime,ACT.still));
+H("chimeCrouch",mk(CTX.chime,ACT.crouchMust));
+H("chimeNoRun",mk(CTX.chime,ACT.runNot));
+H("timeLimit",{w:"この階は、制限時間以内に階段に着かなければならない。画面の右上にタイマーが出て、残り10秒を切ると赤くなる。",n:"制限時間を過ぎた。",t:"走ると1マス0.25秒で進める（歩くと0.5秒、しゃがむと1秒）。ただし走れない規則があるときは、そちらを先に確認する。最短の道を選ぶ。",see:[["timer","残り時間"]]});
+// 階段
+H("stEvenL",{w:"偶数階（10F・8F・6F…）は左の階段、奇数階（9F・7F・5F…）は右の階段を使う。階段が2つある階の規則。",n:"使うべきでない側の階段に入った。",t:"階段は画面の左端と右端にある。階の数字が偶数か奇数かで判断する。",see:[["stairs","階段"],["left","左"],["right","右"]],fl:"even"});
+H("stEvenR",{w:"偶数階（10F・8F・6F…）は右の階段、奇数階（9F・7F・5F…）は左の階段を使う。階段が2つある階の規則。",n:"使うべきでない側の階段に入った。",t:"階段は画面の左端と右端にある。階の数字が偶数か奇数かで判断する。",see:[["stairs","階段"],["left","左"],["right","右"]],fl:"odd"});
+H("noEmerg",{w:"赤い枠の非常階段（「非常」の文字）を使ってはならない。階段が2つあるときは、青い枠の通常の階段を使う。",n:"非常階段に入った。",t:"2つの階段のうち、赤い方が非常階段。",see:[["emerg","赤い階段＝非常階段"],["stairs","青い階段＝通常"]]});
+H("onlyEmerg",{w:"非常階段（赤い枠、「非常」の文字）だけを使う。通常の階段に入ってはならない。",n:"通常の階段に入った。",t:"2つの階段のうち、赤い方が非常階段。",see:[["emerg","赤い階段＝非常階段"],["stairs","青い階段＝通常"]]});
+H("stCrouch",mk(CTX.stairs,ACT.crouchMust));
+H("stNoRun",mk(CTX.stairs,ACT.runNot));
+H("stWalk",mk(CTX.stairs,ACT.walkMust));
+H("stRun",mk(CTX.stairs,ACT.runMust));
+H("stNoCrouch",mk(CTX.stairs,ACT.crouchNot));
+// アイテム
+const ITEMNOTE="アイテムは、そのマスに入ると自動で拾う。タップなどの操作は要らない。";
+H("needKey",{w:"この階のどこかに鍵（水色の鍵のアイコン）が落ちている。拾ってから階段に入る。"+ITEMNOTE,n:"鍵を持たずに階段に入った。",t:"階段に向かう前に、まず鍵のマスを通る。鍵を拾うと画面上に鍵のアイコンが出る。",see:[["key","鍵"],["down","拾ってから降りる"]]});
+H("needCard",{w:"この階のどこかにカード（水色のカードのアイコン）が落ちている。拾ってから階段に入る。"+ITEMNOTE,n:"カードを持たずに階段に入った。",t:"階段に向かう前に、まずカードのマスを通る。拾うと画面上にカードのアイコンが出る。",see:[["card","カード"],["down","拾ってから降りる"]]});
+H("noCoin",{w:"床に散らばっているコイン（黄色い丸のアイコン）を拾ってはならない。"+ITEMNOTE,n:"コインのマスに入った。",t:"コインは7枚ほど落ちている。コインのマスだけ避けて歩く。",see:[["coin","コイン"]]});
+H("noKey",{w:"鍵（水色の鍵のアイコン）を拾ってはならない。"+ITEMNOTE,n:"鍵のマスに入った。",t:"鍵のマスだけ避けて歩く。",see:[["key","鍵"]]});
+H("noCard",{w:"カード（水色のカードのアイコン）を拾ってはならない。"+ITEMNOTE,n:"カードのマスに入った。",t:"カードのマスだけ避けて歩く。",see:[["card","カード"]]});
+// その他
+H("tapRate",{w:"画面（マップ）を、1秒間に4回以上タップしてはならない。",n:"1秒の間にマップを4回以上タップした（連打）。",t:"スティック・方向ボタン・キーボード・コントローラーの操作は、タップの回数に入らない。タップ移動のときは、ゆっくり押す。",see:[["hand","連打"]]});
+const GN=Object.assign({},GROUPNAME);
+function visHTML(k){
+  const m=k.slice(3);
+  if(m.startsWith("tile-")) return `<span class="vt t-${m.slice(5)}"></span>`;
+  if(m.startsWith("frame-")){ const c=m.slice(6); return `<span class="vf" style="border-color:${COLS[c]}"></span>`; }
+  if(m==="cone") return `<svg width="34" height="28" viewBox="0 0 34 28"><path d="M2 14L32 2v24z" fill="rgba(80,140,230,.3)" stroke="#508ce6" stroke-width="2"/></svg>`;
+  if(m==="dash") return `<svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="rgba(224,74,58,.12)" stroke="#e04a3a" stroke-width="2" stroke-dasharray="4 4"/></svg>`;
+  if(m==="lamp") return `<svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="12" fill="rgba(255,200,60,.35)" stroke="#e0a43a" stroke-width="2" stroke-dasharray="4 4"/></svg>`;
+  const tl={tlr:"#e04a3a",tly:"#e0a43a",tlg:"#8d979e"}[m]; if(tl) return `<span class="vb" style="background:${tl}"></span>`;
+  return "";
+}
+function seeHTML(list){
+  return list.map(([k,l])=>`<div class="see">${k.startsWith("sw:")?visHTML(k):svg(k,{size:34,color:"#15171a"})}<span>${l}</span></div>`).join("");
+}
+function poseHTML(h){
+  let o="";
+  if(h.p){ o+=[["walk","歩く"],["run","走る"],["crouch","しゃがむ"]].map(([ic,t],i)=>{ const k=h.p[i]; return `<span class="pose ${k}">${svg(ic,{size:24,color:"currentColor"})}<b>${t}</b><i>${k==="m"?"この姿勢":k==="n"?"NG":"OK"}</i></span>`; }).join(""); }
+  if(h.mv) o+=`<span class="pose n">${svg("walk",{size:24,color:"currentColor"})}<b>動く</b><i>NG</i></span><span class="pose o">${svg("clock",{size:24,color:"currentColor"})}<b>止まる</b><i>OK</i></span>`;
+  if(h.stop) o+=`<span class="pose n">${svg("clock",{size:24,color:"currentColor"})}<b>止まる</b><i>NG</i></span><span class="pose o">${svg("walk",{size:24,color:"currentColor"})}<b>通り抜ける</b><i>OK</i></span>`;
+  return o?`<div class="poses">${o}</div>`:"";
+}
+function zoneMapHTML(r){
+  const s=16; let c=""; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const bad=r.frame({tx:x,ty:y}); c+=`<rect x="${x*s+1}" y="${y*s+1}" width="${s-2}" height="${s-2}" fill="${bad?"#e04a3a":"#2d343a"}"/>`; }
+  return `<div class="zmap"><svg viewBox="0 0 ${GW*s} ${GH*s}" width="100%">${c}</svg><small>赤い部分が禁止の区域（16×9マスのマップ全体）</small></div>`;
+}
+function nearMapHTML(){
+  const s=22; let c=""; for(let y=0;y<5;y++)for(let x=0;x<5;x++){ const me=x===2&&y===2, nb=Math.abs(x-2)+Math.abs(y-2)===1; c+=`<rect x="${x*s+1}" y="${y*s+1}" width="${s-2}" height="${s-2}" fill="${me?"#8d979e":nb?"#e04a3a":"#2d343a"}"/>`; }
+  return `<div class="zmap" style="max-width:150px"><svg viewBox="0 0 ${5*s} ${5*s}" width="100%">${c}</svg><small>灰色が物・壁、赤が禁止のマス（上下左右）</small></div>`;
+}
+let helpPaused=false;
+function helpHTML(r,fl){
+  const h=HELP[r.id]||{w:r.text,n:"この規則に反する行動。",t:"規則書をよく読む。",see:[]};
+  const lim=fl?fl.limit:null;
+  const text=r.text.replace("{lim}",lim!==null?lim:"○");
+  let extra="";
+  if(r.zone&&h.zmap) extra+=zoneMapHTML(r);
+  if(h.near) extra+=nearMapHTML();
+  let now="";
+  if(fl&&h.fl) now=`<div class="hnow">${svg("stairs",{size:22,color:"#15171a"})}この階は ${fl.n}F（${fl.n%2===0?"偶数":"奇数"}階）。使う階段は<b>${(h.fl==="even")===(fl.n%2===0)?"左":"右"}</b>。</div>`;
+  if(r.id==="timeLimit") now=`<div class="hnow">${svg("timer",{size:22,color:"#15171a"})}${fl?`この階の制限時間は<b>${fl.limit}秒</b>。`:"制限時間は階ごとに、最短の道のおよそ1.7倍＋10秒で決まる。"}</div>`;
+  const ico=svg(r.ic[0],{size:64,color:"#15171a",ban:r.ban})+(r.ic[1]?`<span class="plus">+</span>`+svg(r.ic[1],{size:44,color:"#15171a"}):"")+(r.sw?(r.ic[1]?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join(""):"");
+  return `<div class="hhead ${r.ban?"":"must"}"><div class="hico">${ico}</div><div class="htx"><span class="htag">${r.ban?"禁止":"必須"}</span><div class="htt">${text}</div><span class="hgrp">${GN[r.g]||""}</span></div></div>
+  ${now}
+  <div class="hsec"><div class="hh">${svg("eye",{size:22,color:"#e9e5da"})}どういう規則？</div><p>${h.w.replace("{lim}",lim!==null?lim:"○")}</p></div>
+  ${h.see&&h.see.length?`<div class="hsec"><div class="hh">${svg("map",{size:22,color:"#e9e5da"})}画面での見え方</div><div class="sees">${seeHTML(h.see)}</div></div>`:""}
+  ${extra}
+  <div class="hsec ng"><div class="hh">${svg("hand",{size:22,color:"#e04a3a",ban:true})}違反になるとき</div><p>${h.n}</p></div>
+  ${poseHTML(h)}
+  <div class="hsec ok"><div class="hh">${svg("check",{size:22,color:"#7fb0ff"})}守るコツ</div><p>${h.t}</p></div>
+  <div class="hsec base"><div class="hh">${svg("walk",{size:22,color:"#8d979e"})}基本の動き</div><p>歩く：1マス0.5秒　走る：1マス0.25秒　しゃがむ：1マス1秒。姿勢は画面下のボタン（キーボードの1・2・3）で切り替える。階段のマスに入ると、その階はクリア。</p></div>`;
+}
+function openHelp(id){
+  const r=RM[id]; if(!r) return; const fl=G.fl&&G.fl.rules.includes(r)?G.fl:null;
+  $("#hbody").innerHTML=helpHTML(r,fl);
+  $("#help").classList.add("on"); $("#hbox").scrollTop=0;
+  if(G.mode==="play"&&!G.paused){ G.paused=true; helpPaused=true; }
+  audio(); sfx.ui();
+}
+function closeHelp(){ $("#help").classList.remove("on"); if(helpPaused){ G.paused=false; helpPaused=false; } }
+document.addEventListener("click",e=>{ const c=e.target.closest&&e.target.closest(".rc[data-id]"); if(c&&!c.closest("#hbody")) openHelp(c.dataset.id); });
+$("#hx").addEventListener("click",closeHelp);
+$("#hbk").addEventListener("click",closeHelp);
+addEventListener("keydown",e=>{ if(e.key==="Escape"&&$("#help").classList.contains("on")){ closeHelp(); e.stopPropagation(); } },true);
+
 /* ================= 画面 ================= */
 function buildHow(){
   $("#how").innerHTML=[["camera","規則は階ごとにランダム。全部で"+RULES.length+"種類"],["stairs","10Fから階段を降りて、1Fの出口へ"],["gear","タップ・スティック・ボタン・キーボード・コントローラーで遊べる"]].map(([n,t])=>`<div>${svg(n,{size:44,color:"#e9e5da",ban:n==="camera"?false:false}).replace('class="ic"','class="ic"')}${t}</div>`).join("");
@@ -997,6 +1227,7 @@ function buildList(){
   $("#listBody").innerHTML=Object.keys(GROUPNAME).map(g=>`<div class="hdr">${GROUPNAME[g]}（${(groups[g]||[]).length}）</div><div class="grid">${(groups[g]||[]).map(r=>cardHTML(r,null)).join("")}</div>`).join("");
 }
 $("#startBtn").addEventListener("click",()=>{ audio(); newRun(); });
+$("#contBtn").addEventListener("click",()=>{ const sv=store.get("ks_save",null); if(!sv) return; audio(); G.seed=sv.seed; G.floor=sv.floor; G.mode="fade"; doors(sv.floor+"F","",()=>enterFloor(sv.floor)); });
 $("#allBtn").addEventListener("click",()=>{ buildList(); showScreen("list"); G._back="title"; });
 $("#listBtn").addEventListener("click",()=>{ buildList(); G._back=G.mode; if(G.mode==="play") G.paused=true; showScreen("list"); });
 $("#listClose").addEventListener("click",()=>{ if(G._back==="title"||!G.run) showScreen("title"); else if(G._back==="play"){ G.paused=false; showScreen(null); } else if(G._back==="brief") showScreen("brief"); else if(G._back==="dead") showScreen("dead"); else showScreen("title"); });
@@ -1050,10 +1281,14 @@ function openSettings(){ const cur=document.querySelector(".screen.on"); if(cur&
 function closeSettings(){ G.paused=false; showScreen(setBack); applyCtl(); if(G.mode==="brief"||setBack==="brief") $("#bHint").textContent={tap:"移動：行き先を1回タップで経路を表示、もう1回タップで出発",stick:"移動：ジョイスティックを倒す",dpad:"移動：方向ボタンを押す",gamepad:"移動：左スティックか十字キー",keyboard:"移動：矢印キーかWASD"}[S.ctl]; renderSheet(); }
 $("#setTop").addEventListener("click",openSettings); $("#setBtn").addEventListener("click",openSettings); $("#setClose").addEventListener("click",closeSettings);
 function buildTower(){ $("#tower").innerHTML=[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<div style="animation-delay:${i*.5}s">${f}F</div>`).join(""); }
-function titleInfo(){ $("#best").textContent=G.best<=10?(G.best===0?"最高記録：脱出済み":`最高記録：${G.best}F まで到達`):"規則は全部で"+RULES.length+"種類。毎回ランダムに選ばれる。"; }
+function titleInfo(){
+  const sv=store.get("ks_save",null), ok=sv&&sv.v===VERSION&&sv.floor>=1&&sv.floor<=10;
+  const cb=$("#contBtn"); cb.style.display=ok?"":"none"; if(ok) cb.textContent=`続きから（${sv.floor}F）`;
+  $("#startBtn").textContent=ok?"最初から":"スタート"; $("#startBtn").className=ok?"btn ghost":"btn red";
+  $("#best").textContent=G.best<=10?(G.best===0?"最高記録：脱出済み":`最高記録：${G.best}F まで到達`):"規則は全部で"+RULES.length+"種類。毎回ランダムに選ばれる。"; }
 
 applyCalm(); applyCtl(); buildTower(); fit(); buildHow(); titleInfo(); renderStance(); requestAnimationFrame(loop);
-window.__g={G,S,IN,RM,MAPS,pickRules,mulberry,openSettings,closeSettings,RULES,genFloor,solve,enterFloor,newRun,update,advance,buildRun,setStance,tileOf,die,mk:()=>G.run};
+window.__g={VERSION,openHelp,closeHelp,HELP,G,S,IN,RM,MAPS,pickRules,mulberry,openSettings,closeSettings,RULES,genFloor,solve,enterFloor,newRun,update,advance,buildRun,setStance,tileOf,die,mk:()=>G.run};
 })();
 </script>
 </body>
