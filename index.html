@@ -211,7 +211,7 @@ h1 span{color:var(--red)}
 <body>
 <div id="app">
   <div id="bar">
-    <span class="zone">規則を守れ!</span><span class="ver">v2.2.1</span><span id="info"></span><span class="sp"></span>
+    <span class="zone">規則を守れ!</span><span class="ver">v2.2.2</span><span id="info"></span><span class="sp"></span>
     <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
   </div>
   <div id="main">
@@ -230,7 +230,7 @@ h1 span{color:var(--red)}
   <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
   <div class="how" id="how"></div>
   <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="modeBtn">モード</button><button class="btn ghost" id="achBtn">実績</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
-  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><p class="lead" style="margin-top:6px;font-size:13px;color:#e9e5da" id="rank"></p><div class="ver" style="text-align:center">v2.2.1</div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><p class="lead" style="margin-top:6px;font-size:13px;color:#e9e5da" id="rank"></p><div class="ver" style="text-align:center">v2.2.2</div>
 </div></section>
 
 <section id="brief" class="screen"><div class="box">
@@ -272,7 +272,7 @@ h1 span{color:var(--red)}
   <div id="sndList"></div>
   <div class="hdr">キーボード / コントローラー</div>
   <div class="keys" id="keyHelp"></div>
-  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.2.1</div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.2.2</div>
 </div></section>
 
 <script>
@@ -720,6 +720,7 @@ function genFloor(n,seed,rulesMust){
     const rules=pickRules(cnt,rng,n,null);
     const fl=buildLayout(n,rules,rng); if(!fl) continue;
     const sol=solve(fl); if(!sol||(sol.t>45&&attempt<35)) continue;
+    if(attempt<30&&n<=8){ const need=n>=6?.75:n>=3?1.5:2.5; const b=solve(Object.assign({},fl,{rules:[],trk:[]})); if(b&&sol.t-b.t<need) continue; }
     fl.sol=sol; fl.attempt=attempt;
     if(fl.hasLimit){ const lr=rules.find(r=>r.limK), lk=lr?lr.limK:[1.7,10]; fl.limit=Math.ceil(sol.t*lk[0]+lk[1]); }
     return fl;
