@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>規則を守れ! / 規則を守って1Fに着け!</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2315171a'/%3E%3Cpath d='M12 50h14V38h12V26h14' fill='none' stroke='%23e9e5da' stroke-width='5'/%3E%3Crect x='44' y='10' width='10' height='10' fill='%23e04a3a'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1012;--bg2:#15181b;--line:#2a2f34;--paper:#e9e5da;--ink:#15171a;--mute:#8d979e;--red:#e04a3a;--red2:#a8281c;--blue:#2f6fb3;
+  --sans:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--paper);font-family:var(--sans);overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button{font-family:inherit;cursor:pointer}
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+#bar{height:46px;flex:none;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--line);background:var(--bg2);font:500 12px var(--mono);letter-spacing:.14em;color:var(--mute)}
+#bar .zone{color:var(--paper)}
+#bar .sp{flex:1}
+.tbtn{background:transparent;border:1px solid var(--line);color:var(--paper);padding:6px 12px;font:500 12px var(--mono);letter-spacing:.1em;border-radius:2px}
+.tbtn:hover{border-color:var(--mute)}
+#main{flex:1;min-height:0;display:flex}
+#sheet{width:318px;flex:none;padding:14px;border-right:1px solid var(--line);background:var(--bg2);overflow:auto}
+#stageWrap{flex:1;min-width:0;position:relative}
+#stage{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:pointer;touch-action:none}
+#msg{position:absolute;left:50%;top:62px;transform:translateX(-50%);max-width:80%;padding:8px 16px;border:1px solid var(--line);background:rgba(14,16,18,.94);font-size:15px;opacity:0;transition:opacity .3s;pointer-events:none;text-align:center;display:flex;align-items:center;gap:8px}
+#msg.on{opacity:1}
+#stanceBar{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:8px}
+.stb{display:flex;align-items:center;gap:8px;padding:8px 16px;background:rgba(21,24,27,.95);border:2px solid var(--line);color:var(--paper);font:700 14px var(--sans);border-radius:3px}
+.stb.on{border-color:var(--paper);background:var(--paper);color:var(--ink)}
+.stb small{font:500 10px var(--mono);opacity:.6}
+
+#stick{position:absolute;left:18px;bottom:14px;width:132px;height:132px;border-radius:50%;background:rgba(21,24,27,.75);border:2px solid var(--line);touch-action:none;z-index:4}
+#stick::before{content:"";position:absolute;inset:0;background:linear-gradient(var(--line),var(--line)) center/2px 70% no-repeat,linear-gradient(var(--line),var(--line)) center/70% 2px no-repeat}
+#knob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:var(--paper);border:3px solid var(--ink);box-shadow:0 2px 6px rgba(0,0,0,.5)}
+.mapchip{display:flex;align-items:center;justify-content:center;gap:8px;font:500 13px var(--mono);letter-spacing:.14em;color:var(--mute);margin:0 0 14px}
+body.calm *{animation-duration:.001s!important;animation-delay:0s!important;transition-duration:.001s!important}
+/* controls */
+#stageWrap[data-ctl="stick"] #stick{display:block}
+#dpad{display:none;position:absolute;bottom:14px;width:156px;height:156px;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px;z-index:4;touch-action:none}
+#stageWrap[data-ctl="dpad"] #dpad{display:grid}
+#stick{display:none}
+#stageWrap[data-side="left"] #stick,#stageWrap[data-side="left"] #dpad{left:18px;right:auto}
+#stageWrap[data-side="right"] #stick,#stageWrap[data-side="right"] #dpad{right:18px;left:auto}
+#dpad button{border:2px solid var(--line);background:rgba(21,24,27,.85);border-radius:10px;position:relative;transition:transform .08s,background .15s;touch-action:none}
+#dpad button.on{background:var(--paper);transform:scale(.93)}
+#dpad button::after{content:"";position:absolute;left:50%;top:50%;width:0;height:0;margin:-8px 0 0 -9px;border:9px solid transparent}
+#dpad .u{grid-column:2;grid-row:1}#dpad .l{grid-column:1;grid-row:2}#dpad .r{grid-column:3;grid-row:2}#dpad .d{grid-column:2;grid-row:3}
+#dpad .u::after{border-bottom:14px solid #e9e5da;border-top:0;margin-top:-7px}
+#dpad .d::after{border-top:14px solid #e9e5da;border-bottom:0;margin-top:-7px}
+#dpad .l::after{border-right:14px solid #e9e5da;border-left:0;margin-left:-7px}
+#dpad .r::after{border-left:14px solid #e9e5da;border-right:0;margin-left:-7px}
+#dpad .on::after{filter:invert(1)}
+/* settings */
+.box.wide{width:min(720px,100%)}
+.sh{margin:4px 0 18px;text-align:center;font-size:34px;font-weight:900;letter-spacing:.2em}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:12px 0;padding:10px 14px;border:1px solid var(--line);background:rgba(21,24,27,.7)}
+.setrow label{font-weight:700;font-size:14px;flex:1}
+.dd{position:relative;width:300px;max-width:55%}
+.ddb{width:100%;display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border:2px solid var(--line);color:var(--paper);text-align:left;border-radius:3px;transition:border-color .2s}
+.ddb:hover,.dd.open .ddb{border-color:var(--paper)}
+.ddb svg:last-child{margin-left:auto;transition:transform .3s}
+.dd.open .ddb svg:last-child{transform:rotate(180deg)}
+.ddt{display:flex;flex-direction:column;line-height:1.35}.ddt b{font-size:14px}.ddt small{font-size:11px;color:var(--mute)}
+.ddl{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#101316;border:2px solid var(--paper);border-radius:3px;padding:4px;opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top;transition:opacity .22s,transform .22s,visibility .22s}
+.dd.open .ddl{opacity:1;visibility:visible;transform:none}
+.ddo{width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;background:transparent;border:0;color:var(--paper);text-align:left;border-radius:2px;opacity:0;transform:translateX(-8px)}
+.dd.open .ddo{animation:cardIn .35s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*45ms)}
+.ddo:hover{background:#1d2328}.ddo.on{background:#262d33}
+.tg{width:56px;height:30px;border-radius:15px;background:#2a2f34;border:2px solid var(--line);position:relative;transition:background .25s}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--paper);transition:transform .25s cubic-bezier(.3,1.4,.5,1)}
+.tg.on{background:var(--red);border-color:var(--red)}.tg.on::after{transform:translateX(26px)}
+.snd{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--line);background:rgba(21,24,27,.7);margin-bottom:6px}
+.snd .sico{width:30px;display:flex;justify-content:center}.snd .sn{width:120px;font-size:14px;font-weight:700}
+.snd.off input,.snd.off .sico,.snd.off .sn{opacity:.35}
+.snd .pct{width:40px;text-align:right;font:500 12px var(--mono);color:var(--mute)}
+.snd .tbtn{padding:5px 10px}
+input[type=range]{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--red) var(--p,50%),#2a2f34 var(--p,50%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--paper);border:3px solid var(--ink);box-shadow:0 0 0 2px var(--paper);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--paper);border:3px solid var(--ink);cursor:pointer}
+.keys{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:#b9c1c6;line-height:1.7}
+.keys div{border:1px solid var(--line);padding:10px 12px;background:rgba(21,24,27,.7)}.keys b{display:block;color:var(--paper);margin-bottom:2px}
+kbd{font:500 11px var(--mono);border:1px solid #59626a;border-bottom-width:3px;padding:1px 6px;border-radius:3px;color:var(--paper)}
+/* animation */
+@keyframes cardIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes stamp{0%{opacity:0;transform:scale(1.9)}60%{opacity:1;transform:scale(.96)}100%{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes lit{0%,16%{background:var(--paper);color:var(--ink);border-color:var(--paper)}22%,100%{background:transparent;color:var(--mute);border-color:var(--line)}}
+@keyframes pop{0%{opacity:0;transform:scale(.4)}70%{transform:scale(1.1)}100%{opacity:1;transform:none}}
+@keyframes roll{from{opacity:0;transform:translateY(-70%)}to{opacity:1;transform:none}}
+.screen.on .box{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.rc[style*="--i"]{animation:cardIn .5s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*90ms)}
+#floorBig b{display:inline-block;animation:roll .5s cubic-bezier(.2,.8,.2,1) both}
+#brief .big b{display:inline-block;animation:roll .6s cubic-bezier(.2,.8,.2,1) both}
+.btn{transition:transform .15s,background .2s}.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.97)}
+.tbtn{transition:border-color .2s,transform .12s}.tbtn:active{transform:scale(.95)}
+.stb{transition:transform .12s,background .2s,color .2s,border-color .2s}.stb:active{transform:scale(.94)}
+h1{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.sub{font-weight:700;font-size:clamp(16px,3.2vw,26px);letter-spacing:.2em;margin:6px 0 4px;color:var(--paper);animation:rise .9s .15s cubic-bezier(.2,.8,.2,1) both}
+.how div{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}.how div:nth-child(2){animation-delay:.1s}.how div:nth-child(3){animation-delay:.2s}
+#tower{position:absolute;right:calc(50% + 350px);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;pointer-events:none}
+#tower div{width:64px;height:28px;border:1px solid var(--line);color:var(--mute);font:500 12px var(--mono);display:flex;align-items:center;justify-content:center;animation:lit 5s infinite}
+@media(max-width:1180px){#tower{display:none}}
+#dead .big{animation:stamp .5s cubic-bezier(.2,1.2,.4,1) both}
+#end .chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+#end .chips span{border:1px solid var(--paper);padding:6px 10px;font:700 13px var(--mono);animation:pop .4s both;animation-delay:calc(var(--i)*.12s + .3s)}
+#doors{position:fixed;inset:0;z-index:60;pointer-events:none}
+#doors .dl,#doors .dr{position:absolute;top:0;bottom:0;width:50%;background:linear-gradient(90deg,#171b1f,#0e1012);transition:transform .55s cubic-bezier(.7,0,.3,1)}
+#doors .dl{left:0;transform:translateX(-101%);border-right:3px solid #2a2f34}
+#doors .dr{right:0;transform:translateX(101%);border-left:3px solid #2a2f34}
+#doors.closed{pointer-events:auto}
+#doors.closed .dl,#doors.closed .dr{transform:none}
+#dNum{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);font:900 clamp(48px,11vw,110px) var(--sans);letter-spacing:.06em;opacity:0;transition:opacity .3s .35s,transform .5s .35s;color:var(--paper);white-space:nowrap}
+#doors.closed #dNum{opacity:1;transform:translate(-50%,-50%) scale(1)}
+/* building meter */
+#meter{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-bottom:12px}
+#meter div{height:26px;display:flex;align-items:center;justify-content:center;font:500 11px var(--mono);border:1px solid var(--line);color:var(--mute)}
+#meter div.cur{background:var(--paper);color:var(--ink);border-color:var(--paper);font-weight:700}
+#meter div.done{background:#222a30;color:#6f8590}
+#floorBig{display:flex;align-items:baseline;gap:10px;margin:2px 0 10px}
+#floorBig b{font:900 44px var(--sans);letter-spacing:.04em}
+#floorBig span{color:var(--mute);font:500 12px var(--mono);letter-spacing:.14em}
+
+/* rule card */
+.rc{display:flex;gap:10px;align-items:center;background:var(--paper);color:var(--ink);padding:9px 11px;border-left:6px solid var(--red);margin-bottom:8px;border-radius:2px;position:relative}
+.rc.must{border-left-color:var(--blue)}
+.rc .ico{flex:none;display:flex;align-items:center;gap:2px;min-width:44px}
+.rc .plus{font:700 14px var(--mono);color:#777;margin:0 1px}
+.rc .tx{font-weight:700;font-size:14.5px;line-height:1.5;padding-right:30px;padding-top:6px}
+.rc .tag{position:absolute;right:6px;top:4px;font:700 10px var(--mono);letter-spacing:.14em;color:var(--red2)}
+.rc.must .tag{color:var(--blue)}
+.rc.bad{outline:4px solid var(--red);outline-offset:1px}
+.sw{display:inline-block;width:18px;height:18px;border-radius:3px;border:2px solid #15171a;vertical-align:middle}
+.hdr{font:500 11px var(--mono);letter-spacing:.2em;color:var(--mute);margin:14px 0 8px}
+
+.screen{position:fixed;inset:0;display:none;z-index:20;align-items:center;justify-content:center;padding:20px;background:radial-gradient(70rem 40rem at 50% 20%,#1b2024,#0a0b0c)}
+.screen.on{display:flex}
+.btn{border:1px solid var(--paper);background:var(--paper);color:var(--ink);padding:14px 34px;font:900 17px var(--sans);letter-spacing:.24em;border-radius:2px}
+.btn:hover{background:#fff}
+.btn.ghost{background:transparent;color:var(--paper);border-color:var(--line);font-weight:700;font-size:14px;padding:12px 22px;letter-spacing:.14em}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.box{width:min(640px,100%);max-height:100%;overflow:auto;position:relative;z-index:1}
+h1{margin:6px 0;font-size:clamp(40px,8vw,78px);font-weight:900;letter-spacing:.12em;line-height:1.05}
+h1 span{color:var(--red)}
+.k{font:500 12px var(--mono);letter-spacing:.4em;color:var(--mute)}
+.lead{color:#b9c1c6;line-height:1.9;font-size:15px;margin:12px 0 22px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 24px}
+.how div{border:1px solid var(--line);padding:14px 8px;text-align:center;background:rgba(21,24,27,.7);font-size:13px;line-height:1.6}
+.how .ic{display:block;margin:0 auto 8px}
+#brief .big{display:flex;align-items:baseline;justify-content:center;gap:12px;margin-bottom:12px}
+#brief .big b{font:900 72px var(--sans);letter-spacing:.04em}
+#brief .big span{font:500 12px var(--mono);letter-spacing:.2em;color:var(--mute)}
+#dead{background:radial-gradient(60rem 36rem at 50% 40%,#3a0f0c,#0a0505)}
+#dead .big{font-size:clamp(34px,7vw,60px);font-weight:900;letter-spacing:.14em;color:var(--red);margin:0 0 14px;text-align:center}
+#dead .why{color:#e2b1aa;font-size:15px;margin:8px 0 22px;text-align:center;letter-spacing:.04em}
+#fade{position:fixed;inset:0;background:#0a0b0c;opacity:0;pointer-events:none;z-index:30;transition:opacity .6s ease}
+#list .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0 12px}
+#list .cat{grid-column:1/-1}
+#end h2{font-size:clamp(30px,6vw,52px);font-weight:900;letter-spacing:.14em;margin:0 0 8px;text-align:center}
+#end p{color:#b9c1c6;line-height:1.9;text-align:center}
+@media(max-width:900px){#sheet{display:none}#sheet.show{display:block;position:absolute;z-index:6;left:0;top:0;bottom:0;width:min(88vw,340px);box-shadow:0 0 0 100vmax rgba(0,0,0,.6)}.how{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="bar">
+    <span class="zone">規則を守れ!</span><span id="info"></span><span class="sp"></span>
+    <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
+  </div>
+  <div id="main">
+    <aside id="sheet"></aside>
+    <div id="stageWrap"><canvas id="stage"></canvas><div id="msg"></div>
+      <div id="stanceBar"></div>
+      <div id="stick"><div id="knob"></div></div>
+      <div id="dpad"><button data-d="0,-1" class="u"></button><button data-d="-1,0" class="l"></button><i></i><button data-d="1,0" class="r"></button><button data-d="0,1" class="d"></button></div></div>
+  </div>
+</div>
+
+<section id="title" class="screen on"><div id="tower" aria-hidden="true"></div><div class="box" style="text-align:center">
+  <div class="k">RULES / DESCENT</div>
+  <h1>規則を<span>守れ!</span></h1>
+  <div class="sub">規則を守って1Fに着け!</div>
+  <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
+  <div class="how" id="how"></div>
+  <div class="row"><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p>
+</div></section>
+
+<section id="brief" class="screen"><div class="box">
+  <div class="big"><b id="bFloor">10F</b><span id="bSub">出口は 1F</span></div><div class="mapchip" id="bMap"></div>
+  <div id="bRules"></div>
+  <div class="row" style="margin-top:14px"><button class="btn" id="goBtn">この階に入る</button></div>
+  <p style="text-align:center;color:#8d979e;font-size:12px;margin-top:12px;letter-spacing:.08em" id="bHint"></p>
+</div></section>
+
+<section id="dead" class="screen"><div class="box">
+  <p class="big">違反</p><div id="dRule"></div><div class="why" id="dWhy"></div>
+  <div class="row"><button class="btn red" id="retryBtn">この階をやり直す</button><button class="btn ghost" id="newBtn">最初から（新しい規則）</button></div>
+</div></section>
+
+<section id="end" class="screen"><div class="box">
+  <h2>脱出</h2><p id="endText"></p>
+  <div class="row" style="margin-top:20px"><button class="btn red" id="againBtn">もう一度（新しい規則）</button><button class="btn ghost" id="endMenu">タイトル</button></div>
+</div></section>
+
+<section id="list" class="screen"><div class="box">
+  <div class="k" style="text-align:center" id="listK"></div>
+  <div id="listBody"></div>
+  <div class="row" style="margin:14px 0"><button class="btn ghost" id="listClose">閉じる</button></div>
+</div></section>
+<div id="doors"><div class="dl"></div><div class="dr"></div><div id="dNum"></div></div>
+<section id="settings" class="screen"><div class="box wide">
+  <div class="k" style="text-align:center">SETTINGS</div>
+  <h2 class="sh">設定</h2>
+  <div class="setrow"><label>操作方法</label><div id="ddCtl"></div></div>
+  <div class="setrow" id="rowSide"><label>ジョイスティック / 方向ボタンの位置</label><div id="ddSide"></div></div>
+  <div class="setrow"><label>アニメーションを控えめにする</label><div id="tgCalm"></div></div>
+  <div class="hdr">効果音</div>
+  <div class="snd master"><span class="sico" id="mIco"></span><span class="sn">全体の音量</span><input type="range" min="0" max="100" id="vMaster"><span class="pct" id="pMaster"></span></div>
+  <div id="sndList"></div>
+  <div class="hdr">キーボード / コントローラー</div>
+  <div class="keys" id="keyHelp"></div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div>
+</div></section>
+
+<script>
+(()=>{
+"use strict";
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v);}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ================= アイコン（SVG） ================= */
+const IC={
+camera:'<rect x="2" y="7" width="14" height="10" rx="2"/><path d="M16 10.5l6-3v9l-6-3z"/>',
+eye:'<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>',
+hand:'<path d="M8 12V5.5a1.6 1.6 0 013.2 0V11M11.2 10.5V4a1.6 1.6 0 013.2 0v6.5M14.4 10.5V5.5a1.6 1.6 0 013.2 0V13M17.6 10.5a1.6 1.6 0 013.2 0V15a7 7 0 01-7 7h-1a7 7 0 01-5.5-2.7L3.5 15a1.6 1.6 0 012.4-2L8 14.5"/>',
+guard:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5 21v-2.5a5.5 5.5 0 015.5-5.5h3a5.5 5.5 0 015.5 5.5V21zM8 5.5h8L15 3H9z"/>',
+walk:'<circle cx="13" cy="4" r="2"/><path d="M11 8.5l-3 3 2 2.5-1.5 6.5M11 8.5l3.5 2 3 .5M10 14l3.5 2 1 5"/>',
+run:'<circle cx="14" cy="4" r="2"/><path d="M12 8l-4 3 2 2-3 5M12 8l4 3 3-1M10 13l4 2-1 6M2 9h3M1 12h3"/>',
+crouch:'<circle cx="8" cy="6" r="2"/><path d="M8 9l-1 5 5 1 4 4M7 14l-4 5M12 15l-2 5"/>',
+stairs:'<path d="M3 21h5v-5h5v-5h5V6h3"/>',
+down:'<path d="M12 4v15M6 13l6 6 6-6"/>',
+key:'<circle cx="7.5" cy="12" r="4"/><path d="M11.5 12H22M18 12v4M21.5 12v3"/>',
+coin:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 10h4.5a1.5 1.5 0 010 3H9"/>',
+card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h5"/>',
+bell:'<path d="M6 17v-6a6 6 0 0112 0v6l2 2H4z"/><path d="M10 21a2 2 0 004 0"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+timer:'<circle cx="12" cy="13.5" r="8"/><path d="M12 9v4.5l2.5 2M9 2.5h6"/>',
+lamp:'<path d="M9 18h6M10 21h4M12 3a6 6 0 00-4 10.5V16h8v-2.5A6 6 0 0012 3z"/>',
+bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+desk:'<rect x="2" y="9" width="20" height="3"/><path d="M5 12v8M19 12v8M2 15h6"/>',
+plant:'<path d="M12 21v-9M12 12c-5 0-7-4-7-7 5 0 7 3 7 7zM12 14c4 0 6-3 6-6-4 0-6 2-6 6zM8 21h8"/>',
+vending:'<rect x="5" y="2" width="14" height="20" rx="2"/><rect x="8" y="5" width="8" height="8"/><path d="M8 17h8"/>',
+door:'<rect x="5" y="2" width="14" height="20"/><circle cx="15" cy="12" r="1"/>',
+switch:'<rect x="7" y="2" width="10" height="20" rx="2"/><rect x="10" y="6" width="4" height="6"/>',
+bin:'<path d="M5 6h14M9 6V3h6v3M7 6l1 15h8l1-15"/>',
+locker:'<rect x="4" y="2" width="16" height="20"/><path d="M12 2v20M9 12v2M15 12v2"/>',
+sofa:'<path d="M5 11V8a3 3 0 013-3h8a3 3 0 013 3v3M2 11a2 2 0 014 0v3h12v-3a2 2 0 114 0v6H2zM5 17v2M19 17v2"/>',
+center:'<circle cx="12" cy="12" r="3"/><path d="M12 2v5M12 17v5M2 12h5M17 12h5"/>',
+edge:'<rect x="3" y="3" width="18" height="18"/><rect x="7" y="7" width="10" height="10" stroke-dasharray="2 2"/>',
+corner:'<path d="M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6"/>',
+left:'<rect x="3" y="3" width="18" height="18"/><path d="M12 3v18"/><rect x="3" y="3" width="9" height="18" fill="currentColor" opacity=".4"/>',
+right:'<rect x="3" y="3" width="18" height="18"/><path d="M12 3v18"/><rect x="12" y="3" width="9" height="18" fill="currentColor" opacity=".4"/>',
+speaker:'<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/>',
+exit:'<path d="M10 3H4v18h6M14 7l5 5-5 5M19 12H9"/>',
+tile:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/>',
+check:'<path d="M5 13l4 4 10-10"/>',
+emerg:'<path d="M3 21h5v-5h5v-5h5V6h3"/><path d="M19 14v3M19 19.5v.6"/>',
+person:'<circle cx="12" cy="7.5" r="3.5"/><path d="M5 21v-2a6 6 0 016-6h2a6 6 0 016 6v2z"/>',
+pc:'<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/>',
+printer:'<path d="M7 9V3h10v6M7 17H4V9h16v8h-3"/><rect x="7" y="14" width="10" height="7"/>',
+water:'<path d="M8 2h8v4l1 3v13H7V9l1-3z"/><path d="M7 14h10"/>',
+tv:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M8 22h8M9 2l3 3 3-3"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>',
+joystick:'<circle cx="12" cy="7" r="3.5"/><path d="M12 10.5V16M5 20a7 3 0 0014 0z"/>',
+dpad:'<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+gamepad:'<path d="M6 8h12a4 4 0 014 4v2a3 3 0 01-5.5 1.6L15 14H9l-1.5 1.6A3 3 0 012 14v-2a4 4 0 014-4z"/><path d="M7 11v2M6 12h2M16 11.5h.01M18 12.5h.01"/>',
+keyboard:'<rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>',
+chev:'<path d="M6 9l6 6 6-6"/>',
+map:'<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
+top:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="3" width="18" height="9" fill="currentColor" opacity=".4"/>',
+bottom:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="12" width="18" height="9" fill="currentColor" opacity=".4"/>',
+midrow:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="9" width="18" height="6" fill="currentColor" opacity=".4"/>',
+midcol:'<rect x="3" y="3" width="18" height="18"/><rect x="9" y="3" width="6" height="18" fill="currentColor" opacity=".4"/>',
+tl:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="3" width="9" height="9" fill="currentColor" opacity=".4"/>',
+br:'<rect x="3" y="3" width="18" height="18"/><rect x="12" y="12" width="9" height="9" fill="currentColor" opacity=".4"/>',
+near:'<rect x="9" y="9" width="6" height="6" fill="currentColor" opacity=".5"/><rect x="3" y="3" width="18" height="18" stroke-dasharray="3 3"/>',
+wall:'<rect x="3" y="4" width="18" height="16"/><path d="M3 9.3h18M3 14.6h18M9 4v5.3M15 9.3v5.3M9 14.6V20"/>'
+};
+function svg(name,o){
+  o=o||{}; const size=o.size||30, col=o.color||"#15171a";
+  const ban=o.ban?'<circle cx="12" cy="12" r="11" stroke="#e04a3a" stroke-width="2"/><path d="M4.4 19.6L19.6 4.4" stroke="#e04a3a" stroke-width="2.4"/>':'';
+  return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${o.sw||1.9}" stroke-linecap="round" stroke-linejoin="round" style="color:${col}">${IC[name]||""}${ban}</svg>`;
+}
+const imgCache={};
+function iconImg(name,color){
+  const k=name+color; if(imgCache[k]) return imgCache[k];
+  const im=new Image();
+  im.src="data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="color:${color}">${IC[name]}</svg>`);
+  imgCache[k]=im; return im;
+}
+function drawIcon(c,name,x,y,s,color){ const im=iconImg(name,color||"#e9e5da"); if(im.complete&&im.naturalWidth) c.drawImage(im,x-s/2,y-s/2,s,s); }
+
+/* ================= 基本定数 ================= */
+const TS=60,GW=16,GH=9,MAPY=50,DW=960,DH=MAPY+GH*TS;
+const NP=65*37, CYC=12, SUBS=96, TK=48;
+const SPEED=[120,240,60], DTICK=[2,1,4], STN=["walk","run","crouch"], STNAME=["歩く","走る","しゃがむ"];
+const COLS={r:"#c9453a",b:"#3a6fc9",y:"#d6b13a",g:"#3f9b62",w:"#59626a"};
+const CNAME={r:"赤",b:"青",y:"黄",g:"緑"};
+const COLBIT={r:1,b:2,g:4};
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function shuffle(a,rng){for(let i=a.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const pick=(a,rng)=>a[Math.floor(rng()*a.length)];
+
+/* ================= 環境関数 ================= */
+const EV={alarm:[7,11],chime:[6,9],black:[2,6]};
+function evOn(fl,k,t,m){ const a=EV[k][0],b=EV[k][1],u=(((t-fl.off)%CYC)+CYC)%CYC,e=m?.3:0; return u>=a-e&&u<b+e; }
+function camAngle(cm,t){ return cm.base+cm.amp*Math.sin(2*Math.PI*t/cm.per+cm.ph); }
+function camSees(fl,cm,t,px,py,m){
+  const dx=px-cm.px,dy=py-cm.py,d=Math.hypot(dx,dy); if(d<6) return false;
+  if(d>cm.range+(m?18:0)) return false;
+  let da=Math.atan2(dy,dx)-camAngle(cm,t); da=Math.atan2(Math.sin(da),Math.cos(da));
+  if(Math.abs(da)>cm.fov+(m?.12+14/d:0)) return false;
+  if(m) return true;
+  const n=Math.ceil(d/10), ptx=Math.floor(px/TS), pty=Math.floor(py/TS);
+  for(let i=1;i<n;i++){ const x=cm.px+dx*i/n,y=cm.py+dy*i/n,tx=Math.floor(x/TS),ty=Math.floor(y/TS);
+    if(tx<0||ty<0||tx>=GW||ty>=GH) continue; if(fl.obst[ty*GW+tx]&&!(tx===ptx&&ty===pty)) return false; }
+  return true;
+}
+function guardPos(g,t){ const u=(((t+g.ph)%g.per)+g.per)%g.per/g.per, tri=u<.5?u*2:2-2*u; const dir=u<.5?1:-1;
+  return {x:g.ax+(g.bx-g.ax)*tri,y:g.ay+(g.by-g.ay)*tri,fx:(g.bx-g.ax)*dir,fy:(g.by-g.ay)*dir}; }
+function guardNear(fl,c,rad){ for(const g of fl.guards){ const p=guardPos(g,c.t); if(Math.hypot(c.px-p.x,c.py-p.y)<(rad+(c.m?.3:0))*TS) return true; } return false; }
+function guardSight(fl,c){ for(const g of fl.guards){ const p=guardPos(g,c.t),dx=c.px-p.x,dy=c.py-p.y,d=Math.hypot(dx,dy); if(d>(4+(c.m?.3:0))*TS||d<1) continue;
+  let da=Math.atan2(dy,dx)-Math.atan2(p.fy,p.fx); da=Math.atan2(Math.sin(da),Math.cos(da)); if(Math.abs(da)<.6+(c.m?.2:0)) return true; } return false; }
+class Ctx{
+  constructor(fl,bfs){this.fl=fl;this.bfs=bfs;this.m=bfs;this.sub=0;this.pi=0;this.t=0;this.abs=0;this.px=0;this.py=0;this.tx=0;this.ty=0;this.moving=false;this.stance="walk";this.key=false;this.card=false;this.still=0;this.col="";}
+  cam(mask){ if(this.bfs) return (this.fl.camMask[this.sub*NP+this.pi]&mask)!==0;
+    for(const cm of this.fl.cams){ if((COLBIT[cm.col]&mask)&&camSees(this.fl,cm,this.t,this.px,this.py,false)) return true; } return false; }
+  item(){ return this.fl.itemGrid[this.ty*GW+this.tx]; }
+}
+
+/* ================= 規則定義 ================= */
+const RULES=[],RM={};
+function R(o){ RULES.push(o); RM[o.id]=o; }
+const GROUPCAP={cam:1,guard:1,stairs:1,zone:2,tile:2,time:2,touch:2,item:1,stance:1,misc:1};
+const GROUPNAME={cam:"監視カメラ",guard:"警備員",touch:"触れる",tile:"床のタイル",stance:"動き方",zone:"場所",time:"時間",stairs:"階段",item:"アイテム",misc:"その他"};
+// カメラ
+function camRule(id,text,ic,ban,cols,pred){ R({id,g:"cam",text,ic,ban,need:["cam"],camCols:cols,conf:[],frame(c){ if(!c.cam(cols?cols.reduce((a,k)=>a|COLBIT[k],0):7)) return null; return pred(c);} }); }
+camRule("camAll","監視カメラに見られてはならない",["eye","camera"],true,null,c=>"監視カメラに見られた。");
+camRule("camR","赤いランプのカメラに見られてはならない",["eye","camera"],true,["r"],c=>"赤いカメラに見られた。");
+camRule("camB","青いランプのカメラに見られてはならない",["eye","camera"],true,["b"],c=>"青いカメラに見られた。");
+camRule("camG","緑のランプのカメラに見られてはならない",["eye","camera"],true,["g"],c=>"緑のカメラに見られた。");
+camRule("camCrouch","カメラの視界の中では、しゃがむこと",["crouch","camera"],false,null,c=>c.stance!=="crouch"?"カメラの視界の中で、しゃがんでいなかった。":null);
+camRule("camStill","カメラの視界の中では、動いてはならない",["walk","camera"],true,null,c=>c.moving?"カメラの視界の中で動いた。":null);
+camRule("camNoRun","カメラの視界の中で、走ってはならない",["run","camera"],true,null,c=>c.stance==="run"&&c.moving?"カメラの視界の中で走った。":null);
+camRule("camRun","カメラの視界の中では、走ること",["run","camera"],false,null,c=>c.stance!=="run"?"カメラの視界の中で、走っていなかった。":null);
+// 警備員
+function guardRule(id,text,ic,ban,f){ R({id,g:"guard",text,ic,ban,need:["guard"],frame:f}); }
+guardRule("guardNear","警備員に2マス以内に近づいてはならない",["guard"],true,c=>guardNear(c.fl,c,2)?"警備員に近づきすぎた。":null);
+guardRule("guardSight","警備員の正面に入ってはならない",["eye","guard"],true,c=>guardSight(c.fl,c)?"警備員の正面に入った。":null);
+guardRule("guardCrouch","警備員の3マス以内では、しゃがむこと",["crouch","guard"],false,c=>guardNear(c.fl,c,3)&&c.stance!=="crouch"?"警備員の近くで、しゃがんでいなかった。":null);
+guardRule("guardStill","警備員の3マス以内では、動いてはならない",["walk","guard"],true,c=>guardNear(c.fl,c,3)&&c.moving?"警備員の近くで動いた。":null);
+// 触れる
+const OBJT=[["pc","パソコン"],["printer","プリンター"],["water","ウォーターサーバー"],["tv","テレビ"],["desk","机"],["plant","観葉植物"],["vending","自動販売機"],["door","扉"],["clock","壁時計"],["switch","スイッチ"],["bin","ゴミ箱"],["locker","ロッカー"],["sofa","ソファ"],["lamp","フロアライト"]];
+const OBJNAME=Object.fromEntries(OBJT);
+R({id:"touchAny",g:"touch",text:"床以外のものに、触れてはならない",ic:["hand"],ban:true,conf:["touch"],touch:(c,o)=>"床以外のものに触れた。"});
+OBJT.forEach(([t,n])=>R({id:"touch_"+t,g:"touch",text:`${n}に触れてはならない`,ic:["hand",t],ban:true,need:["obj:"+t],conf:["touchAny"],touch:(c,o)=>o.t===t?`${n}に触れた。`:null}));
+["r","b","y","g"].forEach(k=>R({id:"touchc_"+k,g:"touch",text:`${CNAME[k]}い物に触れてはならない`,ic:["hand"],sw:k,ban:true,need:["col:"+k],conf:["touchAny"],touch:(c,o)=>o.c===k?`${CNAME[k]}い物に触れた。`:null}));
+R({id:"touchOnlyB",g:"touch",text:"触れてよいのは、青い物だけ",ic:["hand"],sw:"b",ban:false,conf:["touchAny","touchc_b"],touch:(c,o)=>o.c!=="b"?"青くない物に触れた。":null});
+// タイル
+const TNAME={r:"赤いタイル",b:"青いタイル",y:"黄色いタイル",g:"緑のタイル"};
+["r","b","y","g"].forEach(k=>R({id:"step_"+k,g:"tile",text:`${TNAME[k]}を踏んではならない`,ic:["tile"],sw:k,ban:true,conf:["tileOnlyW"],frame:c=>c.col===k?`${TNAME[k]}を踏んだ。`:null}));
+R({id:"tileOnlyW",g:"tile",text:"白いタイル以外を、踏んではならない",ic:["tile"],sw:"w",ban:true,conf:["tile"],frame:c=>c.col!==""?"色付きのタイルを踏んだ。":null});
+R({id:"colorStop",g:"tile",text:"色付きタイルの上で、立ち止まってはならない",ic:["walk","tile"],ban:true,conf:["tileOnlyW"],frame:c=>!c.moving&&c.still>=.5&&c.col!==""?"色付きタイルの上で立ち止まった。":null});
+R({id:"redCrouch",g:"tile",text:"赤いタイルの上では、しゃがむこと",ic:["crouch"],sw:"r",ban:false,conf:["tileOnlyW","step_r","noCrouch","crouchNoMove"],frame:c=>c.col==="r"&&c.stance!=="crouch"?"赤いタイルの上で、しゃがんでいなかった。":null});
+R({id:"blueRun",g:"tile",text:"青いタイルの上では、走ること",ic:["run"],sw:"b",ban:false,conf:["tileOnlyW","step_b","noRun","camNoRun"],frame:c=>c.col==="b"&&c.stance!=="run"?"青いタイルの上で、走っていなかった。":null});
+R({id:"yellowNoRun",g:"tile",text:"黄色いタイルの上で、走ってはならない",ic:["run"],sw:"y",ban:true,conf:["tileOnlyW","step_y"],frame:c=>c.col==="y"&&c.stance==="run"&&c.moving?"黄色いタイルの上で走った。":null});
+R({id:"greenWalk",g:"tile",text:"緑のタイルの上では、歩くこと",ic:["walk"],sw:"g",ban:false,conf:["tileOnlyW","step_g"],frame:c=>c.col==="g"&&c.stance!=="walk"?"緑のタイルの上で、歩いていなかった。":null});
+// 動き方
+R({id:"noRun",g:"stance",text:"走ってはならない",ic:["run"],ban:true,conf:["blueRun","camRun"],frame:c=>c.stance==="run"&&c.moving?"走った。":null});
+R({id:"noCrouch",g:"stance",text:"しゃがんではならない",ic:["crouch"],ban:true,conf:["camCrouch","redCrouch","guardCrouch","alarmCrouch","stairCrouch"],frame:c=>c.stance==="crouch"?"しゃがんだ。":null});
+R({id:"crouchNoMove",g:"stance",text:"しゃがんだまま、移動してはならない",ic:["crouch","walk"],ban:true,conf:["camCrouch","redCrouch","guardCrouch","stairCrouch"],frame:c=>c.stance==="crouch"&&c.moving?"しゃがんだまま移動した。":null});
+// 場所
+R({id:"noCenter",g:"zone",text:"中央の区域に入ってはならない",ic:["center"],ban:true,zone:"center",frame:c=>c.tx>=6&&c.tx<=9&&c.ty>=3&&c.ty<=5?"中央の区域に入った。":null});
+R({id:"noEdge",g:"zone",text:"壁際を歩いてはならない",ic:["edge"],ban:true,zone:"edge",frame:c=>c.tx===0||c.tx===GW-1||c.ty===0||c.ty===GH-1?"壁際を歩いた。":null});
+R({id:"noCorner",g:"zone",text:"四隅に入ってはならない",ic:["corner"],ban:true,zone:"corner",frame:c=>(c.tx<=1||c.tx>=GW-2)&&(c.ty<=1||c.ty>=GH-2)?"四隅に入った。":null});
+R({id:"noLeft",g:"zone",text:"左半分に入ってはならない",ic:["left"],ban:true,zone:"left",conf:["noRight"],frame:c=>c.tx<=7?"左半分に入った。":null});
+R({id:"noRight",g:"zone",text:"右半分に入ってはならない",ic:["right"],ban:true,zone:"right",conf:["noLeft"],frame:c=>c.tx>=8?"右半分に入った。":null});
+R({id:"lampLight",g:"zone",text:"照明の光の中に入ってはならない",ic:["lamp"],ban:true,need:["lamp"],frame:c=>{ for(const l of c.fl.lamps){ if(Math.hypot(c.px-l.px,c.py-l.py)<(1.8+(c.m?.25:0))*TS) return "照明の光の中に入った。"; } return null; }});
+// 時間
+R({id:"alarmFreeze",g:"time",text:"警報が鳴っている間は、動いてはならない",ic:["walk","bell"],ban:true,need:["ev:alarm"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.moving?"警報の間に動いた。":null});
+R({id:"alarmCrouch",g:"time",text:"警報が鳴っている間は、しゃがむこと",ic:["crouch","bell"],ban:false,need:["ev:alarm"],conf:["noCrouch","alarmFreeze"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.stance!=="crouch"?"警報の間に、しゃがんでいなかった。":null});
+R({id:"blackFreeze",g:"time",text:"停電している間は、動いてはならない",ic:["walk","bolt"],ban:true,need:["ev:black"],frame:c=>evOn(c.fl,"black",c.t,c.m)&&c.moving?"停電の間に動いた。":null});
+R({id:"chimeFreeze",g:"time",text:"チャイムが鳴ったら、3秒間動いてはならない",ic:["walk","speaker"],ban:true,need:["ev:chime"],frame:c=>evOn(c.fl,"chime",c.t,c.m)&&c.moving?"チャイムの後に動いた。":null});
+R({id:"timeLimit",g:"time",text:"この階は、{lim}秒以内に降りること",ic:["timer","down"],ban:false,need:["limit"],frame:c=>c.abs>c.fl.limit?"制限時間を過ぎた。":null});
+// 階段
+R({id:"stEvenL",g:"stairs",text:"偶数階は左の階段、奇数階は右の階段を使うこと",ic:["stairs","left"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%2===0)?st.side==="L":st.side==="R")?null:"使うべきでない側の階段に入った。"});
+R({id:"stEvenR",g:"stairs",text:"偶数階は右の階段、奇数階は左の階段を使うこと",ic:["stairs","right"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%2===0)?st.side==="R":st.side==="L")?null:"使うべきでない側の階段に入った。"});
+R({id:"noEmerg",g:"stairs",text:"赤い非常階段を使ってはならない",ic:["emerg"],ban:true,need:["emerg"],stair:(c,st)=>st.kind==="emerg"?"非常階段を使った。":null});
+R({id:"onlyEmerg",g:"stairs",text:"非常階段だけを使うこと",ic:["emerg"],ban:false,need:["emerg"],stair:(c,st)=>st.kind!=="emerg"?"非常階段ではない階段を使った。":null});
+R({id:"stCrouch",g:"stairs",text:"階段には、しゃがんで入ること",ic:["crouch","stairs"],ban:false,conf:["noCrouch","crouchNoMove"],stair:(c,st)=>c.stance!=="crouch"?"しゃがまずに階段に入った。":null});
+R({id:"stNoRun",g:"stairs",text:"階段に、走って入ってはならない",ic:["run","stairs"],ban:true,conf:["blueRun"],stair:(c,st)=>c.stance==="run"?"走って階段に入った。":null});
+// アイテム
+R({id:"needKey",g:"item",text:"鍵を拾ってから、降りること",ic:["key","down"],ban:false,need:["key"],stair:(c,st)=>c.key?null:"鍵を持たずに降りた。"});
+R({id:"needCard",g:"item",text:"カードを拾ってから、降りること",ic:["card","down"],ban:false,need:["card"],stair:(c,st)=>c.card?null:"カードを持たずに降りた。"});
+R({id:"noCoin",g:"item",text:"コインを拾ってはならない",ic:["coin"],ban:true,need:["coin"],frame:c=>c.item()===1?"コインを拾った。":null});
+R({id:"noKey",g:"item",text:"鍵を拾ってはならない",ic:["key"],ban:true,need:["keyAvoid"],frame:c=>c.item()===2?"鍵を拾った。":null});
+// その他
+R({id:"tapRate",g:"misc",text:"画面を1秒間に4回以上タップしてはならない",ic:["hand"],ban:true,tapR:true});
+
+/* ---- 追加規則 ---- */
+R({id:"touchc_w",g:"touch",text:"白い物に触れてはならない",ic:["hand"],sw:"w",ban:true,need:["col:w"],conf:["touchAny","touchOnlyB","touchOnlyR"],touch:(c,o)=>o.c==="w"?"白い物に触れた。":null});
+R({id:"touchOnlyR",g:"touch",text:"触れてよいのは、赤い物だけ",ic:["hand"],sw:"r",ban:false,conf:["touchAny","touchc_r","touchOnlyB"],touch:(c,o)=>o.c!=="r"?"赤くない物に触れた。":null});
+R({id:"alarmNoTouch",g:"touch",text:"警報が鳴っている間は、物に触れてはならない",ic:["hand","bell"],ban:true,need:["ev:alarm"],conf:["touchAny"],touch:(c,o)=>evOn(c.fl,"alarm",c.t,false)?"警報の間に物に触れた。":null});
+R({id:"blackNoTouch",g:"touch",text:"停電している間は、物に触れてはならない",ic:["hand","bolt"],ban:true,need:["ev:black"],conf:["touchAny"],touch:(c,o)=>evOn(c.fl,"black",c.t,false)?"停電の間に物に触れた。":null});
+R({id:"yellowCrouch",g:"tile",text:"黄色いタイルの上では、しゃがむこと",ic:["crouch"],sw:"y",ban:false,conf:["tileOnlyW","step_y","noCrouch","crouchNoMove","yellowNoRun"],frame:c=>c.col==="y"&&c.stance!=="crouch"?"黄色いタイルの上で、しゃがんでいなかった。":null});
+R({id:"greenRun",g:"tile",text:"緑のタイルの上では、走ること",ic:["run"],sw:"g",ban:false,conf:["tileOnlyW","step_g","noRun","greenWalk","greenNoCrouch"],frame:c=>c.col==="g"&&c.stance!=="run"?"緑のタイルの上で、走っていなかった。":null});
+R({id:"redNoRun",g:"tile",text:"赤いタイルの上で、走ってはならない",ic:["run"],sw:"r",ban:true,conf:["tileOnlyW","step_r","blueRun"],frame:c=>c.col==="r"&&c.stance==="run"&&c.moving?"赤いタイルの上で走った。":null});
+R({id:"blueCrouch",g:"tile",text:"青いタイルの上では、しゃがむこと",ic:["crouch"],sw:"b",ban:false,conf:["tileOnlyW","step_b","noCrouch","crouchNoMove","blueRun"],frame:c=>c.col==="b"&&c.stance!=="crouch"?"青いタイルの上で、しゃがんでいなかった。":null});
+R({id:"greenNoCrouch",g:"tile",text:"緑のタイルの上で、しゃがんではならない",ic:["crouch"],sw:"g",ban:true,conf:["tileOnlyW","step_g","greenRun"],frame:c=>c.col==="g"&&c.stance==="crouch"?"緑のタイルの上でしゃがんだ。":null});
+R({id:"redStop",g:"tile",text:"赤いタイルの上で、立ち止まってはならない",ic:["walk"],sw:"r",ban:true,conf:["tileOnlyW","step_r","colorStop"],frame:c=>c.col==="r"&&!c.moving&&c.still>=.5?"赤いタイルの上で立ち止まった。":null});
+R({id:"stepRB",g:"tile",text:"赤と青のタイルを踏んではならない",ic:["tile"],sw:"rb",ban:true,conf:["tileOnlyW","step_r","step_b","redCrouch","blueRun","redNoRun","blueCrouch"],frame:c=>c.col==="r"||c.col==="b"?"赤か青のタイルを踏んだ。":null});
+R({id:"stepYG",g:"tile",text:"黄色と緑のタイルを踏んではならない",ic:["tile"],sw:"yg",ban:true,conf:["tileOnlyW","step_y","step_g","yellowNoRun","greenWalk","yellowCrouch","greenRun","greenNoCrouch"],frame:c=>c.col==="y"||c.col==="g"?"黄色か緑のタイルを踏んだ。":null});
+R({id:"noTop",g:"zone",text:"上半分の区域に入ってはならない",ic:["top"],ban:true,zone:"top",conf:["noBottom"],frame:c=>c.ty<=3?"上半分の区域に入った。":null});
+R({id:"noBottom",g:"zone",text:"下半分の区域に入ってはならない",ic:["bottom"],ban:true,zone:"bottom",conf:["noTop"],frame:c=>c.ty>=5?"下半分の区域に入った。":null});
+R({id:"noMidRow",g:"zone",text:"中央の横ラインに入ってはならない",ic:["midrow"],ban:true,zone:"midrow",frame:c=>c.ty===4?"中央の横ラインに入った。":null});
+R({id:"noMidCol",g:"zone",text:"中央の縦ラインに入ってはならない",ic:["midcol"],ban:true,zone:"midcol",frame:c=>c.tx===7||c.tx===8?"中央の縦ラインに入った。":null});
+R({id:"noTopLeft",g:"zone",text:"左上の区域に入ってはならない",ic:["tl"],ban:true,zone:"tl",frame:c=>c.tx<=7&&c.ty<=3?"左上の区域に入った。":null});
+R({id:"noBottomRight",g:"zone",text:"右下の区域に入ってはならない",ic:["br"],ban:true,zone:"br",frame:c=>c.tx>=8&&c.ty>=5?"右下の区域に入った。":null});
+R({id:"noNearObj",g:"zone",text:"物や壁のすぐ隣を歩いてはならない",ic:["near"],ban:true,frame:c=>{ const o=c.fl.obst,x=c.tx,y=c.ty; const nb=(a,b)=>a>=0&&b>=0&&a<GW&&b<GH&&o[b*GW+a]; return nb(x+1,y)||nb(x-1,y)||nb(x,y+1)||nb(x,y-1)?"物や壁のすぐ隣を歩いた。":null; }});
+R({id:"alarmRun",g:"time",text:"警報が鳴っている間は、走ること",ic:["run","bell"],ban:false,need:["ev:alarm"],conf:["noRun","alarmCrouch","alarmNoRun","alarmFreeze"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.stance!=="run"?"警報の間に、走っていなかった。":null});
+R({id:"alarmNoRun",g:"time",text:"警報が鳴っている間は、走ってはならない",ic:["run","bell"],ban:true,need:["ev:alarm"],conf:["alarmRun"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.stance==="run"&&c.moving?"警報の間に走った。":null});
+R({id:"blackCrouch",g:"time",text:"停電している間は、しゃがむこと",ic:["crouch","bolt"],ban:false,need:["ev:black"],conf:["noCrouch","blackFreeze","blackNoRun"],frame:c=>evOn(c.fl,"black",c.t,c.m)&&c.stance!=="crouch"?"停電の間に、しゃがんでいなかった。":null});
+R({id:"blackNoRun",g:"time",text:"停電している間は、走ってはならない",ic:["run","bolt"],ban:true,need:["ev:black"],conf:["blackCrouch"],frame:c=>evOn(c.fl,"black",c.t,c.m)&&c.stance==="run"&&c.moving?"停電の間に走った。":null});
+R({id:"chimeCrouch",g:"time",text:"チャイムが鳴ったら、3秒間しゃがむこと",ic:["crouch","speaker"],ban:false,need:["ev:chime"],conf:["noCrouch","chimeFreeze","chimeNoRun"],frame:c=>evOn(c.fl,"chime",c.t,c.m)&&c.stance!=="crouch"?"チャイムの後に、しゃがんでいなかった。":null});
+R({id:"chimeNoRun",g:"time",text:"チャイムが鳴ったら、3秒間走ってはならない",ic:["run","speaker"],ban:true,need:["ev:chime"],conf:["chimeCrouch"],frame:c=>evOn(c.fl,"chime",c.t,c.m)&&c.stance==="run"&&c.moving?"チャイムの後に走った。":null});
+R({id:"stWalk",g:"stairs",text:"階段には、歩いて入ること",ic:["walk","stairs"],ban:false,conf:["stCrouch","stRun","blueRun","greenRun"],stair:(c,st)=>c.stance!=="walk"?"歩かずに階段に入った。":null});
+R({id:"stRun",g:"stairs",text:"階段には、走って入ること",ic:["run","stairs"],ban:false,conf:["stCrouch","stWalk","stNoRun","noRun"],stair:(c,st)=>c.stance!=="run"?"走らずに階段に入った。":null});
+R({id:"stNoCrouch",g:"stairs",text:"階段に、しゃがんで入ってはならない",ic:["crouch","stairs"],ban:true,conf:["stCrouch"],stair:(c,st)=>c.stance==="crouch"?"しゃがんで階段に入った。":null});
+R({id:"noCard",g:"item",text:"カードを拾ってはならない",ic:["card"],ban:true,need:["cardAvoid"],frame:c=>c.item()===3?"カードを拾った。":null});
+R({id:"guardNear3",g:"guard",text:"警備員に3マス以内に近づいてはならない",ic:["guard"],ban:true,need:["guard"],frame:c=>guardNear(c.fl,c,3)?"警備員に近づきすぎた。":null});
+R({id:"guardNoRun",g:"guard",text:"警備員の3マス以内では、走ってはならない",ic:["run","guard"],ban:true,need:["guard"],frame:c=>guardNear(c.fl,c,3)&&c.stance==="run"&&c.moving?"警備員の近くで走った。":null});
+R({id:"guardRun",g:"guard",text:"警備員の3マス以内では、走ること",ic:["run","guard"],ban:false,need:["guard"],conf:["guardCrouch","guardStill","noRun"],frame:c=>guardNear(c.fl,c,3)&&c.stance!=="run"?"警備員の近くで、走っていなかった。":null});
+R({id:"noWalk",g:"stance",text:"歩いてはならない",ic:["walk"],ban:true,conf:["greenWalk","stWalk"],frame:c=>c.stance==="walk"&&c.moving?"歩いた。":null});
+
+function conflict(a,b){
+  const hit=(x,y)=>(x.conf||[]).some(k=>k===y.id||k===y.g);
+  return hit(a,b)||hit(b,a);
+}
+function pickRules(count,rng,n,must){
+  const chosen=[],gc={};
+  const add=r=>{chosen.push(r);gc[r.g]=(gc[r.g]||0)+1;};
+  (must||[]).forEach(id=>add(RM[id]));
+  const pool=shuffle(RULES.slice(),rng);
+  for(const r of pool){
+    if(chosen.length>=count) break;
+    if(chosen.includes(r)) continue;
+    if((gc[r.g]||0)>=GROUPCAP[r.g]) continue;
+    if(chosen.some(c=>conflict(c,r))) continue;
+    add(r);
+  }
+  return chosen;
+}
+
+/* ================= マップ（壁の配置） ================= */
+const range=(a,b)=>{const o=[];for(let i=a;i<=b;i++)o.push(i);return o;};
+const MAPS=[
+ {id:"open",name:"広間",gen:r=>[]},
+ {id:"pillar",name:"柱の広間",gen:r=>[[3,2],[3,6],[6,3],[6,5],[9,3],[9,5],[12,2],[12,6],[4,4],[11,4]]},
+ {id:"hall",name:"回廊",gen:r=>{const g1=4+Math.floor(r()*8),g2=4+Math.floor(r()*8),o=[];range(3,12).forEach(x=>{if(x!==g1)o.push([x,2]);if(x!==g2)o.push([x,6]);});return o;}},
+ {id:"rooms",name:"仕切り部屋",gen:r=>{const a=1+Math.floor(r()*6),b=1+Math.floor(r()*6),o=[];range(0,8).forEach(y=>{if(y!==a&&y!==a+1)o.push([5,y]);if(y!==b&&y!==b+1)o.push([10,y]);});return o;}},
+ {id:"cross",name:"十字路",gen:r=>{const gx1=2+Math.floor(r()*5),gx2=9+Math.floor(r()*5),gy1=Math.floor(r()*4),gy2=5+Math.floor(r()*4),o=[[8,4]];range(2,13).forEach(x=>{if(x!==gx1&&x!==gx2&&x!==8)o.push([x,4]);});range(0,8).forEach(y=>{if(y!==gy1&&y!==gy2&&y!==4)o.push([8,y]);});return o;}},
+ {id:"zigzag",name:"ジグザグ",gen:r=>{const o=[];range(0,6).forEach(y=>{o.push([4,y]);o.push([10,y]);});range(2,8).forEach(y=>{o.push([7,y]);o.push([13,y]);});return o;}},
+ {id:"ring",name:"中央の囲い",gen:r=>{const g1=Math.floor(r()*18),g2=Math.floor(r()*18),o=[];let k=0;for(let x=5;x<=10;x++){o.push([x,2]);o.push([x,6]);}for(let y=3;y<=5;y++){o.push([5,y]);o.push([10,y]);}return o.filter((_,i)=>i!==g1&&i!==g2);}},
+ {id:"blocks",name:"ブロック群",gen:r=>{const o=[];[[3,1],[3,6],[7,3],[11,1],[11,6],[13,3]].forEach(([x,y])=>{o.push([x,y],[x+1,y],[x,y+1],[x+1,y+1]);});return o;}},
+ {id:"diag",name:"斜めの壁",gen:r=>{const g=1+Math.floor(r()*6),o=[];range(0,8).forEach(k=>{if(k!==g)o.push([3+k,k],[4+k,k]);});return o;}}
+];
+
+/* ================= フロア生成 ================= */
+const OTYPES=["desk","plant","vending","door","clock","switch","bin","locker","sofa","pc","printer","water","tv"];
+const OCOLS=["r","b","y","g","w"];
+function buildLayout(n,rules,rng){
+  const need=new Set(); rules.forEach(r=>(r.need||[]).forEach(x=>need.add(x)));
+  const has=id=>rules.some(r=>r.id===id);
+  const fl={n,rules,objs:[],obst:new Uint8Array(GW*GH),tiles:new Array(GW*GH).fill(""),items:[],itemGrid:new Uint8Array(GW*GH),
+    stairs:[],cams:[],guards:[],lamps:[],wall:new Uint8Array(GW*GH),map:null,off:pick([0,2,4,6,8,10],rng),limit:999,start:null,camMask:null,hasKey:false,hasCard:false};
+  const two=need.has("stairs2")||need.has("emerg");
+  const mirror=rng()<.5;
+  const free=(x,y)=>x>=0&&y>=0&&x<GW&&y<GH&&!fl.obst[y*GW+x];
+  // 開始と階段
+  const sy=1+Math.floor(rng()*(GH-2));
+  if(two){
+    fl.start={x:6+Math.floor(rng()*4),y:1+Math.floor(rng()*(GH-2))};
+    const ly=1+Math.floor(rng()*(GH-2)), ry=1+Math.floor(rng()*(GH-2));
+    let kinds=["normal","normal"]; if(need.has("emerg")) kinds=rng()<.5?["normal","emerg"]:["emerg","normal"];
+    fl.stairs.push({x:rng()<.5?0:1,y:ly,side:"L",kind:kinds[0]},{x:rng()<.5?GW-1:GW-2,y:ry,side:"R",kind:kinds[1]});
+  } else {
+    let sx=Math.floor(rng()*3), ex=GW-1-Math.floor(rng()*3), ey=1+Math.floor(rng()*(GH-2));
+    if(mirror){ sx=GW-1-sx; ex=GW-1-ex; }
+    fl.start={x:sx,y:sy}; fl.stairs.push({x:ex,y:ey,side:ex<8?"L":"R",kind:"normal"});
+  }
+  const protectedT=new Set(); const prot=(x,y)=>{for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++)protectedT.add((y+dy)*GW+(x+dx));};
+  prot(fl.start.x,fl.start.y); fl.stairs.forEach(s=>prot(s.x,s.y));
+  { const mp=pick(MAPS,rng), fx=rng()<.5, fy=rng()<.5; fl.map={id:mp.id,name:mp.name};
+    for(let [wx,wy] of mp.gen(rng)){ if(fx) wx=GW-1-wx; if(fy) wy=GH-1-wy; if(wx<0||wy<0||wx>=GW||wy>=GH) continue; const wi=wy*GW+wx; if(protectedT.has(wi)) continue; fl.obst[wi]=1; fl.wall[wi]=1; } }
+  const place=(t,c)=>{ for(let k=0;k<60;k++){ const x=Math.floor(rng()*GW),y=Math.floor(rng()*GH); const i=y*GW+x; if(fl.obst[i]||protectedT.has(i)) continue; fl.obst[i]=1; fl.objs.push({x,y,t,c}); return true; } return false; };
+  // 必須オブジェクト
+  need.forEach(k=>{ if(k.startsWith("obj:")){ const t=k.slice(4); place(t,pick(OCOLS,rng)); place(t,pick(OCOLS,rng)); }
+    if(k.startsWith("col:")){ const c=k.slice(4); place(pick(OTYPES,rng),c); place(pick(OTYPES,rng),c); place(pick(OTYPES,rng),c); } });
+  const total=14+Math.floor(rng()*5);
+  while(fl.objs.length<total) place(pick(OTYPES,rng),pick(OCOLS,rng));
+  if(need.has("lamp")){ for(let i=0;i<3;i++){ if(place("lamp","w")){ const o=fl.objs[fl.objs.length-1]; fl.lamps.push({x:o.x,y:o.y,px:(o.x+.5)*TS,py:(o.y+.5)*TS}); } } }
+  // 警備員
+  if(need.has("guard")){
+    const cnt=1+(rng()<.4?1:0);
+    for(let g=0;g<cnt;g++){
+      for(let tr=0;tr<40;tr++){
+        const horiz=rng()<.5, len=rng()<.5?3:6;
+        const x1=Math.floor(rng()*(GW-(horiz?len:0))), y1=Math.floor(rng()*(GH-(horiz?0:len)));
+        const x2=horiz?x1+len:x1, y2=horiz?y1:y1+len;
+        let bad=false; for(let k=0;k<=len;k++){ const x=horiz?x1+k:x1,y=horiz?y1:y1+k; if(protectedT.has(y*GW+x)||fl.wall[y*GW+x]) bad=true; }
+        if(bad) continue;
+        for(let k=0;k<=len;k++){ const x=horiz?x1+k:x1,y=horiz?y1:y1+k; if(fl.obst[y*GW+x]){ fl.obst[y*GW+x]=0; fl.objs=fl.objs.filter(o=>!(o.x===x&&o.y===y)); } }
+        fl.guards.push({ax:(x1+.5)*TS,ay:(y1+.5)*TS,bx:(x2+.5)*TS,by:(y2+.5)*TS,per:len*2,ph:Math.floor(rng()*len*2)});
+        break;
+      }
+    }
+  }
+  // カメラ
+  if(need.has("cam")){
+    const rule=rules.find(r=>r.g==="cam"); const cnt=2+(n<=6&&rng()<.5?1:0);
+    const sides=shuffle(["T","B","L","R"],rng);
+    for(let i=0;i<cnt;i++){
+      const s=sides[i]; let col;
+      if(rule.camCols&&i===0) col=rule.camCols[0]; else col=pick(["r","b","g"].filter(c=>!rule.camCols||i>0),rng);
+      if(rule.camCols&&i===1&&col===rule.camCols[0]) col=pick(["r","b","g"].filter(c=>c!==rule.camCols[0]),rng);
+      const cm={col,amp:.5+rng()*.4,per:rng()<.5?6:12,ph:rng()*Math.PI*2,fov:.26,side:s};
+      if(s==="T"){cm.px=(1.5+rng()*(GW-3))*TS;cm.py=0;cm.base=Math.PI/2+(rng()-.5)*.5;cm.range=8*TS;}
+      if(s==="B"){cm.px=(1.5+rng()*(GW-3))*TS;cm.py=GH*TS;cm.base=-Math.PI/2+(rng()-.5)*.5;cm.range=8*TS;}
+      if(s==="L"){cm.px=0;cm.py=(1.5+rng()*(GH-3))*TS;cm.base=(rng()-.5)*.5;cm.range=11*TS;}
+      if(s==="R"){cm.px=GW*TS;cm.py=(1.5+rng()*(GH-3))*TS;cm.base=Math.PI+(rng()-.5)*.5;cm.range=11*TS;}
+      fl.cams.push(cm);
+    }
+  }
+  // タイル
+  for(let i=0;i<26;i++){ const x=Math.floor(rng()*GW),y=Math.floor(rng()*GH),k=y*GW+x; if(fl.obst[k]||protectedT.has(k)) continue; fl.tiles[k]=pick(["r","b","y","g"],rng); }
+  // アイテム
+  const putItem=(kind,code)=>{ for(let k=0;k<80;k++){ const x=Math.floor(rng()*GW),y=Math.floor(rng()*GH),i=y*GW+x; if(fl.obst[i]||protectedT.has(i)||fl.itemGrid[i]) continue; fl.itemGrid[i]=code; fl.items.push({x,y,k:kind}); return; } };
+  if(need.has("coin")) for(let i=0;i<7;i++) putItem("coin",1);
+  if(need.has("key")||need.has("keyAvoid")){ putItem("key",2); fl.hasKey=need.has("key"); }
+  if(need.has("card")){ putItem("card",3); fl.hasCard=true; }
+  if(need.has("cardAvoid")) putItem("card",3);
+  // 到達性
+  const seen=new Uint8Array(GW*GH),q=[fl.start.y*GW+fl.start.x]; seen[q[0]]=1;
+  while(q.length){ const u=q.pop(),x=u%GW,y=(u/GW)|0; for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const nx=x+dx,ny=y+dy; if(free(nx,ny)&&!seen[ny*GW+nx]){seen[ny*GW+nx]=1;q.push(ny*GW+nx);} } }
+  if(!fl.stairs.every(s=>seen[s.y*GW+s.x])) return null;
+  fl.ev={alarm:need.has("ev:alarm"),chime:need.has("ev:chime"),black:need.has("ev:black")};
+  fl.hasLimit=need.has("limit");
+  return fl;
+}
+
+/* ================= 解の存在確認（BFS/Dijkstra） ================= */
+function precompute(fl){
+  fl.camMask=new Uint8Array(SUBS*NP);
+  if(!fl.cams.length) return;
+  for(let s=0;s<SUBS;s++){ const t=s/8;
+    for(const cm of fl.cams){ const bit=COLBIT[cm.col];
+      for(let j=0;j<=36;j++)for(let i=0;i<=64;i++){ if(camSees(fl,cm,t,i*15,j*15,true)) fl.camMask[s*NP+j*65+i]|=bit; } } }
+  const m0=fl.camMask.slice(); for(let s=0;s<SUBS;s++){ const pr=((s+SUBS-1)%SUBS)*NP, nx=((s+1)%SUBS)*NP; for(let i=0;i<NP;i++) fl.camMask[s*NP+i]=m0[s*NP+i]|m0[pr+i]|m0[nx+i]; }
+}
+function viol(rules,c){ for(const r of rules){ if(r.frame){ const w=r.frame(c); if(w) return w; } } return null; }
+function solve(fl){
+  precompute(fl);
+  const frameRules=fl.rules.filter(r=>r.frame), stairRules=fl.rules.filter(r=>r.stair);
+  const FLN=(fl.hasKey||fl.hasCard)?4:1, NT=GW*GH, N=NT*TK*3*FLN;
+  const dist=new Int32Array(N).fill(-1), par=new Int32Array(N).fill(-1), act=new Int32Array(N);
+  const c=new Ctx(fl,true);
+  const stairAt=new Array(NT).fill(null); fl.stairs.forEach(s=>stairAt[s.y*GW+s.x]=s);
+  const setC=(sub,px,py,tx,ty,moving,st,fg,still)=>{ c.sub=sub; c.t=sub/8; c.abs=0; c.px=px; c.py=py; c.pi=Math.round(py/15)*65+Math.round(px/15); c.tx=tx; c.ty=ty; c.moving=moving; c.stance=STN[st]; c.key=!!(fg&1); c.card=!!(fg&2); c.still=still; c.col=fl.tiles[ty*GW+tx]; };
+  const enc=(tile,tm,st,fg)=>((tile*TK+tm)*3+st)*FLN+fg;
+  const buckets=[]; const push=(T,s)=>{ (buckets[T]||(buckets[T]=[])).push(s); };
+  const s0=enc(fl.start.y*GW+fl.start.x,0,0,0);
+  setC(0,(fl.start.x+.5)*TS,(fl.start.y+.5)*TS,fl.start.x,fl.start.y,false,0,0,0);
+  if(viol(frameRules,c)) return null;
+  dist[s0]=0; push(0,s0);
+  let best=null;
+  const DIRS=[[1,0],[-1,0],[0,1],[0,-1]];
+  for(let T=0;T<=700;T++){
+    if(best&&T>best.t+1) break;
+    const b=buckets[T]; if(!b) continue;
+    for(let bi=0;bi<b.length;bi++){
+      const s=b[bi]; if(dist[s]!==T) continue;
+      let r=s, fg=r%FLN; r=(r/FLN)|0; const st=r%3; r=(r/3)|0; const tm=r%TK; const tile=(r/TK)|0;
+      const x=tile%GW,y=(tile/GW)|0, px=(x+.5)*TS, py=(y+.5)*TS;
+      // スタンス切替
+      for(let ns=0;ns<3;ns++){ if(ns===st) continue;
+        setC(tm*2,px,py,x,y,false,ns,fg,0); if(viol(frameRules,c)) continue;
+        const t2=enc(tile,tm,ns,fg); if(dist[t2]===-1||T<dist[t2]){ dist[t2]=T; par[t2]=s; act[t2]=100+ns; b.push(t2); } }
+      // 待つ
+      { const tm2=(tm+1)%TK; let ok=true;
+        for(let k=1;k<=2&&ok;k++){ setC((tm*2+k)%SUBS,px,py,x,y,false,st,fg,.5); if(viol(frameRules,c)) ok=false; }
+        if(ok){ const t2=enc(tile,tm2,st,fg); if(dist[t2]===-1||T+1<dist[t2]){ dist[t2]=T+1; par[t2]=s; act[t2]=200; push(T+1,t2); } } }
+      // 移動
+      for(let d=0;d<4;d++){
+        const nx=x+DIRS[d][0],ny=y+DIRS[d][1]; if(nx<0||ny<0||nx>=GW||ny>=GH||fl.obst[ny*GW+nx]) continue;
+        const D=DTICK[st],S=D*2,qx=(nx+.5)*TS,qy=(ny+.5)*TS; let ok=true,fg2=fg,succ=false,stObj=null;
+        for(let k=1;k<=S&&ok;k++){
+          { const fm=(k-.5)/S, mx=px+(qx-px)*fm, my=py+(qy-py)*fm; setC((tm*2+k)%SUBS,mx,my,fm<.5?x:nx,fm<.5?y:ny,true,st,fg,0); if(viol(frameRules,c)){ ok=false; break; } }
+          const f=k/S, ppx=px+(qx-px)*f, ppy=py+(qy-py)*f; const tx=f<.5?x:nx, ty=f<.5?y:ny;
+          if(f>=.5){ const it=fl.itemGrid[ny*GW+nx]; if(it===2) fg2|=1; if(it===3) fg2|=2; }
+          setC((tm*2+k)%SUBS,ppx,ppy,tx,ty,true,st,f>=.5?fg2:fg,0);
+          if(viol(frameRules,c)){ ok=false; break; }
+          if(f>=.5&&!succ){ const sa=stairAt[ny*GW+nx]; if(sa){ succ=true; stObj=sa; const bad=stairRules.some(r=>r.stair(c,sa)); if(bad) ok=false; break; } }
+        }
+        if(!ok) continue;
+        if(succ){ const tt=T+Math.ceil(D/2); if(!best||tt<best.t) best={t:tt,s,d,st,T}; continue; }
+        const t2=enc(ny*GW+nx,(tm+D)%TK,st,fg2); if(dist[t2]===-1||T+D<dist[t2]){ dist[t2]=T+D; par[t2]=s; act[t2]=d; push(T+D,t2); }
+      }
+    }
+  }
+  if(!best) return null;
+  // 復元
+  const acts=[{T:best.T,k:"mv",d:best.d,st:best.st}];
+  let s=best.s; while(s!==s0&&par[s]!==-1){ const a=act[s], p=par[s]; const T0=dist[p];
+    if(a>=200) {} else if(a>=100) acts.push({T:T0,k:"st",st:a-100}); else { let r=p; r=(r/FLN|0); const pst=r%3; acts.push({T:T0,k:"mv",d:a,st:pst}); }
+    s=p; }
+  acts.reverse();
+  return {t:best.t*.25,acts};
+}
+
+function genFloor(n,seed,rulesMust){
+  const rng=mulberry(seed);
+  const count=clamp(2+Math.floor((10-n)/3)+(n===10?1:0)+1,3,6);
+  for(let attempt=0;attempt<40;attempt++){
+    const cnt=attempt>25?Math.max(2,count-2):attempt>14?count-1:count;
+    const rules=pickRules(cnt,rng,n,null);
+    const fl=buildLayout(n,rules,rng); if(!fl) continue;
+    const sol=solve(fl); if(!sol||(sol.t>45&&attempt<35)) continue;
+    fl.sol=sol; fl.attempt=attempt;
+    if(fl.hasLimit) fl.limit=Math.ceil(sol.t*1.7+10);
+    return fl;
+  }
+  const rules=[RM.touchAny]; const fl=buildLayout(n,rules,rng); fl.sol=solve(fl); return fl;
+}
+
+/* ================= ゲーム状態 ================= */
+const G={mode:"title",run:null,floor:10,seed:0,deaths:store.get("kd_deaths",0),best:store.get("kd_best",11),fl:null};
+const cv=$("#stage"),ctx=cv.getContext("2d");
+let sc=1,ox=0,oy=0,dpr=1;
+function fit(){ const r=cv.getBoundingClientRect(); dpr=Math.min(window.devicePixelRatio||1,2); cv.width=Math.max(10,Math.floor(r.width*dpr)); cv.height=Math.max(10,Math.floor(r.height*dpr)); sc=Math.min(cv.width/DW,cv.height/DH); ox=(cv.width-DW*sc)/2; oy=(cv.height-DH*sc)/2; }
+addEventListener("resize",fit);
+function toDesign(cx,cy){ const r=cv.getBoundingClientRect(); return {x:((cx-r.left)*dpr-ox)/sc,y:((cy-r.top)*dpr-oy)/sc}; }
+let msgT=null;
+function say(s,icon){ const m=$("#msg"); m.innerHTML=(icon?svg(icon,{size:22,color:"#e9e5da"}):"")+`<span>${s}</span>`; m.classList.add("on"); clearTimeout(msgT); msgT=setTimeout(()=>m.classList.remove("on"),2200); }
+function showScreen(id){ document.querySelectorAll(".screen").forEach(e=>e.classList.remove("on")); if(id) $("#"+id).classList.add("on"); }
+
+/* ---- 規則カード ---- */
+function swatch(k){ return `<span class="sw" style="background:${k==="w"?"#e9e5da":COLS[k]}"></span>`; }
+function cardHTML(r,fl,cls,i){
+  const main=r.ic[0], ctxIc=r.ic[1];
+  let ico=svg(main,{size:34,ban:r.ban});
+  if(ctxIc) ico+=`<span class="plus">+</span>`+svg(ctxIc,{size:26});
+  if(r.sw) ico+=(ctxIc?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join("");
+  if(!r.ban) ico=ico;
+  const text=r.text.replace("{lim}",fl?fl.limit:"--");
+  return `<div class="rc ${r.ban?"":"must"} ${cls||""}" data-id="${r.id}"${i===undefined?"":` style="--i:${i}"`}><div class="ico">${ico}</div><div class="tx">${text}</div><span class="tag">${r.ban?"禁止":"必須"}</span></div>`;
+}
+function renderSheet(bad){
+  const sh=$("#sheet"), fl=G.fl;
+  if(!fl){ sh.innerHTML=""; return; }
+  let m=""; for(let f=10;f>=1;f--) m+=`<div class="${f===fl.n?"cur":(f>fl.n?"done":"")}">${f}</div>`;
+  sh.innerHTML=`<div id="meter">${m}</div><div id="floorBig"><b>${fl.n}F</b><span>${fl.n===1?"出口の階":"出口は 1F"}</span></div>`+
+    fl.rules.map((r,i)=>cardHTML(r,fl,bad===r.id?"bad":"",bad?undefined:i)).join("")+`<div class="hdr">操作</div>
+    <div style="font-size:13px;line-height:1.9;color:#b9c1c6">${S.ctl==="tap"?"行き先を1回タップ：経路を表示<br>もう1回タップ：出発<br>":""}下のボタン：歩く / 走る / しゃがむ<br>設定から操作方法を変えられる</div>`;
+}
+
+/* ---- ランの開始 ---- */
+function newRun(){ G.seed=(Math.random()*1e9)|0; G.floor=10; G.mode="fade"; doors("10F","",()=>enterFloor(10)); }
+function enterFloor(n){
+  G.floor=n; G.fl=genFloor(n,G.seed*7+n*131);
+  buildRun(); G.mode="brief";
+  $("#bFloor").textContent=n+"F"; $("#bSub").textContent=n===1?"出口の階":"出口は 1F"; $("#bMap").innerHTML=svg("map",{size:18,color:"#8d979e"})+"マップ："+(G.fl.map?G.fl.map.name:"");
+  $("#bHint").textContent={tap:"移動：行き先を1回タップで経路を表示、もう1回タップで出発",stick:"移動：ジョイスティックを倒す",dpad:"移動：方向ボタンを押す",gamepad:"移動：左スティックか十字キー",keyboard:"移動：矢印キーかWASD"}[S.ctl];
+  $("#bRules").innerHTML=G.fl.rules.map((r,i)=>cardHTML(r,G.fl,"",i)).join("");
+  $("#info").textContent=`違反 ${G.deaths}`;
+  renderSheet(); showScreen("brief");
+}
+function buildRun(){
+  const fl=G.fl;
+  G.run={t:0,px:(fl.start.x+.5)*TS,py:(fl.start.y+.5)*TS,st:0,route:[],seg:null,moving:false,still:0,key:false,card:false,over:false,started:false,
+    preview:null,taps:[],tile:fl.start.y*GW+fl.start.x,ap:null,apI:0,dim:0,alarmA:0,lastCam:null};
+  renderStance();
+}
+$("#goBtn").addEventListener("click",()=>{ audio(); G.run.started=true; G.mode="play"; showScreen(null); fit(); });
+
+/* ================= 設定・音 ================= */
+const SD=[["ui","ボタン","hand"],["tap","タップ","tile"],["step","足音","walk"],["pick","アイテム取得","key"],["down","階段を降りる","stairs"],["die","違反","bolt"],["alarm","警報","bell"],["chime","チャイム","clock"],["clear","脱出","exit"]];
+const defS={ctl:"tap",side:"left",calm:false,master:.8,on:{},vol:{}}; SD.forEach(([id])=>{defS.on[id]=true;defS.vol[id]=.7;});
+const saved=store.get("ks_set",null);
+const S=Object.assign({},defS,saved||{}); S.on=Object.assign({},defS.on,S.on||{}); S.vol=Object.assign({},defS.vol,S.vol||{});
+if(!saved&&window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches) S.calm=true;
+const saveS=()=>store.set("ks_set",S);
+let ac=null,master=null;
+function audio(){ if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); master=ac.createGain(); master.gain.value=.5; master.connect(ac.destination);}catch(e){ac=null;} } if(ac&&ac.state!=="running") ac.resume(); }
+function tone(f,d,type,v,slide,delay){ if(!ac||v<=0) return; const t=ac.currentTime+(delay||0),o=ac.createOscillator(),g=ac.createGain(); o.type=type||"sine"; o.frequency.setValueAtTime(f,t); if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(30,f*slide),t+d);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(v,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(master); o.start(t); o.stop(t+d+.05); }
+function noise(d,v,lp){ if(!ac||v<=0) return; const n=Math.floor(ac.sampleRate*d),b=ac.createBuffer(1,n,ac.sampleRate),a=b.getChannelData(0); for(let i=0;i<n;i++) a[i]=(Math.random()*2-1)*(1-i/n); const sr=ac.createBufferSource(); sr.buffer=b; const g=ac.createGain(); g.gain.value=v; let node=sr; if(lp){ const f=ac.createBiquadFilter(); f.type="lowpass"; f.frequency.value=lp; sr.connect(f); node=f; } node.connect(g); g.connect(master); sr.start(); }
+const SFX={
+  ui(m){ tone(420,.06,"triangle",.08*m); tone(630,.07,"triangle",.06*m,0,.05); },
+  tap(m){ tone(500,.05,"square",.05*m); },
+  step(m,st){ noise(st===1?.07:.1,(st===2?.35:st===1?.9:.6)*m,st===2?500:900); },
+  pick(m){ tone(880,.1,"sine",.12*m); tone(1320,.15,"sine",.12*m,0,.08); },
+  die(m){ noise(.6,.35*m,2500); tone(70,.8,"sawtooth",.25*m,.4); },
+  down(m){ [523,659,784].forEach((f,i)=>tone(f,.3,"sine",.12*m,0,i*.11)); },
+  alarm(m){ tone(660,.3,"triangle",.08*m); tone(520,.3,"triangle",.08*m,0,.3); },
+  chime(m){ tone(1046,.5,"sine",.1*m); tone(784,.6,"sine",.07*m,0,.25); },
+  clear(m){ [523,659,784,1046].forEach((f,i)=>tone(f,.55,"sine",.12*m,0,i*.15)); }
+};
+const gainOf=id=>S.on[id]?S.master*S.vol[id]:0;
+function play(id,a){ const g=gainOf(id); if(g<=0||!ac) return; SFX[id](g,a); }
+const sfx=new Proxy({},{get:(_,k)=>(a)=>play(k,a)});
+document.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("button")){ audio(); sfx.ui(); } },true);
+const AF=()=>S.calm?0:1;
+let AT=0;
+function applyCalm(){ document.body.classList.toggle("calm",!!S.calm); }
+function applyCtl(){ const w=$("#stageWrap"); w.dataset.ctl=S.ctl; w.dataset.side=S.side; }
+
+/* ================= 操作と移動 ================= */
+function tileOf(px,py){ return {x:clamp(Math.floor(px/TS),0,GW-1),y:clamp(Math.floor(py/TS),0,GH-1)}; }
+function pathTo(fl,sx,sy,tx,ty){
+  const prev=new Int16Array(GW*GH).fill(-1),q=[sy*GW+sx]; prev[q[0]]=q[0];
+  for(let h=0;h<q.length;h++){ const u=q[h],x=u%GW,y=(u/GW)|0; if(x===tx&&y===ty) break;
+    for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const nx=x+dx,ny=y+dy; if(nx<0||ny<0||nx>=GW||ny>=GH||fl.obst[ny*GW+nx]||prev[ny*GW+nx]!==-1) continue; prev[ny*GW+nx]=u; q.push(ny*GW+nx); } }
+  if(prev[ty*GW+tx]===-1) return null;
+  const out=[]; let u=ty*GW+tx; while(u!==sy*GW+sx){ out.push({x:u%GW,y:(u/GW)|0}); u=prev[u]; } return out.reverse();
+}
+function setStance(s){ if(!G.run) return; G.run.st=s; renderStance(); }
+function renderStance(){
+  const b=$("#stanceBar"); const ic=["walk","run","crouch"]; const r=G.run;
+  b.innerHTML=ic.map((n,i)=>`<button class="stb ${r&&r.st===i?"on":""}" data-s="${i}">${svg(n,{size:24,color:r&&r.st===i?"#15171a":"#e9e5da"})}<span>${STNAME[i]}<br><small>${i+1}</small></span></button>`).join("");
+  b.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",e=>{ e.stopPropagation(); audio(); setStance(+btn.dataset.s); }));
+}
+cv.addEventListener("pointerdown",e=>{
+  audio(); const r=G.run,fl=G.fl; if(!r||G.mode!=="play"||G.paused||r.over||!r.started) return;
+  const p=toDesign(e.clientX,e.clientY), tx=Math.floor(p.x/TS), ty=Math.floor((p.y-MAPY)/TS);
+  const now=r.t; r.taps=r.taps.filter(t=>now-t<1); r.taps.push(now);
+  if(fl.rules.some(q=>q.tapR)&&r.taps.length>=4) return die(RM.tapRate,"画面を連打した。");
+  if(tx<0||ty<0||tx>=GW||ty>=GH) return;
+  sfx.tap();
+  if(fl.obst[ty*GW+tx]){
+    const o=fl.objs.find(o=>o.x===tx&&o.y===ty); const c=mkCtx(r);
+    for(const q of fl.rules){ if(!q.touch) continue; if(!o&&q.id!=="touchAny") continue; const w=q.touch(c,o||{t:"wall",c:"n"}); if(w) return die(q,w); }
+    return say(o?`${OBJNAME[o.t]||"物"}に触れた`:"壁に触れた","hand");
+  }
+  if(S.ctl!=="tap") return;
+  if(r.preview&&r.preview.x===tx&&r.preview.y===ty){ r.route=r.preview.path.slice(); r.preview=null; return; }
+  const from=r.seg?r.seg.tile:{x:tileOf(r.px,r.py).x,y:tileOf(r.px,r.py).y};
+  if(from.x===tx&&from.y===ty){ r.route=[]; r.preview=null; return; }
+  const path=pathTo(fl,from.x,from.y,tx,ty); if(!path){ say("そこへは行けない"); return; }
+  if(r.seg) r.route=[];
+  r.preview={x:tx,y:ty,path,from};
+});
+const IN={stick:[0,0],dpad:[0,0],keys:[],gp:[0,0]};
+const KDIR={ArrowRight:[1,0],ArrowLeft:[-1,0],ArrowDown:[0,1],ArrowUp:[0,-1],d:[1,0],a:[-1,0],s:[0,1],w:[0,-1]};
+const normKey=e=>e.key.length===1?e.key.toLowerCase():e.key;
+function primaryClick(){ const b=document.querySelector(".screen.on .btn:not(.ghost)"); if(b) b.click(); }
+addEventListener("keydown",e=>{
+  const k=normKey(e);
+  if(document.querySelector(".screen.on")){ if(k==="Enter"&&!(document.activeElement&&document.activeElement.tagName==="BUTTON")){ primaryClick(); e.preventDefault(); } return; }
+  if(G.mode!=="play"||!G.run||G.paused) return;
+  if(k==="1"||k==="z") setStance(0); if(k==="2"||k==="x") setStance(1); if(k==="3"||k==="c") setStance(2);
+  if(k==="q") setStance((G.run.st+2)%3); if(k==="e") setStance((G.run.st+1)%3);
+  if(k==="r") $("#sheet").classList.toggle("show");
+  if(KDIR[k]){ if(!IN.keys.includes(k)) IN.keys.push(k); e.preventDefault(); }
+});
+addEventListener("keyup",e=>{ const k=normKey(e); IN.keys=IN.keys.filter(x=>x!==k); });
+addEventListener("blur",()=>{ IN.keys=[]; });
+function dirNow(){ for(const v of [IN.dpad,IN.stick,IN.gp]) if(v[0]||v[1]) return v; const k=IN.keys[IN.keys.length-1]; return k?KDIR[k]:[0,0]; }
+function moveStep(r){
+  const d=dirNow(); if((!d[0]&&!d[1])||r.seg||r.route.length||r.ap) return;
+  const t=tileOf(r.px,r.py),nx=t.x+d[0],ny=t.y+d[1];
+  if(nx<0||ny<0||nx>=GW||ny>=GH||G.fl.obst[ny*GW+nx]) return;
+  r.preview=null; r.route=[{x:nx,y:ny}];
+}
+/* ジョイスティック */
+(()=>{ const el=$("#stick"),kn=$("#knob"),R=44; let id=null;
+  const mv=e=>{ const b=el.getBoundingClientRect(); let x=e.clientX-(b.left+b.width/2),y=e.clientY-(b.top+b.height/2); const d=Math.hypot(x,y); if(d>R){x=x/d*R;y=y/d*R;}
+    kn.style.transform=`translate(${x}px,${y}px)`; if(Math.hypot(x,y)<14) IN.stick=[0,0]; else if(Math.abs(x)>Math.abs(y)) IN.stick=[Math.sign(x),0]; else IN.stick=[0,Math.sign(y)]; };
+  el.addEventListener("pointerdown",e=>{ e.stopPropagation(); audio(); id=e.pointerId; el.setPointerCapture(e.pointerId); mv(e); });
+  el.addEventListener("pointermove",e=>{ if(e.pointerId===id) mv(e); });
+  const end=e=>{ if(e.pointerId!==id) return; id=null; IN.stick=[0,0]; kn.style.transform=""; };
+  el.addEventListener("pointerup",end); el.addEventListener("pointercancel",end);
+})();
+/* 方向ボタン */
+document.querySelectorAll("#dpad button").forEach(btn=>{
+  const d=btn.dataset.d.split(",").map(Number);
+  btn.addEventListener("pointerdown",e=>{ e.stopPropagation(); audio(); btn.setPointerCapture(e.pointerId); IN.dpad=d; btn.classList.add("on"); });
+  const end=()=>{ if(IN.dpad===d) IN.dpad=[0,0]; btn.classList.remove("on"); };
+  btn.addEventListener("pointerup",end); btn.addEventListener("pointercancel",end); btn.addEventListener("lostpointercapture",end);
+});
+/* コントローラー */
+let padPrev=[],padSeen=false;
+function pollPad(){
+  const gps=navigator.getGamepads?navigator.getGamepads():[]; let gp=null; for(const g of gps){ if(g&&g.connected){ gp=g; break; } }
+  if(!gp){ IN.gp=[0,0]; padPrev=[]; padSeen=false; return; }
+  if(!padSeen){ padSeen=true; say("コントローラーを接続した","gamepad"); }
+  const ax=gp.axes[0]||0,ay=gp.axes[1]||0; let dx=0,dy=0;
+  if(Math.hypot(ax,ay)>.5){ if(Math.abs(ax)>Math.abs(ay)) dx=Math.sign(ax); else dy=Math.sign(ay); }
+  const B=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed); if(B(14)) dx=-1; if(B(15)) dx=1; if(B(12)) dy=-1; if(B(13)) dy=1; IN.gp=[dx,dy];
+  const pr=i=>B(i)&&!padPrev[i];
+  if(G.mode==="play"&&G.run&&!G.paused&&!document.querySelector(".screen.on")){
+    if(pr(0)) setStance(0); if(pr(1)) setStance(1); if(pr(2)) setStance(2); if(pr(4)) setStance((G.run.st+2)%3); if(pr(5)) setStance((G.run.st+1)%3); if(pr(9)) $("#sheet").classList.toggle("show");
+  } else if(pr(0)||pr(9)) primaryClick();
+  padPrev=gp.buttons.map((b,i)=>B(i));
+}
+function mkCtx(r){
+  const c=new Ctx(G.fl,false); const t=tileOf(r.px,r.py);
+  c.t=r.t; c.abs=r.t; c.px=r.px; c.py=r.py; c.tx=t.x; c.ty=t.y; c.moving=r.moving; c.stance=STN[r.st]; c.key=r.key; c.card=r.card; c.still=r.still; c.col=G.fl.tiles[t.y*GW+t.x];
+  return c;
+}
+function die(rule,why){
+  const r=G.run; if(!r||r.over) return; G.lastWhy=why+"@"+rule.id+" t="+r.t.toFixed(2)+" px="+r.px.toFixed(0)+","+r.py.toFixed(0)+" st="+r.st; r.over=true; G.mode="dead"; G.deaths++; store.set("kd_deaths",G.deaths); $("#info").textContent=`違反 ${G.deaths}`;
+  sfx.die(); renderSheet(rule.id);
+  setTimeout(()=>{ if(G.run!==r) return; $("#dRule").innerHTML=cardHTML(rule,G.fl,"bad"); $("#dWhy").textContent=why; showScreen("dead"); },800);
+}
+function doors(from,to,cb){
+  const d=$("#doors"),n=$("#dNum"); n.textContent=from; d.classList.add("closed");
+  if(to) setTimeout(()=>{ n.textContent=to; },560);
+  setTimeout(()=>{ cb&&cb(); setTimeout(()=>d.classList.remove("closed"),350); },to?1150:850);
+}
+function descend(){
+  const r=G.run; r.over=true; G.mode="fade"; sfx.down();
+  if(G.floor<G.best){ G.best=G.floor; store.set("kd_best",G.best); }
+  const from=G.floor;
+  if(from===1) doors("1F","出口",()=>{ sfx.clear(); ending(); });
+  else doors(from+"F",(from-1)+"F",()=>enterFloor(from-1));
+}
+function ending(){
+  G.best=0; store.set("kd_best",0);
+  const chips=[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<span style="--i:${i}">${f}F</span>`).join("");
+  $("#endText").innerHTML=`1階の出口に到達した。<br>あなたは、すべての階の規則に従った。<div class="chips">${chips}</div><span style="color:#8d979e">総違反回数：${G.deaths}</span>`;
+  showScreen("end"); G.mode="end";
+}
+
+/* ---- 1フレームの更新 ---- */
+function onEnterTile(r,t){
+  const fl=G.fl,i=t.y*GW+t.x; r.tile=i; sfx.step(r.st); r.rip=r.rip||[]; r.rip.push({x:t.x,y:t.y,t0:AT});
+  const it=fl.itemGrid[i];
+  if(it===2&&!r.key){ r.key=true; say("鍵を拾った","key"); sfx.pick(); }
+  if(it===3&&!r.card){ r.card=true; say("カードを拾った","card"); sfx.pick(); }
+  const st=fl.stairs.find(s=>s.x===t.x&&s.y===t.y);
+  if(st){ const c=mkCtx(r); for(const q of fl.rules){ if(q.stair){ const w=q.stair(c,st); if(w) return die(q,w); } } descend(); }
+}
+function advance(r,dt){
+  const fl=G.fl; let rem=dt, now=r.t-dt;
+  while(rem>1e-9&&!r.over){
+    if(!r.seg){
+      if(r.ap){ const a=r.ap[r.apI];
+        if(!a){} else { const due=a.T*.25; if(a.k==="st"){ if(due<=now+1e-6){ r.st=a.st; r.apI++; continue; } }
+          else if(a.k==="mv"){ if(due<=now+1e-6){ const t=tileOf(r.px,r.py); r.route=[{x:t.x+[1,-1,0,0][a.d],y:t.y+[0,0,1,-1][a.d]}]; r.apI++; }
+            else { const w=due-now; if(w<=rem){ rem-=w; now+=w; continue; } else { rem=0; break; } } } } }
+      if(!r.route.length){ break; }
+      const nx=r.route.shift(); r.seg={tx:(nx.x+.5)*TS,ty:(nx.y+.5)*TS,tile:{x:nx.x,y:nx.y}};
+    }
+    const sp=SPEED[r.st], dx=r.seg.tx-r.px, dy=r.seg.ty-r.py, d=Math.hypot(dx,dy), step=sp*rem;
+    if(step>=d){ r.px=r.seg.tx; r.py=r.seg.ty; const used=d/sp; rem-=used; now+=used; r.seg=null; }
+    else { r.px+=dx/d*step; r.py+=dy/d*step; rem=0; }
+    // タイルの切り替わり
+    const t=tileOf(r.px,r.py); if(t.y*GW+t.x!==r.tile){ onEnterTile(r,t); if(r.over) break; }
+    if(!r.seg){ const c=mkCtxMoving(r,true); const w=checkFrame(c); if(w) return die(w[0],w[1]); }
+  }
+  r.moving=!!r.seg||r.route.length>0||(r.ap&&r.ap[r.apI]&&false);
+}
+function mkCtxMoving(r,m){ const c=mkCtx(r); c.moving=m; return c; }
+function checkFrame(c){ for(const q of G.fl.rules){ if(q.frame){ const w=q.frame(c); if(w) return [q,w]; } } return null; }
+function update(dt){
+  const r=G.run,fl=G.fl; if(!r||!r.started||r.over||G.paused||G.mode!=="play") return;
+  moveStep(r); r.t+=dt; advance(r,dt); if(r.over) return;
+  if(!r.seg&&!r.route.length) r.still+=dt; else r.still=0;
+  const c=mkCtx(r); const w=checkFrame(c); if(w) return die(w[0],w[1]);
+  // 演出の補間（ゆっくり）
+  const bl=fl.ev.black&&evOn(fl,"black",r.t,false)?1:0; r.dim+=(bl-r.dim)*Math.min(1,dt*3);
+  const al=fl.ev.alarm&&evOn(fl,"alarm",r.t,false)?1:0; r.alarmA+=(al-r.alarmA)*Math.min(1,dt*3);
+  // 通知音
+  const u=(((r.t-fl.off)%CYC)+CYC)%CYC, pu=(((r.t-dt-fl.off)%CYC)+CYC)%CYC;
+  if(fl.ev.alarm&&pu<EV.alarm[0]&&u>=EV.alarm[0]) sfx.alarm();
+  if(fl.ev.chime&&pu<EV.chime[0]&&u>=EV.chime[0]) sfx.chime();
+}
+
+/* ================= 描画 ================= */
+function pattern(c,k,x,y){
+  c.save(); c.beginPath(); c.rect(x+3,y+3,TS-6,TS-6); c.clip(); c.strokeStyle="rgba(0,0,0,.28)"; c.lineWidth=3;
+  if(k==="r"){ for(let i=-TS;i<TS*2;i+=14){ c.beginPath(); c.moveTo(x+i,y+TS); c.lineTo(x+i+TS,y); c.stroke(); } }
+  if(k==="b"){ c.fillStyle="rgba(0,0,0,.28)"; for(let i=0;i<4;i++)for(let j=0;j<4;j++){ c.beginPath(); c.arc(x+10+i*14,y+10+j*14,3,0,7); c.fill(); } }
+  if(k==="y"){ for(let i=10;i<TS;i+=14){ c.beginPath(); c.moveTo(x+4,y+i); c.lineTo(x+TS-4,y+i); c.stroke(); } }
+  if(k==="g"){ for(let i=10;i<TS;i+=14){ c.beginPath(); c.moveTo(x+i,y+4); c.lineTo(x+i,y+TS-4); c.stroke(); c.beginPath(); c.moveTo(x+4,y+i); c.lineTo(x+TS-4,y+i); c.stroke(); } }
+  c.restore();
+}
+function rrect(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
+function txt(c,s,x,y,size,color,align,weight){ c.font=`${weight||500} ${size}px "Zen Kaku Gothic New","Hiragino Sans",sans-serif`; c.fillStyle=color; c.textAlign=align||"left"; c.textBaseline="middle"; c.fillText(s,x,y); }
+function draw(){
+  ctx.setTransform(1,0,0,1,0,0); ctx.fillStyle="#0e1012"; ctx.fillRect(0,0,cv.width,cv.height);
+  const r=G.run,fl=G.fl; if(!r||!fl) return;
+  ctx.setTransform(sc,0,0,sc,ox,oy); ctx.save(); ctx.beginPath(); ctx.rect(0,0,DW,DH); ctx.clip();
+  ctx.fillStyle="#16191c"; ctx.fillRect(0,0,DW,DH);
+  const c=ctx; c.save(); c.translate(0,MAPY);
+  // 床
+  for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const px=x*TS,py=y*TS;
+    c.fillStyle=(x+y)%2?"#1e2226":"#1b1f23"; c.fillRect(px,py,TS,TS);
+    const k=fl.tiles[y*GW+x]; if(k){ c.fillStyle=COLS[k]; c.fillRect(px+3,py+3,TS-6,TS-6); pattern(c,k,px,py); }
+  }
+  c.strokeStyle="rgba(255,255,255,.05)"; c.lineWidth=1; for(let x=0;x<=GW;x++){c.beginPath();c.moveTo(x*TS,0);c.lineTo(x*TS,GH*TS);c.stroke();} for(let y=0;y<=GH;y++){c.beginPath();c.moveTo(0,y*TS);c.lineTo(GW*TS,y*TS);c.stroke();}
+  // 禁止区域
+  const zr=fl.rules.filter(q=>q.zone);
+  zr.forEach(q=>{ c.fillStyle="rgba(224,74,58,.20)"; const z=q.zone;
+    for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const t={tx:x,ty:y}; if(q.frame(t)) c.fillRect(x*TS,y*TS,TS,TS); }
+    c.strokeStyle="rgba(224,74,58,.5)"; });
+  zr.forEach(q=>{ for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(q.frame({tx:x,ty:y})){ drawIcon(c,q.ic[0],x*TS+TS/2,y*TS+TS/2,22,"rgba(224,74,58,.55)"); } } });
+  if(fl.rules.some(q=>q.id==="noNearObj")){ const q=RM.noNearObj; c.fillStyle="rgba(224,74,58,.16)"; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(!fl.obst[y*GW+x]&&q.frame({tx:x,ty:y,fl})) c.fillRect(x*TS,y*TS,TS,TS); } }
+  // 壁
+  for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(!fl.wall[y*GW+x]) continue; const px=x*TS,py=y*TS;
+    c.fillStyle="#0c0e10"; c.fillRect(px,py+4,TS,TS); c.fillStyle="#3a4249"; c.fillRect(px,py,TS,TS-4); c.fillStyle="#4a535b"; c.fillRect(px,py,TS,5);
+    c.strokeStyle="rgba(0,0,0,.35)"; c.lineWidth=2; c.beginPath(); c.moveTo(px,py+TS/2-2); c.lineTo(px+TS,py+TS/2-2); c.moveTo(px+TS/3,py+5); c.lineTo(px+TS/3,py+TS/2-2); c.moveTo(px+TS*2/3,py+TS/2-2); c.lineTo(px+TS*2/3,py+TS-4); c.stroke(); }
+  // 照明
+  if(fl.rules.some(q=>q.id==="lampLight")) fl.lamps.forEach(l=>{ const g=c.createRadialGradient(l.px,l.py,10,l.px,l.py,1.8*TS); g.addColorStop(0,"rgba(255,226,130,.38)"); g.addColorStop(1,"rgba(255,226,130,.08)"); c.fillStyle=g; c.beginPath(); c.arc(l.px,l.py,1.8*TS,0,7); c.fill(); c.strokeStyle="rgba(255,226,130,.6)"; c.lineWidth=2; c.setLineDash([6,6]); c.stroke(); c.setLineDash([]); });
+  // アイテム
+  fl.items.forEach(it=>{ if(it.k==="key"&&r.key||it.k==="card"&&r.card) return; const cx=it.x*TS+TS/2,cy=it.y*TS+TS/2+Math.sin(AT*2+it.x)*2.5*AF(); c.fillStyle="rgba(0,0,0,.35)"; c.beginPath(); c.arc(cx,cy,19,0,7); c.fill(); drawIcon(c,it.k,cx,cy,30,it.k==="coin"?"#f0c24a":"#8fd0ff"); });
+  // 階段
+  fl.stairs.forEach(s=>{ const px=s.x*TS,py=s.y*TS,em=s.kind==="emerg"; c.fillStyle=em?"#7a2018":"#2b3a47"; c.fillRect(px+2,py+2,TS-4,TS-4); c.strokeStyle=em?"#e04a3a":"#9fc3e0"; c.lineWidth=3; c.strokeRect(px+4,py+4,TS-8,TS-8);
+    { const g=.35+.35*Math.sin(AT*2.2)*AF(); c.strokeStyle=em?`rgba(224,74,58,${g})`:`rgba(159,195,224,${g})`; c.lineWidth=2; c.strokeRect(px-1,py-1,TS+2,TS+2); if(AF()){ const k=(AT*.8)%1; c.globalAlpha=1-k; drawIcon(c,"down",px+TS/2,py-6+k*18,16,em?"#e04a3a":"#9fc3e0"); c.globalAlpha=1; } }
+    drawIcon(c,G.floor===1?"exit":"stairs",px+TS/2,py+TS/2-4,32,"#e9e5da"); txt(c,G.floor===1?"出口":(em?"非常":"下へ"),px+TS/2,py+TS-8,11,"#e9e5da","center",700); });
+  // 物
+  fl.objs.forEach(o=>{ const px=o.x*TS,py=o.y*TS; c.fillStyle="rgba(0,0,0,.4)"; rrect(c,px+7,py+9,TS-10,TS-10,8); c.fill(); c.fillStyle="#2a3036"; rrect(c,px+5,py+5,TS-10,TS-10,8); c.fill(); c.strokeStyle=COLS[o.c]; c.lineWidth=4; rrect(c,px+5,py+5,TS-10,TS-10,8); c.stroke(); drawIcon(c,o.t,px+TS/2,py+TS/2,32,"#e9e5da"); });
+  // カメラの視界
+  fl.cams.forEach(cm=>{ const a=camAngle(cm,r.t), col=cm.col==="r"?"224,74,58":cm.col==="b"?"80,140,230":"70,190,120";
+    const active=!fl.rules.some(q=>q.camCols)||fl.rules.some(q=>q.camCols&&q.camCols.includes(cm.col));
+    c.beginPath(); c.moveTo(cm.px,cm.py); const N=22;
+    for(let i=0;i<=N;i++){ const an=a-cm.fov+cm.fov*2*i/N; let len=cm.range; const dx=Math.cos(an),dy=Math.sin(an);
+      for(let d=10;d<cm.range;d+=8){ const x=cm.px+dx*d,y=cm.py+dy*d,tx=Math.floor(x/TS),ty=Math.floor(y/TS); if(tx>=0&&ty>=0&&tx<GW&&ty<GH&&fl.obst[ty*GW+tx]){ len=d; break; } }
+      c.lineTo(cm.px+dx*len,cm.py+dy*len); }
+    c.closePath(); c.fillStyle=`rgba(${col},${active?.2:.07})`; c.fill(); c.strokeStyle=`rgba(${col},${active?.8:.3})`; c.lineWidth=2; c.setLineDash(active?[]:[5,6]); c.stroke(); c.setLineDash([]);
+    // 本体
+    const bx=clamp(cm.px,18,DW-18), by=clamp(cm.py,18,GH*TS-18);
+    c.fillStyle="#0b0d0f"; c.beginPath(); c.arc(bx,by,17,0,7); c.fill(); c.strokeStyle=`rgb(${col})`; c.lineWidth=3; c.stroke(); if(AF()){ const k=(AT*.5)%1; c.strokeStyle=`rgba(${col},${.5*(1-k)})`; c.lineWidth=2; c.beginPath(); c.arc(bx,by,17+k*12,0,7); c.stroke(); } drawIcon(c,"camera",bx,by,22,"#e9e5da");
+  });
+  // 警備員
+  fl.guards.forEach(g=>{ const p=guardPos(g,r.t);
+    if(fl.rules.some(q=>q.id==="guardSight")){ const an=Math.atan2(p.fy,p.fx); c.beginPath(); c.moveTo(p.x,p.y); c.arc(p.x,p.y,4*TS,an-.6,an+.6); c.closePath(); c.fillStyle="rgba(224,74,58,.2)"; c.fill(); c.strokeStyle="rgba(224,74,58,.7)"; c.lineWidth=2; c.stroke(); }
+    [["guardNear",2],["guardCrouch",3],["guardStill",3]].forEach(([id,rad])=>{ if(fl.rules.some(q=>q.id===id)){ c.strokeStyle=id==="guardNear"?"rgba(224,74,58,.7)":"rgba(80,140,230,.7)"; c.lineWidth=2; c.setLineDash([6,6]); c.beginPath(); c.arc(p.x,p.y,rad*TS,0,7); c.stroke(); c.setLineDash([]); } });
+    c.fillStyle="#0b0d0f"; c.beginPath(); c.arc(p.x,p.y,20,0,7); c.fill(); c.strokeStyle="#e9e5da"; c.lineWidth=3; c.stroke(); drawIcon(c,"guard",p.x,p.y,28,"#e9e5da"); });
+  // 経路プレビュー
+  if(r.preview){ c.strokeStyle="rgba(233,229,218,.85)"; c.lineWidth=4; c.setLineDash([2,10]); c.lineDashOffset=-AT*24*AF(); c.lineCap="round"; c.beginPath(); const f=r.preview.from||tileOf(r.px,r.py); c.moveTo((f.x+.5)*TS,(f.y+.5)*TS); r.preview.path.forEach(p=>c.lineTo((p.x+.5)*TS,(p.y+.5)*TS)); c.stroke(); c.setLineDash([]); c.lineDashOffset=0; c.lineCap="butt";
+    const e=r.preview; c.strokeStyle="#e9e5da"; c.lineWidth=3; c.beginPath(); c.arc((e.x+.5)*TS,(e.y+.5)*TS,16+Math.sin(AT*4)*2*AF(),0,7); c.stroke(); txt(c,"もう一度タップで出発",(e.x+.5)*TS,(e.y+.5)*TS-30,12,"#e9e5da","center",700); }
+  // 波紋
+  if(r.rip&&AF()){ r.rip=r.rip.filter(q=>AT-q.t0<.7); r.rip.forEach(q=>{ const k=(AT-q.t0)/.7; c.strokeStyle=`rgba(233,229,218,${.45*(1-k)})`; c.lineWidth=2; c.beginPath(); c.arc((q.x+.5)*TS,(q.y+.5)*TS,10+k*26,0,7); c.stroke(); }); }
+  // プレイヤー
+  const crouch=r.st===2, run=r.st===1; const bob=(r.moving?Math.abs(Math.sin(AT*(run?14:9)))*4:Math.sin(AT*2)*1.2)*AF(); const PY=r.py-bob; c.fillStyle="rgba(0,0,0,.4)"; c.beginPath(); c.ellipse(r.px,r.py+14,(crouch?15:19)-bob*.5,6,0,0,7); c.fill();
+  c.fillStyle="#e9e5da"; c.beginPath(); c.arc(r.px,PY,crouch?16:21,0,7); c.fill(); c.strokeStyle=run?"#e04a3a":"#15171a"; c.lineWidth=4; c.stroke();
+  drawIcon(c,["walk","run","crouch"][r.st],r.px,PY,crouch?22:28,"#15171a");
+  c.restore();
+  // 演出（ゆっくり）
+  if(r.alarmA>.01){ ctx.fillStyle=`rgba(224,74,58,${.13*r.alarmA})`; ctx.fillRect(0,MAPY,DW,GH*TS); drawIcon(ctx,"bell",DW-44,MAPY+36,34,`rgba(255,200,190,${.9*r.alarmA})`); }
+  if(r.dim>.01){ ctx.fillStyle=`rgba(0,0,0,${.62*r.dim})`; ctx.fillRect(0,MAPY,DW,GH*TS); drawIcon(ctx,"bolt",DW-44,MAPY+36,34,`rgba(255,255,255,${.8*r.dim})`); }
+  // タイムライン
+  ctx.fillStyle="#0e1012"; ctx.fillRect(0,0,DW,MAPY);
+  ctx.fillStyle="#1b1f23"; ctx.fillRect(0,MAPY-2,DW,2);
+  const rows=[["alarm","bell","#e04a3a"],["chime","speaker","#e0a43a"],["black","bolt","#8d979e"]].filter(x=>fl.ev[x[0]]);
+  const x0=340,x1=DW-110,wd=x1-x0;
+  rows.forEach((row,i)=>{ const y=10+i*14+ (rows.length<3?(3-rows.length)*7:0); drawIcon(ctx,row[1],x0-16,y+4,14,row[2]);
+    ctx.fillStyle="#22272c"; ctx.fillRect(x0,y,wd,8);
+    const [a,b]=EV[row[0]]; const A=((a+fl.off)%CYC), B=A+(b-a);
+    const seg=(s,e)=>{ ctx.fillStyle=row[2]; ctx.fillRect(x0+wd*s/CYC,y,wd*(e-s)/CYC,8); };
+    if(B<=CYC) seg(A,B); else { seg(A,CYC); seg(0,B-CYC); } });
+  if(rows.length){ const u=((r.t%CYC)+CYC)%CYC; ctx.fillStyle="#e9e5da"; ctx.fillRect(x0+wd*u/CYC-1,6,3,38); }
+  // 階の表示
+  drawIcon(ctx,"stairs",30,MAPY/2,26,"#e9e5da"); txt(ctx,`${fl.n}F`,56,MAPY/2,26,"#e9e5da","left",900);
+  txt(ctx,"→ 1F",118,MAPY/2+1,14,"#8d979e","left",500); if(fl.map){ drawIcon(ctx,"map",186,MAPY/2,18,"#8d979e"); txt(ctx,fl.map.name,202,MAPY/2+1,13,"#8d979e","left",500); }
+  if(fl.hasLimit){ const left=Math.max(0,fl.limit-r.t); drawIcon(ctx,"timer",DW-90,MAPY/2,24,left<10?"#e04a3a":"#e9e5da"); txt(ctx,Math.ceil(left)+"s",DW-72,MAPY/2,20,left<10?"#e04a3a":"#e9e5da","left",700); }
+  if(r.key) drawIcon(ctx,"key",DW-130,MAPY/2,22,"#8fd0ff"); if(r.card) drawIcon(ctx,"card",DW-160,MAPY/2,22,"#8fd0ff");
+  if(!rows.length&&!fl.hasLimit) txt(ctx,"この階に、時間で変わる仕掛けはない",x0,MAPY/2,13,"#59626a","left",500);
+  if(r.over&&G.mode==="dead"){ ctx.fillStyle="rgba(224,74,58,.22)"; ctx.fillRect(0,0,DW,DH); }
+  ctx.restore();
+}
+let last=0;
+function loop(ts){ requestAnimationFrame(loop); const dt=Math.min(.05,(ts-last)/1000||0); last=ts; AT=ts/1000; pollPad(); update(dt); draw(); }
+
+/* ================= 画面 ================= */
+function buildHow(){
+  $("#how").innerHTML=[["camera","規則は階ごとにランダム。全部で"+RULES.length+"種類"],["stairs","10Fから階段を降りて、1Fの出口へ"],["gear","タップ・スティック・ボタン・キーボード・コントローラーで遊べる"]].map(([n,t])=>`<div>${svg(n,{size:44,color:"#e9e5da",ban:n==="camera"?false:false}).replace('class="ic"','class="ic"')}${t}</div>`).join("");
+}
+function buildList(){
+  const groups={}; RULES.forEach(r=>{(groups[r.g]=groups[r.g]||[]).push(r);});
+  $("#listK").textContent=`全${RULES.length}種の規則`;
+  $("#listBody").innerHTML=Object.keys(GROUPNAME).map(g=>`<div class="hdr">${GROUPNAME[g]}（${(groups[g]||[]).length}）</div><div class="grid">${(groups[g]||[]).map(r=>cardHTML(r,null)).join("")}</div>`).join("");
+}
+$("#startBtn").addEventListener("click",()=>{ audio(); newRun(); });
+$("#allBtn").addEventListener("click",()=>{ buildList(); showScreen("list"); G._back="title"; });
+$("#listBtn").addEventListener("click",()=>{ buildList(); G._back=G.mode; if(G.mode==="play") G.paused=true; showScreen("list"); });
+$("#listClose").addEventListener("click",()=>{ if(G._back==="title"||!G.run) showScreen("title"); else if(G._back==="play"){ G.paused=false; showScreen(null); } else if(G._back==="brief") showScreen("brief"); else if(G._back==="dead") showScreen("dead"); else showScreen("title"); });
+$("#menuBtn").addEventListener("click",()=>{ G.mode="title"; titleInfo(); showScreen("title"); });
+$("#rulesBtn").addEventListener("click",()=>$("#sheet").classList.toggle("show"));
+$("#retryBtn").addEventListener("click",()=>{ audio(); enterFloor(G.floor); });
+$("#newBtn").addEventListener("click",()=>{ audio(); newRun(); });
+$("#againBtn").addEventListener("click",()=>{ audio(); newRun(); });
+$("#endMenu").addEventListener("click",()=>{ G.mode="title"; titleInfo(); showScreen("title"); });
+/* ---- 設定画面 ---- */
+function dropdown(el,opts,get,set){
+  el.classList.add("dd");
+  const draw=()=>{ const cur=opts.find(o=>o.v===get())||opts[0];
+    const row=(o,i,list)=>`${svg(o.ic,{size:26,color:"#e9e5da"})}<span class="ddt"><b>${o.t}</b><small>${o.d||""}</small></span>`;
+    el.innerHTML=`<button class="ddb" type="button">${row(cur)}${svg("chev",{size:18,color:"#8d979e"})}</button><div class="ddl">${opts.map((o,i)=>`<button class="ddo ${o.v===cur.v?"on":""}" data-v="${o.v}" type="button" style="--i:${i}">${row(o)}${o.v===cur.v?`<span style="margin-left:auto">${svg("check",{size:18,color:"#e04a3a"})}</span>`:""}</button>`).join("")}</div>`;
+    el.querySelector(".ddb").addEventListener("click",e=>{ e.stopPropagation(); document.querySelectorAll(".dd.open").forEach(x=>{ if(x!==el) x.classList.remove("open"); }); el.classList.toggle("open"); });
+    el.querySelectorAll(".ddo").forEach(b=>b.addEventListener("click",e=>{ e.stopPropagation(); set(b.dataset.v); draw(); el.classList.remove("open"); }));
+  };
+  draw(); return draw;
+}
+document.addEventListener("click",()=>document.querySelectorAll(".dd.open").forEach(x=>x.classList.remove("open")));
+function setRange(inp,v){ inp.value=Math.round(v*100); inp.style.setProperty("--p",inp.value+"%"); }
+function renderSettings(){
+  dropdown($("#ddCtl"),[
+    {v:"tap",ic:"hand",t:"タップで移動",d:"行き先をタップ→もう一度タップで出発"},
+    {v:"stick",ic:"joystick",t:"ジョイスティック",d:"画面のスティックを倒して移動"},
+    {v:"dpad",ic:"dpad",t:"方向ボタン",d:"画面の十字ボタンで移動"},
+    {v:"gamepad",ic:"gamepad",t:"コントローラー",d:"左スティック / 十字キー、A B X で姿勢"},
+    {v:"keyboard",ic:"keyboard",t:"キーボード",d:"矢印キー / WASD、1 2 3 で姿勢"}],
+    ()=>S.ctl,v=>{ S.ctl=v; saveS(); applyCtl(); rowSide(); });
+  dropdown($("#ddSide"),[{v:"left",ic:"left",t:"画面の左",d:"左手で操作する"},{v:"right",ic:"right",t:"画面の右",d:"右手で操作する"}],()=>S.side,v=>{ S.side=v; saveS(); applyCtl(); });
+  const rowSide=()=>{ $("#rowSide").style.display=(S.ctl==="stick"||S.ctl==="dpad")?"flex":"none"; }; rowSide();
+  const tg=$("#tgCalm"); tg.innerHTML=`<button class="tg ${S.calm?"on":""}" type="button" role="switch" aria-checked="${!!S.calm}"></button>`;
+  tg.firstChild.addEventListener("click",e=>{ S.calm=!S.calm; saveS(); applyCalm(); e.target.classList.toggle("on",S.calm); });
+  $("#mIco").innerHTML=svg("speaker",{size:24,color:"#e9e5da"});
+  const vm=$("#vMaster"); setRange(vm,S.master); $("#pMaster").textContent=vm.value+"%";
+  vm.oninput=()=>{ S.master=vm.value/100; setRange(vm,S.master); $("#pMaster").textContent=vm.value+"%"; saveS(); };
+  $("#sndList").innerHTML=SD.map(([id,name,ic])=>`<div class="snd ${S.on[id]?"":"off"}" data-id="${id}"><span class="sico">${svg(ic,{size:22,color:"#e9e5da"})}</span><span class="sn">${name}</span><input type="range" min="0" max="100"><span class="pct"></span><button class="tg ${S.on[id]?"on":""}" type="button" role="switch"></button><button class="tbtn" type="button">試す</button></div>`).join("");
+  document.querySelectorAll("#sndList .snd").forEach(row=>{
+    const id=row.dataset.id,inp=row.querySelector("input"),pc=row.querySelector(".pct"),tgb=row.querySelector(".tg"),tb=row.querySelector(".tbtn");
+    setRange(inp,S.vol[id]); pc.textContent=inp.value+"%";
+    inp.oninput=()=>{ S.vol[id]=inp.value/100; setRange(inp,S.vol[id]); pc.textContent=inp.value+"%"; saveS(); };
+    inp.onchange=()=>{ audio(); play(id,0); };
+    tgb.onclick=()=>{ S.on[id]=!S.on[id]; saveS(); tgb.classList.toggle("on",S.on[id]); row.classList.toggle("off",!S.on[id]); };
+    tb.onclick=()=>{ audio(); play(id,0); };
+  });
+  $("#keyHelp").innerHTML=`<div><b>キーボード</b><kbd>←↑↓→</kbd> / <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 移動<br><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> または <kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd> 歩く / 走る / しゃがむ<br><kbd>Q</kbd><kbd>E</kbd> 姿勢を切り替え　<kbd>R</kbd> 規則書</div><div><b>コントローラー</b>左スティック / 十字キー 移動<br>A 歩く　B 走る　X しゃがむ<br>LB RB 姿勢を切り替え　Start 規則書<br>メニューでは A で決定</div>`;
+}
+let setBack=null;
+function openSettings(){ const cur=document.querySelector(".screen.on"); if(cur&&cur.id==="settings") return; setBack=cur?cur.id:null; if(G.mode==="play") G.paused=true; renderSettings(); showScreen("settings"); }
+function closeSettings(){ G.paused=false; showScreen(setBack); applyCtl(); if(G.mode==="brief"||setBack==="brief") $("#bHint").textContent={tap:"移動：行き先を1回タップで経路を表示、もう1回タップで出発",stick:"移動：ジョイスティックを倒す",dpad:"移動：方向ボタンを押す",gamepad:"移動：左スティックか十字キー",keyboard:"移動：矢印キーかWASD"}[S.ctl]; renderSheet(); }
+$("#setTop").addEventListener("click",openSettings); $("#setBtn").addEventListener("click",openSettings); $("#setClose").addEventListener("click",closeSettings);
+function buildTower(){ $("#tower").innerHTML=[10,9,8,7,6,5,4,3,2,1].map((f,i)=>`<div style="animation-delay:${i*.5}s">${f}F</div>`).join(""); }
+function titleInfo(){ $("#best").textContent=G.best<=10?(G.best===0?"最高記録：脱出済み":`最高記録：${G.best}F まで到達`):"規則は全部で"+RULES.length+"種類。毎回ランダムに選ばれる。"; }
+
+applyCalm(); applyCtl(); buildTower(); fit(); buildHow(); titleInfo(); renderStance(); requestAnimationFrame(loop);
+window.__g={G,S,IN,RM,MAPS,pickRules,mulberry,openSettings,closeSettings,RULES,genFloor,solve,enterFloor,newRun,update,advance,buildRun,setStance,tileOf,die,mk:()=>G.run};
+})();
+</script>
+</body>
+</html>
