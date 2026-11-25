@@ -114,8 +114,11 @@ h1{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
 #dNum{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);font:900 clamp(48px,11vw,110px) var(--sans);letter-spacing:.06em;opacity:0;transition:opacity .3s .35s,transform .5s .35s;color:var(--paper);white-space:nowrap}
 #doors.closed #dNum{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .ver{font:500 11px var(--mono);letter-spacing:.14em;color:var(--mute)}
+.gh{width:100%;display:flex;align-items:center;gap:10px;margin:8px 0 6px;padding:11px 14px;background:rgba(21,24,27,.9);border:1px solid var(--line);color:var(--paper);font:700 15px var(--sans);text-align:left;border-radius:3px}.gh b{margin-left:auto;font:500 12px var(--mono);color:var(--mute)}.gh svg{transition:transform .25s}.gh.open svg{transform:rotate(180deg)}.gh:hover{border-color:var(--mute)}
+#listQ{width:100%;margin:6px 0 10px;padding:11px 14px;background:var(--bg);border:2px solid var(--line);color:var(--paper);font:500 15px var(--sans);border-radius:3px;outline:none}#listQ:focus{border-color:var(--paper)}
 .hint2{font:500 12px var(--mono);letter-spacing:.06em;color:var(--mute);margin:6px 0 10px}
 .rc{cursor:pointer;transition:transform .15s,box-shadow .15s}.rc:hover{transform:translateX(3px);box-shadow:-3px 0 0 rgba(233,229,218,.35)}
+.banall{position:relative;display:inline-flex;align-items:center;gap:3px}.banall::after{content:"";position:absolute;left:-5px;right:-5px;top:50%;height:4px;background:var(--red);border-radius:2px;transform:rotate(-14deg)}
 .rc .q{position:absolute;right:7px;bottom:5px;width:18px;height:18px;border:2px solid #8a8f93;border-radius:50%;font:700 11px var(--mono);display:flex;align-items:center;justify-content:center;color:#6a6f73}
 #help{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
 #help.on{display:flex}
@@ -204,7 +207,7 @@ h1 span{color:var(--red)}
 <body>
 <div id="app">
   <div id="bar">
-    <span class="zone">規則を守れ!</span><span class="ver">v2.0.0</span><span id="info"></span><span class="sp"></span>
+    <span class="zone">規則を守れ!</span><span class="ver">v2.1.0</span><span id="info"></span><span class="sp"></span>
     <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
   </div>
   <div id="main">
@@ -223,7 +226,7 @@ h1 span{color:var(--red)}
   <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
   <div class="how" id="how"></div>
   <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
-  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><div class="ver" style="text-align:center">v2.0.0</div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><div class="ver" style="text-align:center">v2.1.0</div>
 </div></section>
 
 <section id="brief" class="screen"><div class="box">
@@ -245,7 +248,7 @@ h1 span{color:var(--red)}
 
 <section id="list" class="screen"><div class="box">
   <div class="k" style="text-align:center" id="listK"></div><p class="hint2" style="text-align:center">規則カードをタップすると、くわしい説明が出る</p>
-  <div id="listBody"></div>
+  <input id="listQ" type="search" placeholder="規則をさがす（例：走る、カメラ、傘、赤いタイル）" autocomplete="off"><div id="listBody"></div>
   <div class="row" style="margin:14px 0"><button class="btn ghost" id="listClose">閉じる</button></div>
 </div></section>
 <div id="help"><div id="hbk"></div><div id="hbox"><button id="hx" type="button" aria-label="閉じる"></button><div id="hbody"></div></div></div>
@@ -261,7 +264,7 @@ h1 span{color:var(--red)}
   <div id="sndList"></div>
   <div class="hdr">キーボード / コントローラー</div>
   <div class="keys" id="keyHelp"></div>
-  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.0.0</div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.1.0</div>
 </div></section>
 
 <script>
@@ -327,6 +330,17 @@ midcol:'<rect x="3" y="3" width="18" height="18"/><rect x="9" y="3" width="6" he
 tl:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="3" width="9" height="9" fill="currentColor" opacity=".4"/>',
 br:'<rect x="3" y="3" width="18" height="18"/><rect x="12" y="12" width="9" height="9" fill="currentColor" opacity=".4"/>',
 near:'<rect x="9" y="9" width="6" height="6" fill="currentColor" opacity=".5"/><rect x="3" y="3" width="18" height="18" stroke-dasharray="3 3"/>',
+umbrella:'<path d="M3 12a9 9 0 0118 0z"/><path d="M12 12v6a2 2 0 004 0M12 3v0"/>',
+box:'<path d="M3 7l9-4 9 4v10l-9 4-9-4z"/><path d="M3 7l9 4 9-4M12 11v10"/>',
+book:'<path d="M4 4h12a3 3 0 013 3v13H7a3 3 0 01-3-3z"/><path d="M4 17a3 3 0 013-3h12"/>',
+bottle:'<path d="M10 2h4v4l2 3v12a1 1 0 01-1 1H9a1 1 0 01-1-1V9l2-3z"/><path d="M8 13h8"/>',
+battery:'<rect x="2" y="8" width="18" height="8" rx="1"/><path d="M22 11v2M6 11v2M10 11v2"/>',
+flower:'<circle cx="12" cy="9" r="2.5"/><path d="M12 6.5V3M12 11.5V15M9.5 9H6M14.5 9H18M12 15v7M12 19l-3-2"/>',
+mug:'<path d="M4 6h12v10a4 4 0 01-4 4H8a4 4 0 01-4-4z"/><path d="M16 9h2a2 2 0 010 5h-2"/>',
+tr:'<rect x="3" y="3" width="18" height="18"/><rect x="12" y="3" width="9" height="9" fill="currentColor" opacity=".4"/>',
+bl:'<rect x="3" y="3" width="18" height="18"/><rect x="3" y="12" width="9" height="9" fill="currentColor" opacity=".4"/>',
+block:'<rect x="3" y="3" width="18" height="18"/><rect x="8" y="8" width="8" height="8" fill="currentColor" opacity=".45"/>',
+diamond:'<rect x="3" y="3" width="18" height="18"/><path d="M12 6l6 6-6 6-6-6z" fill="currentColor" opacity=".45"/>',
 wall:'<rect x="3" y="4" width="18" height="16"/><path d="M3 9.3h18M3 14.6h18M9 4v5.3M15 9.3v5.3M9 14.6V20"/>'
 };
 function svg(name,o){
@@ -334,6 +348,10 @@ function svg(name,o){
   const ban=o.ban?'<circle cx="12" cy="12" r="11" stroke="#e04a3a" stroke-width="2"/><path d="M4.4 19.6L19.6 4.4" stroke="#e04a3a" stroke-width="2.4"/>':'';
   return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${o.sw||1.9}" stroke-linecap="round" stroke-linejoin="round" style="color:${col}">${IC[name]||""}${ban}</svg>`;
 }
+const ITK={coin:{c:1,n:"コイン",d:"黄色い丸"},key:{c:2,n:"鍵",d:"鍵"},card:{c:3,n:"カード",d:"カード"},umbrella:{c:4,n:"傘",d:"開いた傘"},box:{c:5,n:"荷物",d:"段ボール箱"},book:{c:6,n:"本",d:"開いた本"},bottle:{c:7,n:"ボトル",d:"ペットボトル"},battery:{c:8,n:"電池",d:"電池"},flower:{c:9,n:"花",d:"一輪の花"},mug:{c:10,n:"マグカップ",d:"取っ手の付いたカップ"}};
+const ITC={}; Object.keys(ITK).forEach(k=>ITC[ITK[k].c]=k);
+const HOLD=["key","card","umbrella","box","book","bottle","battery","flower","mug"];
+const CAP=6;
 const imgCache={};
 function iconImg(name,color){
   const k=name+color; if(imgCache[k]) return imgCache[k];
@@ -344,7 +362,7 @@ function iconImg(name,color){
 function drawIcon(c,name,x,y,s,color){ const im=iconImg(name,color||"#e9e5da"); if(im.complete&&im.naturalWidth) c.drawImage(im,x-s/2,y-s/2,s,s); }
 
 /* ================= 基本定数 ================= */
-const TS=60,GW=16,GH=9,MAPY=50,DW=960,DH=MAPY+GH*TS;
+const INV0=620,TS=60,GW=16,GH=9,MAPY=50,DW=960,DH=MAPY+GH*TS;
 const NP=65*37, CYC=12, SUBS=96, TK=48;
 const SPEED=[120,240,60], DTICK=[2,1,4], STN=["walk","run","crouch"], STNAME=["歩く","走る","しゃがむ"];
 const COLS={r:"#c9453a",b:"#3a6fc9",y:"#d6b13a",g:"#3f9b62",w:"#59626a"};
@@ -375,7 +393,8 @@ function guardNear(fl,c,rad){ for(const g of fl.guards){ const p=guardPos(g,c.t)
 function guardSight(fl,c){ for(const g of fl.guards){ const p=guardPos(g,c.t),dx=c.px-p.x,dy=c.py-p.y,d=Math.hypot(dx,dy); if(d>(4+(c.m?.3:0))*TS||d<1) continue;
   let da=Math.atan2(dy,dx)-Math.atan2(p.fy,p.fx); da=Math.atan2(Math.sin(da),Math.cos(da)); if(Math.abs(da)<.6+(c.m?.2:0)) return true; } return false; }
 class Ctx{
-  constructor(fl,bfs){this.fl=fl;this.bfs=bfs;this.m=bfs;this.sub=0;this.pi=0;this.t=0;this.abs=0;this.px=0;this.py=0;this.tx=0;this.ty=0;this.moving=false;this.stance="walk";this.key=false;this.card=false;this.still=0;this.col="";}
+  constructor(fl,bfs){this.fl=fl;this.bfs=bfs;this.m=bfs;this.sub=0;this.pi=0;this.t=0;this.abs=0;this.px=0;this.py=0;this.tx=0;this.ty=0;this.moving=false;this.stance="walk";this.inv=[];this.fg=0;this.dir=-1;this.still=0;this.col="";}
+  has(code){ if(this.bfs){ const i=this.fl.trk.indexOf(code); return i>=0&&((this.fg>>i)&1)===1; } return this.inv.includes(code); }
   cam(mask){ if(this.bfs) return (this.fl.camMask[this.sub*NP+this.pi]&mask)!==0;
     for(const cm of this.fl.cams){ if((COLBIT[cm.col]&mask)&&camSees(this.fl,cm,this.t,this.px,this.py,false)) return true; } return false; }
   item(){ return this.fl.itemGrid[this.ty*GW+this.tx]; }
@@ -434,7 +453,7 @@ R({id:"alarmFreeze",g:"time",text:"警報が鳴っている間は、動いては
 R({id:"alarmCrouch",g:"time",text:"警報が鳴っている間は、しゃがむこと",ic:["crouch","bell"],ban:false,need:["ev:alarm"],conf:["noCrouch","alarmFreeze"],frame:c=>evOn(c.fl,"alarm",c.t,c.m)&&c.stance!=="crouch"?"警報の間に、しゃがんでいなかった。":null});
 R({id:"blackFreeze",g:"time",text:"停電している間は、動いてはならない",ic:["walk","bolt"],ban:true,need:["ev:black"],frame:c=>evOn(c.fl,"black",c.t,c.m)&&c.moving?"停電の間に動いた。":null});
 R({id:"chimeFreeze",g:"time",text:"チャイムが鳴ったら、3秒間動いてはならない",ic:["walk","speaker"],ban:true,need:["ev:chime"],frame:c=>evOn(c.fl,"chime",c.t,c.m)&&c.moving?"チャイムの後に動いた。":null});
-R({id:"timeLimit",g:"time",text:"この階は、{lim}秒以内に降りること",ic:["timer","down"],ban:false,need:["limit"],frame:c=>c.abs>c.fl.limit?"制限時間を過ぎた。":null});
+R({id:"timeLimit",g:"time",limK:[1.7,10],text:"この階は、{lim}秒以内に降りること",ic:["timer","down"],ban:false,need:["limit"],frame:c=>c.abs>c.fl.limit?"制限時間を過ぎた。":null});
 // 階段
 R({id:"stEvenL",g:"stairs",text:"偶数階は左の階段、奇数階は右の階段を使うこと",ic:["stairs","left"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%2===0)?st.side==="L":st.side==="R")?null:"使うべきでない側の階段に入った。"});
 R({id:"stEvenR",g:"stairs",text:"偶数階は右の階段、奇数階は左の階段を使うこと",ic:["stairs","right"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%2===0)?st.side==="R":st.side==="L")?null:"使うべきでない側の階段に入った。"});
@@ -443,12 +462,12 @@ R({id:"onlyEmerg",g:"stairs",text:"非常階段だけを使うこと",ic:["emerg
 R({id:"stCrouch",g:"stairs",text:"階段には、しゃがんで入ること",ic:["crouch","stairs"],ban:false,conf:["noCrouch","crouchNoMove"],stair:(c,st)=>c.stance!=="crouch"?"しゃがまずに階段に入った。":null});
 R({id:"stNoRun",g:"stairs",text:"階段に、走って入ってはならない",ic:["run","stairs"],ban:true,conf:["blueRun"],stair:(c,st)=>c.stance==="run"?"走って階段に入った。":null});
 // アイテム
-R({id:"needKey",g:"item",text:"鍵を拾ってから、降りること",ic:["key","down"],ban:false,need:["key"],stair:(c,st)=>c.key?null:"鍵を持たずに降りた。"});
-R({id:"needCard",g:"item",text:"カードを拾ってから、降りること",ic:["card","down"],ban:false,need:["card"],stair:(c,st)=>c.card?null:"カードを持たずに降りた。"});
+R({id:"needKey",g:"item",text:"鍵を拾ってから、降りること",ic:["key","down"],ban:false,need:["it:key"],stair:(c,st)=>c.has(2)?null:"鍵を持たずに降りた。"});
+R({id:"needCard",g:"item",text:"カードを拾ってから、降りること",ic:["card","down"],ban:false,need:["it:card"],stair:(c,st)=>c.has(3)?null:"カードを持たずに降りた。"});
 R({id:"noCoin",g:"item",text:"コインを拾ってはならない",ic:["coin"],ban:true,need:["coin"],frame:c=>c.item()===1?"コインを拾った。":null});
-R({id:"noKey",g:"item",text:"鍵を拾ってはならない",ic:["key"],ban:true,need:["keyAvoid"],frame:c=>c.item()===2?"鍵を拾った。":null});
+R({id:"noKey",g:"item",text:"鍵を拾ってはならない",ic:["key"],ban:true,need:["itp:key"],frame:c=>c.item()===2?"鍵を拾った。":null});
 // その他
-R({id:"tapRate",g:"misc",text:"画面を1秒間に4回以上タップしてはならない",ic:["hand"],ban:true,tapR:true});
+R({id:"tapRate",tapR:4,g:"misc",text:"画面を1秒間に4回以上タップしてはならない",ic:["hand"],ban:true,tapR:true});
 
 /* ---- 追加規則 ---- */
 R({id:"touchc_w",g:"touch",text:"白い物に触れてはならない",ic:["hand"],sw:"w",ban:true,need:["col:w"],conf:["touchAny","touchOnlyB","touchOnlyR"],touch:(c,o)=>o.c==="w"?"白い物に触れた。":null});
@@ -479,7 +498,7 @@ R({id:"chimeNoRun",g:"time",text:"チャイムが鳴ったら、3秒間走って
 R({id:"stWalk",g:"stairs",text:"階段には、歩いて入ること",ic:["walk","stairs"],ban:false,conf:["stCrouch","stRun","blueRun","greenRun"],stair:(c,st)=>c.stance!=="walk"?"歩かずに階段に入った。":null});
 R({id:"stRun",g:"stairs",text:"階段には、走って入ること",ic:["run","stairs"],ban:false,conf:["stCrouch","stWalk","stNoRun","noRun"],stair:(c,st)=>c.stance!=="run"?"走らずに階段に入った。":null});
 R({id:"stNoCrouch",g:"stairs",text:"階段に、しゃがんで入ってはならない",ic:["crouch","stairs"],ban:true,conf:["stCrouch"],stair:(c,st)=>c.stance==="crouch"?"しゃがんで階段に入った。":null});
-R({id:"noCard",g:"item",text:"カードを拾ってはならない",ic:["card"],ban:true,need:["cardAvoid"],frame:c=>c.item()===3?"カードを拾った。":null});
+R({id:"noCard",g:"item",text:"カードを拾ってはならない",ic:["card"],ban:true,need:["itp:card"],frame:c=>c.item()===3?"カードを拾った。":null});
 R({id:"guardNear3",g:"guard",text:"警備員に3マス以内に近づいてはならない",ic:["guard"],ban:true,need:["guard"],frame:c=>guardNear(c.fl,c,3)?"警備員に近づきすぎた。":null});
 R({id:"guardNoRun",g:"guard",text:"警備員の3マス以内では、走ってはならない",ic:["run","guard"],ban:true,need:["guard"],frame:c=>guardNear(c.fl,c,3)&&c.stance==="run"&&c.moving?"警備員の近くで走った。":null});
 R({id:"guardRun",g:"guard",text:"警備員の3マス以内では、走ること",ic:["run","guard"],ban:false,need:["guard"],conf:["guardCrouch","guardStill","noRun"],frame:c=>guardNear(c.fl,c,3)&&c.stance!=="run"?"警備員の近くで、走っていなかった。":null});
@@ -496,7 +515,7 @@ function pickRules(count,rng,n,must){
   const pool=shuffle(RULES.slice(),rng);
   for(const r of pool){
     if(chosen.length>=count) break;
-    if(chosen.includes(r)) continue;
+    if(chosen.includes(r)||(r.fc&&!r.fc(n))) continue;
     if((gc[r.g]||0)>=GROUPCAP[r.g]) continue;
     if(chosen.some(c=>conflict(c,r))) continue;
     add(r);
@@ -525,31 +544,43 @@ function buildLayout(n,rules,rng){
   const need=new Set(); rules.forEach(r=>(r.need||[]).forEach(x=>need.add(x)));
   const has=id=>rules.some(r=>r.id===id);
   const fl={n,rules,objs:[],obst:new Uint8Array(GW*GH),tiles:new Array(GW*GH).fill(""),items:[],itemGrid:new Uint8Array(GW*GH),
-    stairs:[],cams:[],guards:[],lamps:[],wall:new Uint8Array(GW*GH),map:null,off:pick([0,2,4,6,8,10],rng),limit:999,start:null,camMask:null,hasKey:false,hasCard:false};
+    stairs:[],cams:[],guards:[],lamps:[],wall:new Uint8Array(GW*GH),map:null,off:pick([0,2,4,6,8,10],rng),limit:999,start:null,camMask:null,trk:[]};
   const two=need.has("stairs2")||need.has("emerg");
   const mirror=rng()<.5;
   const free=(x,y)=>x>=0&&y>=0&&x<GW&&y<GH&&!fl.obst[y*GW+x];
   // 開始と階段
-  const sy=1+Math.floor(rng()*(GH-2));
+  let xr=[0,GW-1],yr=[1,GH-2],sameX=false,sameY=false,dno=-1;
+  rules.forEach(r=>{ const q=r.place; if(!q) return; if(q.x) xr=[Math.max(xr[0],q.x[0]),Math.min(xr[1],q.x[1])]; if(q.y) yr=[Math.max(yr[0],q.y[0]),Math.min(yr[1],q.y[1])]; if(q.sameX) sameX=true; if(q.sameY) sameY=true; if(q.dno!==undefined) dno=q.dno; });
+  if(sameX){ if(rng()<.5) xr=[xr[0],Math.min(xr[1],6)]; else xr=[Math.max(xr[0],9),xr[1]]; }
+  if(sameY){ if(rng()<.5) yr=[yr[0],Math.min(yr[1],3)]; else yr=[Math.max(yr[0],5),yr[1]]; }
+  if(xr[0]>xr[1]||yr[0]>yr[1]) return null;
+  const constrained=xr[0]>0||xr[1]<GW-1;
   if(two){
-    fl.start={x:6+Math.floor(rng()*4),y:1+Math.floor(rng()*(GH-2))};
-    const ly=1+Math.floor(rng()*(GH-2)), ry=1+Math.floor(rng()*(GH-2));
+    if(constrained) return null;
+    fl.start={x:6+Math.floor(rng()*4),y:yr[0]+Math.floor(rng()*(yr[1]-yr[0]+1))};
+    const ly=yr[0]+Math.floor(rng()*(yr[1]-yr[0]+1)), ry=yr[0]+Math.floor(rng()*(yr[1]-yr[0]+1));
     let kinds=["normal","normal"]; if(need.has("emerg")) kinds=rng()<.5?["normal","emerg"]:["emerg","normal"];
     fl.stairs.push({x:rng()<.5?0:1,y:ly,side:"L",kind:kinds[0]},{x:rng()<.5?GW-1:GW-2,y:ry,side:"R",kind:kinds[1]});
   } else {
-    let sx=Math.floor(rng()*3), ex=GW-1-Math.floor(rng()*3), ey=1+Math.floor(rng()*(GH-2));
-    if(mirror){ sx=GW-1-sx; ex=GW-1-ex; }
+    let sx,ex,sy,ey,ok=false;
+    for(let tries=0;tries<40&&!ok;tries++){
+      if(constrained){ const lo=xr[0],hi=xr[1],w=Math.min(3,hi-lo+1); if(rng()<.5){ sx=lo+Math.floor(rng()*w); ex=hi-Math.floor(rng()*w); } else { ex=lo+Math.floor(rng()*w); sx=hi-Math.floor(rng()*w); } }
+      else { sx=Math.floor(rng()*3); ex=GW-1-Math.floor(rng()*3); if(rng()<.5){ sx=GW-1-sx; ex=GW-1-ex; } }
+      sy=yr[0]+Math.floor(rng()*(yr[1]-yr[0]+1)); ey=yr[0]+Math.floor(rng()*(yr[1]-yr[0]+1));
+      ok=!(dno===0&&ex>sx)&&!(dno===1&&ex<sx)&&!(dno===2&&ey>sy)&&!(dno===3&&ey<sy)&&Math.abs(sx-ex)+Math.abs(sy-ey)>=3;
+    }
+    if(!ok) return null;
     fl.start={x:sx,y:sy}; fl.stairs.push({x:ex,y:ey,side:ex<8?"L":"R",kind:"normal"});
   }
   const protectedT=new Set(); const prot=(x,y)=>{for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++)protectedT.add((y+dy)*GW+(x+dx));};
   prot(fl.start.x,fl.start.y); fl.stairs.forEach(s=>prot(s.x,s.y));
-  { const mp=pick(MAPS,rng), fx=rng()<.5, fy=rng()<.5; fl.map={id:mp.id,name:mp.name};
+  { const mp=rules.some(r=>r.id==="noNearObj")?MAPS[0]:rules.some(r=>r.id==="nearWall")?pick(MAPS.slice(1),rng):pick(MAPS,rng), fx=rng()<.5, fy=rng()<.5; fl.map={id:mp.id,name:mp.name};
     for(let [wx,wy] of mp.gen(rng)){ if(fx) wx=GW-1-wx; if(fy) wy=GH-1-wy; if(wx<0||wy<0||wx>=GW||wy>=GH) continue; const wi=wy*GW+wx; if(protectedT.has(wi)) continue; fl.obst[wi]=1; fl.wall[wi]=1; } }
   const place=(t,c)=>{ for(let k=0;k<60;k++){ const x=Math.floor(rng()*GW),y=Math.floor(rng()*GH); const i=y*GW+x; if(fl.obst[i]||protectedT.has(i)) continue; fl.obst[i]=1; fl.objs.push({x,y,t,c}); return true; } return false; };
   // 必須オブジェクト
   need.forEach(k=>{ if(k.startsWith("obj:")){ const t=k.slice(4); place(t,pick(OCOLS,rng)); place(t,pick(OCOLS,rng)); }
     if(k.startsWith("col:")){ const c=k.slice(4); place(pick(OTYPES,rng),c); place(pick(OTYPES,rng),c); place(pick(OTYPES,rng),c); } });
-  const total=14+Math.floor(rng()*5);
+  const total=rules.some(r=>r.near)?7+Math.floor(rng()*4):14+Math.floor(rng()*5);
   while(fl.objs.length<total) place(pick(OTYPES,rng),pick(OCOLS,rng));
   if(need.has("lamp")){ for(let i=0;i<3;i++){ if(place("lamp","w")){ const o=fl.objs[fl.objs.length-1]; fl.lamps.push({x:o.x,y:o.y,px:(o.x+.5)*TS,py:(o.y+.5)*TS}); } } }
   // 警備員
@@ -570,7 +601,7 @@ function buildLayout(n,rules,rng){
   }
   // カメラ
   if(need.has("cam")){
-    const rule=rules.find(r=>r.g==="cam"); const cnt=2+(n<=6&&rng()<.5?1:0);
+    const rule=rules.find(r=>r.camCols)||rules.find(r=>r.g==="cam")||{}; const cnt=2+(n<=6&&rng()<.5?1:0);
     const sides=shuffle(["T","B","L","R"],rng);
     for(let i=0;i<cnt;i++){
       const s=sides[i]; let col;
@@ -589,9 +620,10 @@ function buildLayout(n,rules,rng){
   // アイテム
   const putItem=(kind,code)=>{ for(let k=0;k<80;k++){ const x=Math.floor(rng()*GW),y=Math.floor(rng()*GH),i=y*GW+x; if(fl.obst[i]||protectedT.has(i)||fl.itemGrid[i]) continue; fl.itemGrid[i]=code; fl.items.push({x,y,k:kind}); return; } };
   if(need.has("coin")) for(let i=0;i<7;i++) putItem("coin",1);
-  if(need.has("key")||need.has("keyAvoid")){ putItem("key",2); fl.hasKey=need.has("key"); }
-  if(need.has("card")){ putItem("card",3); fl.hasCard=true; }
-  if(need.has("cardAvoid")) putItem("card",3);
+  const refd=new Set(); need.forEach(k=>{ if(k.startsWith("it:")){ const kd=k.slice(3); refd.add(kd); if(!fl.trk.includes(ITK[kd].c)) fl.trk.push(ITK[kd].c); } else if(k.startsWith("itp:")) refd.add(k.slice(4)); });
+  if(fl.trk.length>2) return null;
+  refd.forEach(kd=>{ putItem(kd,ITK[kd].c); putItem(kd,ITK[kd].c); });
+  { const others=HOLD.filter(k=>!refd.has(k)); const nd=Math.floor(rng()*3); for(let i=0;i<nd;i++){ const kd=pick(others,rng); putItem(kd,ITK[kd].c); } }
   // 到達性
   const seen=new Uint8Array(GW*GH),q=[fl.start.y*GW+fl.start.x]; seen[q[0]]=1;
   while(q.length){ const u=q.pop(),x=u%GW,y=(u/GW)|0; for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){ const nx=x+dx,ny=y+dy; if(free(nx,ny)&&!seen[ny*GW+nx]){seen[ny*GW+nx]=1;q.push(ny*GW+nx);} } }
@@ -614,15 +646,16 @@ function viol(rules,c){ for(const r of rules){ if(r.frame){ const w=r.frame(c); 
 function solve(fl){
   precompute(fl);
   const frameRules=fl.rules.filter(r=>r.frame), stairRules=fl.rules.filter(r=>r.stair);
-  const FLN=(fl.hasKey||fl.hasCard)?4:1, NT=GW*GH, N=NT*TK*3*FLN;
+  const FLN=1<<fl.trk.length, NT=GW*GH, N=NT*TK*3*FLN;
   const dist=new Int32Array(N).fill(-1), par=new Int32Array(N).fill(-1), act=new Int32Array(N);
   const c=new Ctx(fl,true);
   const stairAt=new Array(NT).fill(null); fl.stairs.forEach(s=>stairAt[s.y*GW+s.x]=s);
-  const setC=(sub,px,py,tx,ty,moving,st,fg,still)=>{ c.sub=sub; c.t=sub/8; c.abs=0; c.px=px; c.py=py; c.pi=Math.round(py/15)*65+Math.round(px/15); c.tx=tx; c.ty=ty; c.moving=moving; c.stance=STN[st]; c.key=!!(fg&1); c.card=!!(fg&2); c.still=still; c.col=fl.tiles[ty*GW+tx]; };
+  const setC=(sub,px,py,tx,ty,moving,st,fg,still,dir)=>{ c.dir=dir===undefined?-1:dir; c.fg=fg; c.sub=sub; c.t=sub/8; c.abs=0; c.px=px; c.py=py; c.pi=Math.round(py/15)*65+Math.round(px/15); c.tx=tx; c.ty=ty; c.moving=moving; c.stance=STN[st]; c.still=still; c.col=fl.tiles[ty*GW+tx]; };
   const enc=(tile,tm,st,fg)=>((tile*TK+tm)*3+st)*FLN+fg;
   const buckets=[]; const push=(T,s)=>{ (buckets[T]||(buckets[T]=[])).push(s); };
-  const s0=enc(fl.start.y*GW+fl.start.x,0,0,0);
-  setC(0,(fl.start.x+.5)*TS,(fl.start.y+.5)*TS,fl.start.x,fl.start.y,false,0,0,0);
+  const sst=(fl.rules.find(q=>q.startSt!==undefined)||{startSt:0}).startSt;
+  const s0=enc(fl.start.y*GW+fl.start.x,0,sst,0);
+  setC(0,(fl.start.x+.5)*TS,(fl.start.y+.5)*TS,fl.start.x,fl.start.y,false,sst,0,0);
   if(viol(frameRules,c)) return null;
   dist[s0]=0; push(0,s0);
   let best=null;
@@ -646,11 +679,12 @@ function solve(fl){
       for(let d=0;d<4;d++){
         const nx=x+DIRS[d][0],ny=y+DIRS[d][1]; if(nx<0||ny<0||nx>=GW||ny>=GH||fl.obst[ny*GW+nx]) continue;
         const D=DTICK[st],S=D*2,qx=(nx+.5)*TS,qy=(ny+.5)*TS; let ok=true,fg2=fg,succ=false,stObj=null;
+        { setC(tm*2,px+(qx-px)*.03,py+(qy-py)*.03,x,y,true,st,fg,0,d); if(viol(frameRules,c)) continue; }
         for(let k=1;k<=S&&ok;k++){
-          { const fm=(k-.5)/S, mx=px+(qx-px)*fm, my=py+(qy-py)*fm; setC((tm*2+k)%SUBS,mx,my,fm<.5?x:nx,fm<.5?y:ny,true,st,fg,0); if(viol(frameRules,c)){ ok=false; break; } }
+          { const fm=(k-.5)/S, mx=px+(qx-px)*fm, my=py+(qy-py)*fm; setC((tm*2+k)%SUBS,mx,my,fm<.5?x:nx,fm<.5?y:ny,true,st,fg,0,d); if(viol(frameRules,c)){ ok=false; break; } }
           const f=k/S, ppx=px+(qx-px)*f, ppy=py+(qy-py)*f; const tx=f<.5?x:nx, ty=f<.5?y:ny;
-          if(f>=.5){ const it=fl.itemGrid[ny*GW+nx]; if(it===2) fg2|=1; if(it===3) fg2|=2; }
-          setC((tm*2+k)%SUBS,ppx,ppy,tx,ty,true,st,f>=.5?fg2:fg,0);
+          if(f>=.5){ const it=fl.itemGrid[ny*GW+nx]; const bi=fl.trk.indexOf(it); if(bi>=0) fg2|=1<<bi; }
+          setC((tm*2+k)%SUBS,ppx,ppy,tx,ty,true,st,f>=.5?fg2:fg,0,d);
           if(viol(frameRules,c)){ ok=false; break; }
           if(f>=.5&&!succ){ const sa=stairAt[ny*GW+nx]; if(sa){ succ=true; stObj=sa; const bad=stairRules.some(r=>r.stair(c,sa)); if(bad) ok=false; break; } }
         }
@@ -679,7 +713,7 @@ function genFloor(n,seed,rulesMust){
     const fl=buildLayout(n,rules,rng); if(!fl) continue;
     const sol=solve(fl); if(!sol||(sol.t>45&&attempt<35)) continue;
     fl.sol=sol; fl.attempt=attempt;
-    if(fl.hasLimit) fl.limit=Math.ceil(sol.t*1.7+10);
+    if(fl.hasLimit){ const lr=rules.find(r=>r.limK), lk=lr?lr.limK:[1.7,10]; fl.limit=Math.ceil(sol.t*lk[0]+lk[1]); }
     return fl;
   }
   const rules=[RM.touchAny]; const fl=buildLayout(n,rules,rng); fl.sol=solve(fl); return fl;
@@ -700,8 +734,8 @@ function showScreen(id){ document.querySelectorAll(".screen").forEach(e=>e.class
 function swatch(k){ return `<span class="sw" style="background:${k==="w"?"#e9e5da":COLS[k]}"></span>`; }
 function cardHTML(r,fl,cls,i){
   const main=r.ic[0], ctxIc=r.ic[1];
-  let ico=svg(main,{size:34,ban:r.ban});
-  if(ctxIc) ico+=`<span class="plus">+</span>`+svg(ctxIc,{size:26});
+  let ico=r.banAll?`<span class="banall">${svg(r.ic[0],{size:30})}<span class="plus">+</span>${svg(r.ic[1],{size:30})}</span>`:svg(main,{size:34,ban:r.ban});
+  if(ctxIc&&!r.banAll) ico+=`<span class="plus">+</span>`+svg(ctxIc,{size:26});
   if(r.sw) ico+=(ctxIc?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join("");
   if(!r.ban) ico=ico;
   const text=r.text.replace("{lim}",fl?fl.limit:"--");
@@ -730,7 +764,7 @@ function enterFloor(n){
 }
 function buildRun(){
   const fl=G.fl;
-  G.run={t:0,px:(fl.start.x+.5)*TS,py:(fl.start.y+.5)*TS,st:0,route:[],seg:null,moving:false,still:0,key:false,card:false,over:false,started:false,
+  G.run={t:0,px:(fl.start.x+.5)*TS,py:(fl.start.y+.5)*TS,st:(fl.rules.find(q=>q.startSt!==undefined)||{startSt:0}).startSt,route:[],seg:null,moving:false,still:0,inv:[],over:false,started:false,
     preview:null,taps:[],tile:fl.start.y*GW+fl.start.x,ap:null,apI:0,dim:0,alarmA:0,lastCam:null};
   renderStance();
 }
@@ -786,8 +820,9 @@ function renderStance(){
 cv.addEventListener("pointerdown",e=>{
   audio(); const r=G.run,fl=G.fl; if(!r||G.mode!=="play"||G.paused||r.over||!r.started) return;
   const p=toDesign(e.clientX,e.clientY), tx=Math.floor(p.x/TS), ty=Math.floor((p.y-MAPY)/TS);
+  if(p.y<MAPY){ const i=Math.floor((p.x-INV0)/42); if(i>=0&&i<CAP&&(p.x-INV0-i*42)<=38&&r.inv[i]!==undefined) dropItem(i); return; }
   const now=r.t; r.taps=r.taps.filter(t=>now-t<1); r.taps.push(now);
-  if(fl.rules.some(q=>q.tapR)&&r.taps.length>=4) return die(RM.tapRate,"画面を連打した。");
+  { const tq=fl.rules.find(q=>q.tapR); if(tq&&r.taps.length>=tq.tapR) return die(tq,"画面を連打した。"); }
   if(tx<0||ty<0||tx>=GW||ty>=GH) return;
   sfx.tap();
   if(fl.obst[ty*GW+tx]){
@@ -814,6 +849,7 @@ addEventListener("keydown",e=>{
   if(k==="1"||k==="z") setStance(0); if(k==="2"||k==="x") setStance(1); if(k==="3"||k==="c") setStance(2);
   if(k==="q") setStance((G.run.st+2)%3); if(k==="e") setStance((G.run.st+1)%3);
   if(k==="r") $("#sheet").classList.toggle("show");
+  if(k==="f"&&G.run.inv.length) dropItem(G.run.inv.length-1);
   if(KDIR[k]){ if(!IN.keys.includes(k)) IN.keys.push(k); e.preventDefault(); }
 });
 addEventListener("keyup",e=>{ const k=normKey(e); IN.keys=IN.keys.filter(x=>x!==k); });
@@ -853,13 +889,19 @@ function pollPad(){
   const pr=i=>B(i)&&!padPrev[i];
   if($("#help").classList.contains("on")){ if(pr(0)||pr(1)||pr(9)) closeHelp(); padPrev=gp.buttons.map((b,i)=>B(i)); return; }
   if(G.mode==="play"&&G.run&&!G.paused&&!document.querySelector(".screen.on")){
-    if(pr(0)) setStance(0); if(pr(1)) setStance(1); if(pr(2)) setStance(2); if(pr(4)) setStance((G.run.st+2)%3); if(pr(5)) setStance((G.run.st+1)%3); if(pr(9)) $("#sheet").classList.toggle("show");
+    if(pr(0)) setStance(0); if(pr(1)) setStance(1); if(pr(2)) setStance(2); if(pr(4)) setStance((G.run.st+2)%3); if(pr(5)) setStance((G.run.st+1)%3); if(pr(9)) $("#sheet").classList.toggle("show"); if(pr(3)&&G.run.inv.length) dropItem(G.run.inv.length-1);
   } else if(pr(0)||pr(9)) primaryClick();
   padPrev=gp.buttons.map((b,i)=>B(i));
 }
+function dropItem(i){
+  const r=G.run,fl=G.fl; if(!r||r.over||G.mode!=="play"||G.paused||r.inv[i]===undefined) return;
+  const t=tileOf(r.px,r.py),k=t.y*GW+t.x;
+  if(fl.itemGrid[k]||fl.stairs.some(s=>s.x===t.x&&s.y===t.y)){ say("ここには置けない","hand"); return; }
+  const code=r.inv.splice(i,1)[0]; fl.itemGrid[k]=code; fl.items.push({x:t.x,y:t.y,k:ITC[code]}); say(ITK[ITC[code]].n+"を置いた",ITC[code]); sfx.tap();
+}
 function mkCtx(r){
   const c=new Ctx(G.fl,false); const t=tileOf(r.px,r.py);
-  c.t=r.t; c.abs=r.t; c.px=r.px; c.py=r.py; c.tx=t.x; c.ty=t.y; c.moving=r.moving; c.stance=STN[r.st]; c.key=r.key; c.card=r.card; c.still=r.still; c.col=G.fl.tiles[t.y*GW+t.x];
+  c.t=r.t; c.abs=r.t; c.px=r.px; c.py=r.py; c.tx=t.x; c.ty=t.y; c.moving=r.moving; c.stance=STN[r.st]; c.inv=r.inv; c.dir=(r.moving&&r.dirNow!==undefined)?r.dirNow:-1; c.still=r.still; c.col=G.fl.tiles[t.y*GW+t.x];
   return c;
 }
 function die(rule,why){
@@ -891,8 +933,11 @@ function ending(){
 function onEnterTile(r,t){
   const fl=G.fl,i=t.y*GW+t.x; r.tile=i; sfx.step(r.st); r.rip=r.rip||[]; r.rip.push({x:t.x,y:t.y,t0:AT});
   const it=fl.itemGrid[i];
-  if(it===2&&!r.key){ r.key=true; say("鍵を拾った","key"); sfx.pick(); }
-  if(it===3&&!r.card){ r.card=true; say("カードを拾った","card"); sfx.pick(); }
+  if(it>=2){
+    { const w0=checkFrame(mkCtxMoving(r,true)); if(w0) return die(w0[0],w0[1]); }
+    if(r.inv.length>=CAP) say("持ち物がいっぱいで拾えない","hand");
+    else { r.inv.push(it); fl.itemGrid[i]=0; fl.items=fl.items.filter(o=>!(o.x===t.x&&o.y===t.y)); say(ITK[ITC[it]].n+"を拾った",ITC[it]); sfx.pick(); }
+  }
   const st=fl.stairs.find(s=>s.x===t.x&&s.y===t.y);
   if(st){ const c=mkCtx(r); for(const q of fl.rules){ if(q.stair){ const w=q.stair(c,st); if(w) return die(q,w); } } descend(); }
 }
@@ -905,7 +950,7 @@ function advance(r,dt){
           else if(a.k==="mv"){ if(due<=now+1e-6){ const t=tileOf(r.px,r.py); r.route=[{x:t.x+[1,-1,0,0][a.d],y:t.y+[0,0,1,-1][a.d]}]; r.apI++; }
             else { const w=due-now; if(w<=rem){ rem-=w; now+=w; continue; } else { rem=0; break; } } } } }
       if(!r.route.length){ break; }
-      const nx=r.route.shift(); r.seg={tx:(nx.x+.5)*TS,ty:(nx.y+.5)*TS,tile:{x:nx.x,y:nx.y}};
+      const nx=r.route.shift(); { const ct=tileOf(r.px,r.py),ddx=nx.x-ct.x,ddy=nx.y-ct.y; r.dirNow=ddx>0?0:ddx<0?1:ddy>0?2:3; } r.seg={tx:(nx.x+.5)*TS,ty:(nx.y+.5)*TS,tile:{x:nx.x,y:nx.y}};
     }
     const sp=SPEED[r.st], dx=r.seg.tx-r.px, dy=r.seg.ty-r.py, d=Math.hypot(dx,dy), step=sp*rem;
     if(step>=d){ r.px=r.seg.tx; r.py=r.seg.ty; const used=d/sp; rem-=used; now+=used; r.seg=null; }
@@ -916,7 +961,7 @@ function advance(r,dt){
   }
   r.moving=!!r.seg||r.route.length>0||(r.ap&&r.ap[r.apI]&&false);
 }
-function mkCtxMoving(r,m){ const c=mkCtx(r); c.moving=m; return c; }
+function mkCtxMoving(r,m){ const c=mkCtx(r); c.moving=m; c.dir=(m&&r.dirNow!==undefined)?r.dirNow:-1; return c; }
 function checkFrame(c){ for(const q of G.fl.rules){ if(q.frame){ const w=q.frame(c); if(w) return [q,w]; } } return null; }
 function update(dt){
   const r=G.run,fl=G.fl; if(!r||!r.started||r.over||G.paused||G.mode!=="play") return;
@@ -961,7 +1006,8 @@ function draw(){
     for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const t={tx:x,ty:y}; if(q.frame(t)) c.fillRect(x*TS,y*TS,TS,TS); }
     c.strokeStyle="rgba(224,74,58,.5)"; });
   zr.forEach(q=>{ for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(q.frame({tx:x,ty:y})){ drawIcon(c,q.ic[0],x*TS+TS/2,y*TS+TS/2,22,"rgba(224,74,58,.55)"); } } });
-  if(fl.rules.some(q=>q.id==="noNearObj")){ const q=RM.noNearObj; c.fillStyle="rgba(224,74,58,.16)"; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(!fl.obst[y*GW+x]&&q.frame({tx:x,ty:y,fl})) c.fillRect(x*TS,y*TS,TS,TS); } }
+  fl.rules.filter(q=>q.near).forEach(q=>{ c.fillStyle="rgba(224,74,58,.16)"; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(!fl.obst[y*GW+x]&&q.frame({tx:x,ty:y,fl})) c.fillRect(x*TS,y*TS,TS,TS); } });
+  fl.rules.filter(q=>q.zt).forEach(q=>{ c.fillStyle="rgba(80,140,230,.13)"; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(q.zt(x,y)){ c.fillRect(x*TS,y*TS,TS,TS); } } c.strokeStyle="rgba(80,140,230,.35)"; c.lineWidth=1; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(q.zt(x,y)&&(x===0||!q.zt(x-1,y))){ c.beginPath(); c.moveTo(x*TS,y*TS); c.lineTo(x*TS,y*TS+TS); c.stroke(); } if(q.zt(x,y)&&(y===0||!q.zt(x,y-1))){ c.beginPath(); c.moveTo(x*TS,y*TS); c.lineTo(x*TS+TS,y*TS); c.stroke(); } } });
   // 壁
   for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ if(!fl.wall[y*GW+x]) continue; const px=x*TS,py=y*TS;
     c.fillStyle="#0c0e10"; c.fillRect(px,py+4,TS,TS); c.fillStyle="#3a4249"; c.fillRect(px,py,TS,TS-4); c.fillStyle="#4a535b"; c.fillRect(px,py,TS,5);
@@ -969,7 +1015,7 @@ function draw(){
   // 照明
   if(fl.rules.some(q=>q.id==="lampLight")) fl.lamps.forEach(l=>{ const g=c.createRadialGradient(l.px,l.py,10,l.px,l.py,1.8*TS); g.addColorStop(0,"rgba(255,226,130,.38)"); g.addColorStop(1,"rgba(255,226,130,.08)"); c.fillStyle=g; c.beginPath(); c.arc(l.px,l.py,1.8*TS,0,7); c.fill(); c.strokeStyle="rgba(255,226,130,.6)"; c.lineWidth=2; c.setLineDash([6,6]); c.stroke(); c.setLineDash([]); });
   // アイテム
-  fl.items.forEach(it=>{ if(it.k==="key"&&r.key||it.k==="card"&&r.card) return; const cx=it.x*TS+TS/2,cy=it.y*TS+TS/2+Math.sin(AT*2+it.x)*2.5*AF(); c.fillStyle="rgba(0,0,0,.35)"; c.beginPath(); c.arc(cx,cy,19,0,7); c.fill(); drawIcon(c,it.k,cx,cy,30,it.k==="coin"?"#f0c24a":"#8fd0ff"); });
+  fl.items.forEach(it=>{ const cx=it.x*TS+TS/2,cy=it.y*TS+TS/2+Math.sin(AT*2+it.x)*2.5*AF(); c.fillStyle="rgba(0,0,0,.35)"; c.beginPath(); c.arc(cx,cy,19,0,7); c.fill(); drawIcon(c,it.k,cx,cy,30,it.k==="coin"?"#f0c24a":"#8fd0ff"); });
   // 階段
   fl.stairs.forEach(s=>{ const px=s.x*TS,py=s.y*TS,em=s.kind==="emerg"; c.fillStyle=em?"#7a2018":"#2b3a47"; c.fillRect(px+2,py+2,TS-4,TS-4); c.strokeStyle=em?"#e04a3a":"#9fc3e0"; c.lineWidth=3; c.strokeRect(px+4,py+4,TS-8,TS-8);
     { const g=.35+.35*Math.sin(AT*2.2)*AF(); c.strokeStyle=em?`rgba(224,74,58,${g})`:`rgba(159,195,224,${g})`; c.lineWidth=2; c.strokeRect(px-1,py-1,TS+2,TS+2); if(AF()){ const k=(AT*.8)%1; c.globalAlpha=1-k; drawIcon(c,"down",px+TS/2,py-6+k*18,16,em?"#e04a3a":"#9fc3e0"); c.globalAlpha=1; } }
@@ -990,8 +1036,8 @@ function draw(){
   });
   // 警備員
   fl.guards.forEach(g=>{ const p=guardPos(g,r.t);
-    if(fl.rules.some(q=>q.id==="guardSight")){ const an=Math.atan2(p.fy,p.fx); c.beginPath(); c.moveTo(p.x,p.y); c.arc(p.x,p.y,4*TS,an-.6,an+.6); c.closePath(); c.fillStyle="rgba(224,74,58,.2)"; c.fill(); c.strokeStyle="rgba(224,74,58,.7)"; c.lineWidth=2; c.stroke(); }
-    [["guardNear",2],["guardCrouch",3],["guardStill",3]].forEach(([id,rad])=>{ if(fl.rules.some(q=>q.id===id)){ c.strokeStyle=id==="guardNear"?"rgba(224,74,58,.7)":"rgba(80,140,230,.7)"; c.lineWidth=2; c.setLineDash([6,6]); c.beginPath(); c.arc(p.x,p.y,rad*TS,0,7); c.stroke(); c.setLineDash([]); } });
+    if(fl.rules.some(q=>q.gs)){ const an=Math.atan2(p.fy,p.fx); c.beginPath(); c.moveTo(p.x,p.y); c.arc(p.x,p.y,4*TS,an-.6,an+.6); c.closePath(); c.fillStyle="rgba(224,74,58,.2)"; c.fill(); c.strokeStyle="rgba(224,74,58,.7)"; c.lineWidth=2; c.stroke(); }
+    fl.rules.filter(q=>q.gr).forEach(q=>{ c.strokeStyle=q.ban?"rgba(224,74,58,.7)":"rgba(80,140,230,.7)"; c.lineWidth=2; c.setLineDash([6,6]); c.beginPath(); c.arc(p.x,p.y,q.gr*TS,0,7); c.stroke(); c.setLineDash([]); });
     c.fillStyle="#0b0d0f"; c.beginPath(); c.arc(p.x,p.y,20,0,7); c.fill(); c.strokeStyle="#e9e5da"; c.lineWidth=3; c.stroke(); drawIcon(c,"guard",p.x,p.y,28,"#e9e5da"); });
   // 経路プレビュー
   if(r.preview){ c.strokeStyle="rgba(233,229,218,.85)"; c.lineWidth=4; c.setLineDash([2,10]); c.lineDashOffset=-AT*24*AF(); c.lineCap="round"; c.beginPath(); const f=r.preview.from||tileOf(r.px,r.py); c.moveTo((f.x+.5)*TS,(f.y+.5)*TS); r.preview.path.forEach(p=>c.lineTo((p.x+.5)*TS,(p.y+.5)*TS)); c.stroke(); c.setLineDash([]); c.lineDashOffset=0; c.lineCap="butt";
@@ -1010,7 +1056,7 @@ function draw(){
   ctx.fillStyle="#0e1012"; ctx.fillRect(0,0,DW,MAPY);
   ctx.fillStyle="#1b1f23"; ctx.fillRect(0,MAPY-2,DW,2);
   const rows=[["alarm","bell","#e04a3a"],["chime","speaker","#e0a43a"],["black","bolt","#8d979e"]].filter(x=>fl.ev[x[0]]);
-  const x0=340,x1=DW-110,wd=x1-x0;
+  const x0=340,x1=INV0-60,wd=x1-x0;
   rows.forEach((row,i)=>{ const y=10+i*14+ (rows.length<3?(3-rows.length)*7:0); drawIcon(ctx,row[1],x0-16,y+4,14,row[2]);
     ctx.fillStyle="#22272c"; ctx.fillRect(x0,y,wd,8);
     const [a,b]=EV[row[0]]; const A=((a+fl.off)%CYC), B=A+(b-a);
@@ -1021,8 +1067,11 @@ function draw(){
   drawIcon(ctx,"stairs",30,MAPY/2,26,"#e9e5da"); txt(ctx,`${fl.n}F`,56,MAPY/2,26,"#e9e5da","left",900);
   txt(ctx,"→ 1F",118,MAPY/2+1,14,"#8d979e","left",500); if(fl.map){ drawIcon(ctx,"map",186,MAPY/2,18,"#8d979e"); txt(ctx,fl.map.name,202,MAPY/2+1,13,"#8d979e","left",500); }
   if(fl.hasLimit){ const left=Math.max(0,fl.limit-r.t); drawIcon(ctx,"timer",DW-90,MAPY/2,24,left<10?"#e04a3a":"#e9e5da"); txt(ctx,Math.ceil(left)+"s",DW-72,MAPY/2,20,left<10?"#e04a3a":"#e9e5da","left",700); }
-  if(r.key) drawIcon(ctx,"key",DW-130,MAPY/2,22,"#8fd0ff"); if(r.card) drawIcon(ctx,"card",DW-160,MAPY/2,22,"#8fd0ff");
-  if(!rows.length&&!fl.hasLimit) txt(ctx,"この階に、時間で変わる仕掛けはない",x0,MAPY/2,13,"#59626a","left",500);
+  // 持ち物欄
+  for(let i=0;i<CAP;i++){ const sx=INV0+i*42, has=r.inv[i]!==undefined; ctx.strokeStyle=has?"#e9e5da":"#2f353b"; ctx.lineWidth=2; ctx.setLineDash(has?[]:[4,4]); ctx.fillStyle=has?"#222a30":"rgba(0,0,0,0)"; rrect(ctx,sx,6,38,38,6); ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+    if(has) drawIcon(ctx,ITC[r.inv[i]],sx+19,25,24,"#9fd0ff"); }
+  txt(ctx,"持ち物",INV0-6,MAPY/2,11,"#59626a","right",500);
+  if(!rows.length&&!fl.hasLimit) txt(ctx,"時間で変わる仕掛けなし",x0,MAPY/2,12,"#59626a","left",500);
   if(r.over&&G.mode==="dead"){ ctx.fillStyle="rgba(224,74,58,.22)"; ctx.fillRect(0,0,DW,DH); }
   ctx.restore();
 }
@@ -1030,7 +1079,7 @@ let last=0;
 function loop(ts){ requestAnimationFrame(loop); const dt=Math.min(.05,(ts-last)/1000||0); last=ts; AT=ts/1000; pollPad(); update(dt); draw(); }
 
 /* ================= ヘルプ ================= */
-const VERSION="2.0.0";
+const VERSION="2.1.0";
 const OBJDESC={pc:"モニターの絵",printer:"紙が出る箱の絵",water:"背の高いタンクの絵",tv:"アンテナの付いた画面の絵",desk:"天板と脚の絵",plant:"葉っぱの絵",vending:"窓とボタンの絵",door:"ドアノブの付いた長方形の絵",clock:"丸い文字盤の絵",switch:"縦長の板の絵",bin:"ふたの付いたかごの絵",locker:"真ん中に線の入った長方形の絵",sofa:"ひじ掛けの付いた椅子の絵",lamp:"電球の絵"};
 const LAMPX="フロアライトとは、床に立てる背の高い照明のこと。「フロアライトの光の中に入ってはならない」規則のときだけ、まわりに黄色い点線の光の円が出る。";
 const PT={r:"赤いタイル（斜線）",b:"青いタイル（ドット）",y:"黄色いタイル（横線）",g:"緑のタイル（格子）"};
@@ -1175,7 +1224,7 @@ function poseHTML(h){
   return o?`<div class="poses">${o}</div>`:"";
 }
 function zoneMapHTML(r){
-  const s=16; let c=""; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const bad=r.frame({tx:x,ty:y}); c+=`<rect x="${x*s+1}" y="${y*s+1}" width="${s-2}" height="${s-2}" fill="${bad?"#e04a3a":"#2d343a"}"/>`; }
+  const s=16; let c=""; for(let y=0;y<GH;y++)for(let x=0;x<GW;x++){ const bad=r.zt?r.zt(x,y):r.frame({tx:x,ty:y}); c+=`<rect x="${x*s+1}" y="${y*s+1}" width="${s-2}" height="${s-2}" fill="${bad?"#e04a3a":"#2d343a"}"/>`; }
   return `<div class="zmap"><svg viewBox="0 0 ${GW*s} ${GH*s}" width="100%">${c}</svg><small>赤い部分が禁止の区域（16×9マスのマップ全体）</small></div>`;
 }
 function nearMapHTML(){
@@ -1188,12 +1237,12 @@ function helpHTML(r,fl){
   const lim=fl?fl.limit:null;
   const text=r.text.replace("{lim}",lim!==null?lim:"○");
   let extra="";
-  if(r.zone&&h.zmap) extra+=zoneMapHTML(r);
+  if((r.zone||r.zt)&&h.zmap) extra+=zoneMapHTML(r);
   if(h.near) extra+=nearMapHTML();
   let now="";
   if(fl&&h.fl) now=`<div class="hnow">${svg("stairs",{size:22,color:"#15171a"})}この階は ${fl.n}F（${fl.n%2===0?"偶数":"奇数"}階）。使う階段は<b>${(h.fl==="even")===(fl.n%2===0)?"左":"右"}</b>。</div>`;
   if(r.id==="timeLimit") now=`<div class="hnow">${svg("timer",{size:22,color:"#15171a"})}${fl?`この階の制限時間は<b>${fl.limit}秒</b>。`:"制限時間は階ごとに、最短の道のおよそ1.7倍＋10秒で決まる。"}</div>`;
-  const ico=svg(r.ic[0],{size:64,color:"#15171a",ban:r.ban})+(r.ic[1]?`<span class="plus">+</span>`+svg(r.ic[1],{size:44,color:"#15171a"}):"")+(r.sw?(r.ic[1]?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join(""):"");
+  const ico=(r.banAll?`<span class="banall">${svg(r.ic[0],{size:48,color:"#15171a"})}<span class="plus">+</span>${svg(r.ic[1],{size:48,color:"#15171a"})}</span>`:svg(r.ic[0],{size:64,color:"#15171a",ban:r.ban})+(r.ic[1]?`<span class="plus">+</span>`+svg(r.ic[1],{size:44,color:"#15171a"}):""))+(r.sw?(r.ic[1]?"":'<span class="plus">+</span>')+r.sw.split("").map(swatch).join(""):"");
   return `<div class="hhead ${r.ban?"":"must"}"><div class="hico">${ico}</div><div class="htx"><span class="htag">${r.ban?"禁止":"必須"}</span><div class="htt">${text}</div><span class="hgrp">${GN[r.g]||""}</span></div></div>
   ${now}
   <div class="hsec"><div class="hh">${svg("eye",{size:22,color:"#e9e5da"})}どういう規則？</div><p>${h.w.replace("{lim}",lim!==null?lim:"○")}</p></div>
@@ -1217,19 +1266,195 @@ $("#hx").addEventListener("click",closeHelp);
 $("#hbk").addEventListener("click",closeHelp);
 addEventListener("keydown",e=>{ if(e.key==="Escape"&&$("#help").classList.contains("on")){ closeHelp(); e.stopPropagation(); } },true);
 
+/* ================= 追加規則（400） ================= */
+const NEW0=RULES.length;
+const evOnS=(fl,k,t,m)=>{ const a=EV[k][0],b=EV[k][1],u=(((t-fl.off)%CYC)+CYC)%CYC,e=m?.3:0; return u>=a+e&&u<b-e; };
+const ACTK={
+ runNot:{rt:"走ってはならない",ic:"run",ban:true,f:c=>c.stance==="run"&&c.moving},
+ runMust:{rt:"走ること",ic:"run",ban:false,f:c=>c.stance!=="run"},
+ crouchMust:{rt:"しゃがむこと",ic:"crouch",ban:false,f:c=>c.stance!=="crouch"},
+ crouchNot:{rt:"しゃがんではならない",ic:"crouch",ban:true,f:c=>c.stance==="crouch"},
+ walkMust:{rt:"歩くこと",ic:"walk",ban:false,f:c=>c.stance!=="walk"},
+ walkNot:{rt:"歩いてはならない",ic:"walk",ban:true,f:c=>c.stance==="walk"&&c.moving},
+ still:{rt:"動いてはならない",ic:"walk",ban:true,f:c=>c.moving},
+ stopNot:{rt:"立ち止まってはならない",ic:"clock",ban:true,f:c=>!c.moving&&c.still>=.5}
+};
+ACT.walkNot={w:"そこでは、歩いて移動してはならない。",ng:"歩く姿勢のまま移動した。",tip:"走るかしゃがむで移動する。歩く姿勢で止まっているだけなら違反にならない。",p:"noo"};
+const A6=["runNot","runMust","crouchMust","crouchNot","walkMust","still"];
+const A6Z=["runNot","runMust","crouchMust","crouchNot","walkMust","stopNot"];
+function ctxRule(o){
+  const a=ACTK[o.act],ac=ACT[o.act],nm=o.cx.nm,msg=(nm?nm+"で、":"")+ac.ng;
+  R({id:o.id,g:o.g,text:o.t+a.rt,ic:[a.ic,o.ic2].filter(Boolean),ban:a.ban,sw:o.sw,need:o.need,camCols:o.camCols,fc:o.fc,zt:o.zt,gr:o.gr,gs:o.gs,conf:o.conf,frame:c=>o.pred(c)&&a.f(c)?msg:null});
+  HELP[o.id]=mk(o.cx,ac,Object.assign({},o.hx||{},o.zt?{zmap:1}:{}));
+}
+/* --- カメラ --- */
+const CCN={r:"赤い",b:"青い",g:"緑の"};
+["r","b","g"].forEach(k=>{
+  const cx={nm:CCN[k]+"カメラの視界の中",d:CTX.cam.d+` この規則で対象になるのは、ランプが${CCN[k].replace("い","").replace("の","")}色のカメラだけ。他の色のカメラは点線の弱い光で描かれ、見られても大丈夫。`,see:[["camera",CCN[k]+"ランプのカメラ"],CONE],tip:CTX.cam.tip};
+  A6.forEach(a=>ctxRule({id:`cam_${k}_${a}`,g:"cam",t:CCN[k]+"カメラの視界の中では、",cx,act:a,ic2:"camera",need:["cam"],camCols:[k],pred:c=>c.cam(COLBIT[k])}));
+});
+["crouchNot","walkMust"].forEach(a=>ctxRule({id:`cam_any_${a}`,g:"cam",t:"カメラの視界の中では、",cx:CTX.cam,act:a,ic2:"camera",need:["cam"],pred:c=>c.cam(7)}));
+/* --- 警備員 --- */
+const gcx=rad=>({nm:`警備員の${rad}マス以内`,d:CTX.guard.d.replace("3マス",rad+"マス"),see:CTX.guard.see,tip:CTX.guard.tip});
+[2,4].forEach(rad=>A6.forEach(a=>ctxRule({id:`gd${rad}_${a}`,g:"guard",t:`警備員の${rad}マス以内では、`,cx:gcx(rad),act:a,ic2:"guard",need:["guard"],gr:rad,pred:c=>guardNear(c.fl,c,rad)})));
+["crouchNot","walkMust"].forEach(a=>ctxRule({id:`gd3_${a}`,g:"guard",t:"警備員の3マス以内では、",cx:gcx(3),act:a,ic2:"guard",need:["guard"],gr:3,pred:c=>guardNear(c.fl,c,3)}));
+const gscx={nm:"警備員の正面",d:"警備員が向いている方向には、赤い扇形の光（正面）が出ている。その範囲が「正面」で、約4マス先まで、左右35度ずつ。",see:[["guard","警備員"],["eye","視線"]],tip:"警備員は進行方向を向いている。背後や真横は正面ではない。"};
+A6.forEach(a=>ctxRule({id:`gs_${a}`,g:"guard",t:"警備員の正面では、",cx:gscx,act:a,ic2:"eye",need:["guard"],gs:true,pred:c=>guardSight(c.fl,c)}));
+R({id:"guardNear4",g:"guard",text:"警備員に4マス以内に近づいてはならない",ic:["guard"],ban:true,need:["guard"],gr:4,frame:c=>guardNear(c.fl,c,4)?"警備員に近づきすぎた。":null});
+H("guardNear4",{w:gcx(4).d+" 警備員に近づきすぎてはならない。",n:"警備員のまわり4マスの円に入った。",t:"円がとても広いので、警備員が離れている間に通る。",see:CTX.guard.see});
+RM.guardNear.gr=2; RM.guardCrouch.gr=3; RM.guardStill.gr=3; RM.guardNear3.gr=3; RM.guardNoRun.gr=3; RM.guardRun.gr=3; RM.guardSight.gs=true;
+/* --- タイル --- */
+const TN={r:"赤",b:"青",y:"黄色",g:"緑"};
+const TK4=["r","b","y","g"],TCN={r:"赤いタイル",b:"青いタイル",y:"黄色いタイル",g:"緑のタイル"};
+const TEX=new Set(["r:crouchMust","b:runMust","y:runNot","g:walkMust","y:crouchMust","g:runMust","r:runNot","b:crouchMust","g:crouchNot","r:stopNot"]);
+TK4.forEach(k=>["runNot","runMust","crouchMust","crouchNot","walkMust","walkNot","stopNot"].forEach(a=>{ if(TEX.has(k+":"+a)) return;
+  ctxRule({id:`tl_${k}_${a}`,g:"tile",t:TCN[k]+"の上では、",cx:CTX["tile"+k.toUpperCase()],act:a,sw:k,pred:c=>c.col===k}); }));
+[["r","y"],["r","g"],["b","y"],["b","g"]].forEach(([a,b])=>{ R({id:`tp_${a}${b}`,g:"tile",text:`${TN[a]}と${TN[b]}のタイルを踏んではならない`,ic:["tile"],sw:a+b,ban:true,frame:c=>c.col===a||c.col===b?"禁止の色のタイルを踏んだ。":null});
+  H(`tp_${a}${b}`,{w:`${PT[a]}と${PT[b]}の両方を踏んではならない。`,n:"禁止の色のタイルの上に入った。",t:"残りの色と白い床は通ってよい。",see:[["sw:tile-"+a,"禁止"],["sw:tile-"+b,"禁止"]]}); });
+TK4.forEach(k=>{ R({id:`to_${k}`,g:"tile",text:`${TN[k]}以外の色付きタイルを踏んではならない`,ic:["tile"],sw:k,ban:true,frame:c=>c.col!==""&&c.col!==k?"禁止の色のタイルを踏んだ。":null});
+  H(`to_${k}`,{w:`色付きタイルのうち、${PT[k]}だけは踏んでよい。ほかの色（と模様）のタイルは踏んではならない。白い床は大丈夫。`,n:`${PT[k]}以外の色付きタイルの上に入った。`,t:"踏んでよい色のタイルは、道として使える。",see:[["sw:tile-"+k,"踏んでよい"]]}); });
+/* --- 場所の形（27） --- */
+const zdef=(id,text,ic,test,w,n)=>{ R({id,g:"zone",text,ic:[ic],ban:true,zone:id,frame:c=>test(c.tx,c.ty)?n:null}); H(id,zoneH(w,n)); };
+for(let by=0;by<3;by++)for(let bx=0;bx<4;bx++){ zdef(`zb_${bx}${by}`,`左から${bx+1}番目・上から${by+1}段目のブロックに入ってはならない`,"block",(x,y)=>x>=bx*4&&x<bx*4+4&&y>=by*3&&y<by*3+3,`マップを横に4つ、縦に3つに分けたブロックのうち、左から${bx+1}番目・上から${by+1}段目（4×3マス）に入ってはならない。`,"禁止のブロックに入った。"); }
+zdef("zc_tl","左上の角（3×3マス）に入ってはならない","tl",(x,y)=>x<=2&&y<=2,"左上の角の3×3マスに入ってはならない。","左上の角に入った。");
+zdef("zc_tr","右上の角（3×3マス）に入ってはならない","tr",(x,y)=>x>=13&&y<=2,"右上の角の3×3マスに入ってはならない。","右上の角に入った。");
+zdef("zc_bl","左下の角（3×3マス）に入ってはならない","bl",(x,y)=>x<=2&&y>=6,"左下の角の3×3マスに入ってはならない。","左下の角に入った。");
+zdef("zc_br","右下の角（3×3マス）に入ってはならない","br",(x,y)=>x>=13&&y>=6,"右下の角の3×3マスに入ってはならない。","右下の角に入った。");
+zdef("zq_tr","右上の区域に入ってはならない","tr",(x,y)=>x>=8&&y<=3,"右上の区域（左から9〜16列目、上から1〜4行目）に入ってはならない。","右上の区域に入った。");
+zdef("zq_bl","左下の区域に入ってはならない","bl",(x,y)=>x<=7&&y>=5,"左下の区域（左から1〜8列目、上から6〜9行目）に入ってはならない。","左下の区域に入った。");
+zdef("zt_top","上の3行（上から1〜3行目）に入ってはならない","top",(x,y)=>y<=2,"上から1〜3行目に入ってはならない。","上の3行に入った。");
+zdef("zt_bot","下の3行（上から7〜9行目）に入ってはならない","bottom",(x,y)=>y>=6,"上から7〜9行目に入ってはならない。","下の3行に入った。");
+zdef("zd_mid","中央のひし形の区域に入ってはならない","diamond",(x,y)=>Math.abs(x-7.5)+Math.abs(y-4)*1.7<=4.6,"マップ中央の、ひし形の区域に入ってはならない。","中央のひし形に入った。");
+[["zs_1","左寄りの縦長ブロック（4・5列目、2〜7行目）","block",3,4,1,6],["zs_2","右寄りの縦長ブロック（12・13列目、3〜8行目）","block",11,12,2,7],["zs_3","上の横長ブロック（6〜11列目、2〜3行目）","block",5,10,1,2],["zs_4","下の横長ブロック（6〜11列目、7〜8行目）","block",5,10,6,7],["zs_5","中央上の柱（8・9列目、2〜4行目）","block",7,8,1,3],["zs_6","中央下の柱（8・9列目、6〜8行目）","block",7,8,5,7]].forEach(([id,nm,ic,x1,x2,y1,y2])=>zdef(id,nm+"に入ってはならない",ic,(x,y)=>x>=x1&&x<=x2&&y>=y1&&y<=y2,nm+"に入ってはならない。","禁止のブロックに入った。"));
+/* --- 場所×動き方（42） --- */
+const ZS=[{k:"left",t:"左半分",ic:"left",d:"画面の左半分（左から1〜8列目）",f:(x,y)=>x<=7},{k:"right",t:"右半分",ic:"right",d:"画面の右半分（左から9〜16列目）",f:(x,y)=>x>=8},{k:"top",t:"上半分",ic:"top",d:"画面の上半分（上から1〜4行目）",f:(x,y)=>y<=3},{k:"bottom",t:"下半分",ic:"bottom",d:"画面の下半分（上から6〜9行目）",f:(x,y)=>y>=5},{k:"center",t:"中央の区域",ic:"center",d:"マップ中央（左から7〜10列目、上から4〜6行目）",f:(x,y)=>x>=6&&x<=9&&y>=3&&y<=5},{k:"edge",t:"壁際",ic:"edge",d:"いちばん外側の1周",f:(x,y)=>x===0||x===GW-1||y===0||y===GH-1},{k:"corner",t:"四隅",ic:"corner",d:"四隅（各隅の2×2マス）",f:(x,y)=>(x<=1||x>=GW-2)&&(y<=1||y>=GH-2)}];
+ZS.forEach(z=>A6Z.forEach(a=>ctxRule({id:`za_${z.k}_${a}`,g:"zone",t:z.t+"では、",cx:{nm:z.t,d:z.d+"。その区域は、青く薄く塗られている。",see:[["map","青い範囲＝この区域"]],tip:"区域に入る前に姿勢を整えておく。"},act:a,ic2:z.ic,zt:z.f,pred:c=>z.f(c.tx,c.ty)})));
+/* --- 時間（10） --- */
+[["alarm","警報が鳴っている間は、","bell",["crouchNot","walkMust"]],["black","停電している間は、","bolt",["runMust","crouchNot","walkMust"]],["chime","チャイムが鳴ってから3秒間は、","speaker",["runMust","crouchNot","walkMust"]]].forEach(([ev,t,ic,acts])=>acts.forEach(a=>ctxRule({id:`tm_${ev}_${a}`,g:"time",t,cx:CTX[ev],act:a,ic2:ic,need:["ev:"+ev],pred:c=>evOn(c.fl,ev,c.t,c.m)})));
+[["timeLimitTight","この階は、{lim}秒以内に降りること（きびしめ）",[1.35,6],"timeLimitLoose"],["timeLimitLoose","この階は、{lim}秒以内に降りること（ゆるめ）",[2.5,20],"timeLimitTight"]].forEach(([id,text,lk,cf])=>{ R({id,g:"time",text,ic:["timer","down"],ban:false,need:["limit"],limK:lk,conf:["timeLimit",cf],frame:c=>c.abs>c.fl.limit?"制限時間を過ぎた。":null}); HELP[id]=HELP.timeLimit; });
+RM.timeLimit.conf=["timeLimitTight","timeLimitLoose"];
+/* --- 階段（10） --- */
+R({id:"stLeftOnly",g:"stairs",text:"いつも、左の階段を使うこと",ic:["stairs","left"],ban:false,need:["stairs2"],stair:(c,st)=>st.side==="L"?null:"右の階段に入った。"});
+R({id:"stRightOnly",g:"stairs",text:"いつも、右の階段を使うこと",ic:["stairs","right"],ban:false,need:["stairs2"],stair:(c,st)=>st.side==="R"?null:"左の階段に入った。"});
+R({id:"stMod3L",g:"stairs",text:"3の倍数の階は左、それ以外の階は右の階段を使うこと",ic:["stairs","left"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%3===0)?st.side==="L":st.side==="R")?null:"使うべきでない側の階段に入った。"});
+R({id:"stMod3R",g:"stairs",text:"3の倍数の階は右、それ以外の階は左の階段を使うこと",ic:["stairs","right"],ban:false,need:["stairs2"],stair:(c,st)=>((c.fl.n%3===0)?st.side==="R":st.side==="L")?null:"使うべきでない側の階段に入った。"});
+H("stLeftOnly",{w:"階段が2つある階では、いつも左の階段（画面の左端）を使う。",n:"右の階段に入った。",t:"階段は画面の左端と右端にある。",see:[["stairs","階段"],["left","左"]]});
+H("stRightOnly",{w:"階段が2つある階では、いつも右の階段（画面の右端）を使う。",n:"左の階段に入った。",t:"階段は画面の左端と右端にある。",see:[["stairs","階段"],["right","右"]]});
+H("stMod3L",{w:"3の倍数の階（9F・6F・3F）は左の階段、それ以外の階は右の階段を使う。階段が2つある階の規則。",n:"使うべきでない側の階段に入った。",t:"階の数字が3で割り切れるかどうかで決まる。",see:[["stairs","階段"],["left","左"],["right","右"]],fl:"mod3L"});
+H("stMod3R",{w:"3の倍数の階（9F・6F・3F）は右の階段、それ以外の階は左の階段を使う。階段が2つある階の規則。",n:"使うべきでない側の階段に入った。",t:"階の数字が3で割り切れるかどうかで決まる。",see:[["stairs","階段"],["left","左"],["right","右"]],fl:"mod3R"});
+[["alarm","警報が鳴っている間","bell"],["black","停電している間","bolt"],["chime","チャイムが鳴ってから3秒間","speaker"]].forEach(([ev,nm,ic])=>{
+  R({id:`stNo_${ev}`,g:"stairs",text:nm+"は、階段に入ってはならない",ic:["stairs",ic],ban:true,need:["ev:"+ev],stair:(c,st)=>evOn(c.fl,ev,c.t,c.m)?nm+"に階段に入った。":null});
+  R({id:`stIn_${ev}`,g:"stairs",text:nm+"に、階段に入ること",ic:["stairs",ic],ban:false,need:["ev:"+ev],stair:(c,st)=>evOnS(c.fl,ev,c.t,c.m)?null:nm+"ではないときに階段に入った。"});
+  H(`stNo_${ev}`,{w:CTX[ev].d+" その間は、階段に入ってはならない。",n:nm+"に、階段のマスに入った。",t:"階段の手前で待って、帯が終わってから入る。",see:CTX[ev].see});
+  H(`stIn_${ev}`,{w:CTX[ev].d+" 階段には、その時間の間に入らなければならない。",n:nm+"ではないときに、階段のマスに入った。",t:"階段の手前で待って、帯が始まったら入る。帯の始まりと終わりぎりぎりは避ける。",see:CTX[ev].see});
+});
+/* --- 進む向き（12） --- */
+const DN=["右","左","下","上"],DNI=["right","left","bottom","top"];
+for(let d=0;d<4;d++){
+  R({id:`dr_${d}`,g:"stance",text:`${DN[d]}へ進んではならない`,ic:[DNI[d]],ban:true,frame:c=>c.dir===d?`${DN[d]}へ進んだ。`:null});
+  H(`dr_${d}`,{w:`マップの${DN[d]}方向へ、1マスでも進んではならない。経路の途中でも、スティックでも、キーでも同じ。`,n:`${DN[d]}へ移動した。`,t:"逆向きや横には進んでよい。遠回りして目的地へ向かう。",see:[[DNI[d],`${DN[d]}方向`]]});
+  ["runNot","crouchNot"].forEach(a=>{ const ak=ACTK[a],ac=ACT[a]; R({id:`dr_${d}_${a}`,g:"stance",text:`${DN[d]}へ進むときは、${ak.rt}`,ic:[ak.ic,DNI[d]],ban:true,frame:c=>c.dir===d&&ak.f(c)?`${DN[d]}へ進むときに、${ac.ng}`:null});
+    H(`dr_${d}_${a}`,{w:`${DN[d]}方向へ進むときだけ、${ak.rt.replace("ならない","はならない")}。他の方向なら大丈夫。`,n:`${DN[d]}へ進むときに、${ac.ng}`,t:"向きを変えるたびに、姿勢ボタンで切り替える。",p:ac.p,see:[[ak.ic,"姿勢"],[DNI[d],`${DN[d]}方向`]]}); });
+}
+/* --- 階の条件（25） --- */
+const FCS=[["ev","偶数階",n=>n%2===0],["od","奇数階",n=>n%2===1],["hi","上層（10〜7F）の階",n=>n>=7],["md","中層（6〜4F）の階",n=>n>=4&&n<=6],["lo","下層（3〜1F）の階",n=>n<=3]];
+FCS.forEach(([k,nm,fn])=>["runNot","runMust","crouchMust","crouchNot","walkMust"].forEach(a=>ctxRule({id:`fc_${k}_${a}`,g:"stance",t:nm+"では、",cx:Object.assign({},CTX.any,{d:`この規則は${nm}にだけ出てくる。その階では、常に守らなければならない。`}),act:a,fc:fn,pred:c=>true})));
+/* --- タップ連打 --- */
+R({id:"tapRate3",g:"misc",text:"画面を1秒間に3回以上タップしてはならない",ic:["hand"],ban:true,tapR:3});
+H("tapRate3",Object.assign({},HELP.tapRate,{w:"画面（マップ）を、1秒間に3回以上タップしてはならない。連打に厳しい版。",n:"1秒の間にマップを3回以上タップした。"}));
+RM.tapRate.tapR=4;
+/* --- 触れる（36） --- */
+const TH=TOUCHHOW;
+OBJT.forEach(([t,n])=>{ R({id:"touchOnly_"+t,g:"touch",text:`触れてよいのは、${n}だけ`,ic:["hand",t],ban:false,need:["obj:"+t],conf:["touchAny"],touch:(c,o)=>o.t!==t?`${n}以外に触れた。`:null});
+  H("touchOnly_"+t,{w:`触れてよいのは${n}だけ。ほかの物や壁に触れたら違反。${TH}`,n:`${n}以外の物や壁のマスをタップした。`,t:"何にも触れなければ守っていることになる。",see:[[t,n]]}); });
+const CCW={r:"赤",b:"青",y:"黄",g:"緑",w:"白"},CL5=["r","b","y","g","w"];
+for(let i=0;i<5;i++)for(let j=i+1;j<5;j++){ const a=CL5[i],b=CL5[j]; R({id:`touchcc_${a}${b}`,g:"touch",text:`${CCW[a]}か${CCW[b]}の物に触れてはならない`,ic:["hand"],sw:a+b,ban:true,need:["col:"+a,"col:"+b],conf:["touchAny"],touch:(c,o)=>o.c===a||o.c===b?"禁止の色の物に触れた。":null});
+  H(`touchcc_${a}${b}`,{w:`枠が${CCW[a]}い物と${CCW[b]}い物の両方に触れてはならない。物の種類は関係なく、枠の色で決まる。${TH}`,n:"禁止の色の枠の物のマスをタップした。",t:"ほかの色の物は触れても大丈夫。",see:[["sw:frame-"+a,CCW[a]+"い枠"],["sw:frame-"+b,CCW[b]+"い枠"]]}); }
+const CATS=[["furn","家具（机・ソファ・ロッカー）",["desk","sofa","locker"]],["elec","電気製品（パソコン・プリンター・テレビ・自動販売機・ウォーターサーバー・スイッチ・フロアライト・壁時計）",["pc","printer","tv","vending","water","switch","lamp","clock"]],["oth","その他（観葉植物・ゴミ箱・扉）",["plant","bin","door"]]];
+CATS.forEach(([k,nm,ts])=>{ const short=nm.split("（")[0];
+  R({id:`touchcat_${k}`,g:"touch",text:`${short}に触れてはならない`,ic:["hand",ts[0]],ban:true,need:["obj:"+ts[0]],conf:["touchAny"],touch:(c,o)=>ts.includes(o.t)?`${short}に触れた。`:null});
+  H(`touchcat_${k}`,{w:`${nm}に触れてはならない。${TH}`,n:`${short}のマスをタップした。`,t:"物のアイコンで種類を見分ける。ほかの種類の物は触れても大丈夫。",see:ts.map(t=>[t,OBJNAME[t]])});
+  R({id:`touchcato_${k}`,g:"touch",text:`触れてよいのは、${short}だけ`,ic:["hand",ts[0]],ban:false,need:["obj:"+ts[0]],conf:["touchAny"],touch:(c,o)=>!ts.includes(o.t)?`${short}以外に触れた。`:null});
+  H(`touchcato_${k}`,{w:`触れてよいのは${nm}だけ。ほかの物や壁に触れたら違反。${TH}`,n:`${short}以外の物や壁のマスをタップした。`,t:"何にも触れなければ守っていることになる。",see:ts.map(t=>[t,OBJNAME[t]])}); });
+[["walk","歩く姿勢"],["run","走る姿勢"],["crouch","しゃがむ姿勢"]].forEach(([k,nm],i)=>{ R({id:`touchst_${k}`,g:"touch",text:`${nm}のときは、物に触れてはならない`,ic:["hand",k],ban:true,conf:["touchAny"],touch:(c,o)=>c.stance===k?`${nm}のときに物に触れた。`:null});
+  H(`touchst_${k}`,{w:`姿勢が「${nm.replace("姿勢","")}」のときに、物をタップしてはならない。他の姿勢なら触れてよい。${TH}`,n:`${nm}のときに、物のマスをタップした。`,t:"触れたいときは、先に姿勢ボタンを切り替える。",p:["noo","ono","oon"][i],see:[["hand","触れる＝タップ"],[k,nm]]}); });
+R({id:"touchCam",g:"touch",text:"カメラの視界の中で、物に触れてはならない",ic:["hand","camera"],ban:true,need:["cam"],conf:["touchAny"],touch:(c,o)=>c.cam(7)?"カメラの視界の中で物に触れた。":null});
+H("touchCam",{w:CTX.cam.d+" その中では、物に触れてはならない。"+TH,n:"カメラの視界の中で、物のマスをタップした。",t:"視界の外にいるときに触れる。",see:CTX.cam.see});
+R({id:"touchGuard",g:"touch",text:"警備員の3マス以内で、物に触れてはならない",ic:["hand","guard"],ban:true,need:["guard"],gr:3,conf:["touchAny"],touch:(c,o)=>guardNear(c.fl,c,3)?"警備員の近くで物に触れた。":null});
+H("touchGuard",{w:CTX.guard.d+" その中では、物に触れてはならない。"+TH,n:"警備員の3マス以内で、物のマスをタップした。",t:"警備員が離れてから触れる。",see:CTX.guard.see});
+R({id:"chimeNoTouch",g:"touch",text:"チャイムが鳴ってから3秒間は、物に触れてはならない",ic:["hand","speaker"],ban:true,need:["ev:chime"],conf:["touchAny"],touch:(c,o)=>evOn(c.fl,"chime",c.t,false)?"チャイムの後に物に触れた。":null});
+H("chimeNoTouch",{w:CTX.chime.d+" その間は、物に触れてはならない。"+TH,n:"チャイムが鳴ってから3秒の間に、物のマスをタップした。",t:"帯の間は、画面をタップしないでおく。",see:CTX.chime.see});
+/* --- 持ち物（アイテム） --- */
+const HOWHOLD="アイテムは、そのマスに入ると自動で拾われて、画面上の持ち物欄（最大6個）に入る。持ち物欄のアイテムをタップするか、キーボードのFキー（コントローラーはY）で、その場に置ける。";
+const kin=k=>ITK[k],K9=HOLD;
+const iconsOf=k=>[k];
+const itemRule=(id,k,text,ic,ban,o)=>{ R(Object.assign({id,g:"item",text,ic,ban},o)); };
+K9.forEach(k=>{ const n=kin(k).n,d=kin(k).d,seeK=[[k,`${n}（${d}）`]];
+  const C=kin(k).c;
+  if(k!=="key"&&k!=="card"){
+    itemRule(`it_no_${k}`,k,`${n}を拾ってはならない`,[k],true,{need:["itp:"+k],frame:c=>c.item()===C?`${n}を拾った。`:null});
+    H(`it_no_${k}`,{w:`${n}（${d}のアイコン）を拾ってはならない。${HOWHOLD}`,n:`${n}のマスに入った（入ると自動で拾ってしまう）。`,t:`${n}のマスだけ避けて歩く。`,see:seeK});
+    itemRule(`it_need_${k}`,k,`${n}を拾ってから、降りること`,[k,"down"],false,{need:["it:"+k],stair:(c,st)=>c.has(C)?null:`${n}を持たずに降りた。`});
+    H(`it_need_${k}`,{w:`この階のどこかに${n}（${d}のアイコン）が落ちている。拾ってから階段に入る。${HOWHOLD}`,n:`${n}を持たずに階段に入った。`,t:`階段に向かう前に、まず${n}のマスを通る。拾うと持ち物欄に入る。途中で置いてしまうと、持っていないことになる。`,see:seeK});
+  }
+  itemRule(`it_st_${k}`,k,`${n}を持ったまま、階段に入ってはならない`,[k,"stairs"],true,{need:["it:"+k],stair:(c,st)=>c.has(C)?`${n}を持ったまま階段に入った。`:null});
+  H(`it_st_${k}`,{w:`${n}（${d}のアイコン）を持っているときは、階段に入ってはならない。持ち物欄の${n}をタップして置けば入れる。${HOWHOLD}`,n:`${n}を持ったまま、階段のマスに入った。`,t:`${n}を拾わなければ何も起きない。拾ってしまったら、階段の手前で置く。`,see:seeK});
+  [["runNot","走ってはならない"],["crouchNot","しゃがんではならない"],["walkMust","歩くこと"]].forEach(([a,rt])=>{ const ak=ACTK[a],ac=ACT[a];
+    itemRule(`it_${a}_${k}`,k,`${n}を持っている間は、${rt}`,[ak.ic,k],ak.ban,{need:["it:"+k],frame:c=>c.has(C)&&ak.f(c)?`${n}を持っている間に、${ac.ng}`:null});
+    H(`it_${a}_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、${rt}。持ち物欄の${n}をタップして置けば、普通に戻る。${HOWHOLD}`,n:`${n}を持っている間に、${ac.ng}`,t:`${n}を拾わなければ何も起きない。拾うなら、先に姿勢を合わせる。`,p:ac.p,see:seeK}); });
+  itemRule(`it_cam_${k}`,k,`${n}を持っている間は、カメラに見られてはならない`,[k,"camera"],true,{need:["it:"+k,"cam"],frame:c=>c.has(C)&&c.cam(7)?`${n}を持ったままカメラに見られた。`:null});
+  H(`it_cam_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、カメラの視界に入ってはならない。持っていなければ見られても大丈夫。${HOWHOLD}`,n:`${n}を持ったまま、カメラの視界に入った。`,t:`${n}を拾わなければ何も起きない。拾うなら、カメラの周期を見て進む。`,see:[...seeK,["camera","監視カメラ"]]});
+  itemRule(`it_gd_${k}`,k,`${n}を持っている間は、警備員の3マス以内に入ってはならない`,[k,"guard"],true,{need:["it:"+k,"guard"],gr:3,frame:c=>c.has(C)&&guardNear(c.fl,c,3)?`${n}を持ったまま警備員に近づいた。`:null});
+  H(`it_gd_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、警備員の3マス以内（点線の円）に入ってはならない。${HOWHOLD}`,n:`${n}を持ったまま、警備員の3マス以内に入った。`,t:`${n}を拾わなければ何も起きない。`,see:[...seeK,["guard","警備員"]]});
+  TK4.forEach(tc=>{ itemRule(`it_tl_${tc}_${k}`,k,`${n}を持っている間は、${TCN[tc]}を踏んではならない`,[k,"tile"],true,{sw:tc,need:["it:"+k],frame:c=>c.has(C)&&c.col===tc?`${n}を持ったまま${TCN[tc]}を踏んだ。`:null});
+    H(`it_tl_${tc}_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、${PT[tc]}を踏んではならない。${HOWHOLD}`,n:`${n}を持ったまま、${TCN[tc]}の上に入った。`,t:`${n}を拾わなければ何も起きない。`,see:[...seeK,["sw:tile-"+tc,PT[tc]]]}); });
+  itemRule(`it_touch_${k}`,k,`${n}を持っている間は、物に触れてはならない`,[k,"hand"],true,{need:["it:"+k],touch:(c,o)=>c.has(C)?`${n}を持ったまま物に触れた。`:null});
+  H(`it_touch_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、物に触れてはならない。${TOUCHHOW} ${HOWHOLD}`,n:`${n}を持ったまま、物のマスをタップした。`,t:`${n}を拾わなければ何も起きない。`,see:[...seeK,["hand","触れる＝タップ"]]});
+  itemRule(`it_red_${k}`,k,`${n}を持っているときだけ、赤いタイルを踏んでよい`,[k,"tile"],false,{sw:"r",need:["it:"+k],frame:c=>c.col==="r"&&!c.has(C)?`${n}を持たずに赤いタイルを踏んだ。`:null});
+  H(`it_red_${k}`,{w:`赤いタイル（斜線）は、${n}（${d}のアイコン）を持っているときだけ踏んでよい。持っていないときに踏んだら違反。${HOWHOLD}`,n:`${n}を持たずに、赤いタイルの上に入った。`,t:`赤いタイルを避けるなら、${n}は要らない。通りたいときだけ${n}を取りに行く。`,see:[...seeK,["sw:tile-r",PT.r]]});
+  itemRule(`it_zone_${k}`,k,`${n}を持っている間は、中央の区域に入ってはならない`,[k,"center"],true,{need:["it:"+k],zt:(x,y)=>x>=6&&x<=9&&y>=3&&y<=5,frame:c=>c.has(C)&&c.tx>=6&&c.tx<=9&&c.ty>=3&&c.ty<=5?`${n}を持ったまま中央の区域に入った。`:null});
+  H(`it_zone_${k}`,{w:`${n}（${d}のアイコン）を持っている間は、マップ中央（左から7〜10列目、上から4〜6行目）に入ってはならない。${HOWHOLD}`,n:`${n}を持ったまま、中央の区域に入った。`,t:`${n}を拾わなければ何も起きない。`,see:[...seeK,["center","中央の区域"]],zmap:1});
+});
+H("needKey",Object.assign({},HELP.needKey,{w:HELP.needKey.w+" "+HOWHOLD,t:"階段に向かう前に、まず鍵のマスを通る。途中で置いてしまうと、持っていないことになる。"}));
+H("needCard",Object.assign({},HELP.needCard,{w:HELP.needCard.w+" "+HOWHOLD,t:"階段に向かう前に、まずカードのマスを通る。途中で置いてしまうと、持っていないことになる。"}));
+// 2つ同時に持ってはならない
+const PAIRS=[]; for(let i=0;i<K9.length;i++)for(let j=i+1;j<K9.length;j++) PAIRS.push([K9[i],K9[j]]);
+PAIRS.forEach(([a,b])=>{ const na=kin(a).n,nb=kin(b).n,Ca=kin(a).c,Cb=kin(b).c;
+  R({id:`it_pair_${a}_${b}`,g:"item",text:`${na}と${nb}を、同時に持ってはならない`,ic:[a,b],banAll:true,ban:true,need:["it:"+a,"it:"+b],frame:c=>c.has(Ca)&&c.has(Cb)?`${na}と${nb}を同時に持った。`:null});
+  H(`it_pair_${a}_${b}`,{w:`${na}（${kin(a).d}）と${nb}（${kin(b).d}）を、両方同時に持ってはならない。片方だけなら持ってよい。${HOWHOLD}`,n:`${na}と${nb}の両方が、持ち物欄に入った。`,t:`片方を拾ったら、もう片方のマスは避ける。間違えて拾ったら、持ち物欄から置けば大丈夫。`,see:[[a,na],[b,nb]]}); });
+R({id:"nearWall",g:"zone",text:"壁のすぐ隣を歩いてはならない",ic:["wall"],ban:true,near:true,frame:c=>{ const o=c.fl.wall,x=c.tx,y=c.ty; const nb=(a,b)=>a>=0&&b>=0&&a<GW&&b<GH&&o[b*GW+a]; return nb(x+1,y)||nb(x-1,y)||nb(x,y+1)||nb(x,y-1)?"壁のすぐ隣を歩いた。":null; }});
+H("nearWall",{w:"壁（石のブロック）のすぐ隣（上下左右の4マス）を歩いてはならない。ななめ隣や、物の隣は大丈夫。壁がないマップでは何も起きない。",n:"壁と上下左右で接しているマスに入った。",t:"赤く薄く塗られたマスが禁止の範囲。壁から1マス離れて歩く。",see:[["wall","壁"]],near:1});
+R({id:"nearThing",g:"zone",text:"物のすぐ隣を歩いてはならない（壁は除く）",ic:["desk"],ban:true,near:true,frame:c=>{ const o=c.fl.obst,w=c.fl.wall,x=c.tx,y=c.ty; const nb=(a,b)=>a>=0&&b>=0&&a<GW&&b<GH&&o[b*GW+a]&&!w[b*GW+a]; return nb(x+1,y)||nb(x-1,y)||nb(x,y+1)||nb(x,y-1)?"物のすぐ隣を歩いた。":null; }});
+H("nearThing",{w:"物（机、ロッカーなど）のすぐ隣（上下左右の4マス）を歩いてはならない。壁の隣は大丈夫。",n:"物と上下左右で接しているマスに入った。",t:"赤く薄く塗られたマスが禁止の範囲。物から1マス離れて歩く。",see:[["desk","物"]],near:1});
+R({id:"tapRate2",g:"misc",text:"画面を1秒間に2回以上タップしてはならない",ic:["hand"],ban:true,tapR:2});
+H("tapRate2",Object.assign({},HELP.tapRate,{w:"画面（マップ）を、1秒間に2回以上タップしてはならない。連打にとても厳しい版。",n:"1秒の間にマップを2回以上タップした。"}));
+RM.noNearObj.near=true;
+RM.noLeft.place={x:[8,15]}; RM.noRight.place={x:[0,7]}; RM.noMidCol.place={sameX:true}; RM.noTop.place={y:[4,7]}; RM.noBottom.place={y:[1,4]}; RM.noMidRow.place={sameY:true}; RM.zt_top.place={y:[3,7]}; RM.zt_bot.place={y:[1,5]};
+for(let d=0;d<4;d++) RM["dr_"+d].place={dno:d};
+FCS.forEach(([k])=>{ RM[`fc_${k}_runMust`].startSt=1; RM[`fc_${k}_crouchMust`].startSt=2; });
+const NEWN=RULES.length-NEW0;
+
 /* ================= 画面 ================= */
 function buildHow(){
-  $("#how").innerHTML=[["camera","規則は階ごとにランダム。全部で"+RULES.length+"種類"],["stairs","10Fから階段を降りて、1Fの出口へ"],["gear","タップ・スティック・ボタン・キーボード・コントローラーで遊べる"]].map(([n,t])=>`<div>${svg(n,{size:44,color:"#e9e5da",ban:n==="camera"?false:false}).replace('class="ic"','class="ic"')}${t}</div>`).join("");
+  $("#how").innerHTML=[["camera","規則は階ごとにランダム。全部で"+RULES.length+"種類"],["stairs","10Fから階段を降りて1Fの出口へ。アイテムを拾って持ち運べる"],["gear","タップ・スティック・ボタン・キーボード・コントローラーで遊べる"]].map(([n,t])=>`<div>${svg(n,{size:44,color:"#e9e5da",ban:n==="camera"?false:false}).replace('class="ic"','class="ic"')}${t}</div>`).join("");
 }
 function buildList(){
   const groups={}; RULES.forEach(r=>{(groups[r.g]=groups[r.g]||[]).push(r);});
   $("#listK").textContent=`全${RULES.length}種の規則`;
-  $("#listBody").innerHTML=Object.keys(GROUPNAME).map(g=>`<div class="hdr">${GROUPNAME[g]}（${(groups[g]||[]).length}）</div><div class="grid">${(groups[g]||[]).map(r=>cardHTML(r,null)).join("")}</div>`).join("");
+  const q=($("#listQ").value||"").trim(), body=$("#listBody");
+  if(q){
+    const m=RULES.filter(r=>r.text.includes(q)||(HELP[r.id]&&HELP[r.id].w.includes(q)));
+    body.innerHTML=`<div class="hdr">「${q.replace(/</g,"&lt;")}」に合う規則：${m.length}件${m.length>120?"（先頭の120件を表示）":""}</div><div class="grid">${m.slice(0,120).map(r=>cardHTML(r,null)).join("")}</div>`;
+    return;
+  }
+  body.innerHTML=Object.keys(GROUPNAME).map(g=>`<button class="gh" type="button" data-g="${g}"><span>${GROUPNAME[g]}</span><b>${(groups[g]||[]).length}</b>${svg("chev",{size:18,color:"#8d979e"})}</button><div class="grid" data-gg="${g}" style="display:none"></div>`).join("");
+  body.querySelectorAll(".gh").forEach(h=>h.addEventListener("click",()=>{ const g=h.dataset.g,box=body.querySelector(`[data-gg="${g}"]`); const open=box.style.display==="none"; box.style.display=open?"grid":"none"; h.classList.toggle("open",open); if(open&&!box.innerHTML) box.innerHTML=(groups[g]||[]).map(r=>cardHTML(r,null)).join(""); }));
 }
+$("#listQ").addEventListener("input",buildList);
 $("#startBtn").addEventListener("click",()=>{ audio(); newRun(); });
 $("#contBtn").addEventListener("click",()=>{ const sv=store.get("ks_save",null); if(!sv) return; audio(); G.seed=sv.seed; G.floor=sv.floor; G.mode="fade"; doors(sv.floor+"F","",()=>enterFloor(sv.floor)); });
-$("#allBtn").addEventListener("click",()=>{ buildList(); showScreen("list"); G._back="title"; });
-$("#listBtn").addEventListener("click",()=>{ buildList(); G._back=G.mode; if(G.mode==="play") G.paused=true; showScreen("list"); });
+$("#allBtn").addEventListener("click",()=>{ $("#listQ").value=""; buildList(); showScreen("list"); G._back="title"; });
+$("#listBtn").addEventListener("click",()=>{ $("#listQ").value=""; buildList(); G._back=G.mode; if(G.mode==="play") G.paused=true; showScreen("list"); });
 $("#listClose").addEventListener("click",()=>{ if(G._back==="title"||!G.run) showScreen("title"); else if(G._back==="play"){ G.paused=false; showScreen(null); } else if(G._back==="brief") showScreen("brief"); else if(G._back==="dead") showScreen("dead"); else showScreen("title"); });
 $("#menuBtn").addEventListener("click",()=>{ G.mode="title"; titleInfo(); showScreen("title"); });
 $("#rulesBtn").addEventListener("click",()=>$("#sheet").classList.toggle("show"));
@@ -1288,7 +1513,7 @@ function titleInfo(){
   $("#best").textContent=G.best<=10?(G.best===0?"最高記録：脱出済み":`最高記録：${G.best}F まで到達`):"規則は全部で"+RULES.length+"種類。毎回ランダムに選ばれる。"; }
 
 applyCalm(); applyCtl(); buildTower(); fit(); buildHow(); titleInfo(); renderStance(); requestAnimationFrame(loop);
-window.__g={VERSION,openHelp,closeHelp,HELP,G,S,IN,RM,MAPS,pickRules,mulberry,openSettings,closeSettings,RULES,genFloor,solve,enterFloor,newRun,update,advance,buildRun,setStance,tileOf,die,mk:()=>G.run};
+window.__g={buildLayoutX:(rules,n,rng)=>buildLayout(n,rules,rng),VERSION,openHelp,closeHelp,HELP,G,S,IN,RM,MAPS,pickRules,mulberry,openSettings,closeSettings,RULES,genFloor,solve,enterFloor,newRun,update,advance,buildRun,setStance,tileOf,die,mk:()=>G.run};
 })();
 </script>
 </body>
