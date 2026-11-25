@@ -211,7 +211,7 @@ h1 span{color:var(--red)}
 <body>
 <div id="app">
   <div id="bar">
-    <span class="zone">規則を守れ!</span><span class="ver">v2.2.0</span><span id="info"></span><span class="sp"></span>
+    <span class="zone">規則を守れ!</span><span class="ver">v2.2.1</span><span id="info"></span><span class="sp"></span>
     <button class="tbtn" id="rulesBtn">規則書</button><button class="tbtn" id="listBtn">全規則</button><button class="tbtn" id="setTop">設定</button><button class="tbtn" id="menuBtn">タイトル</button>
   </div>
   <div id="main">
@@ -230,7 +230,7 @@ h1 span{color:var(--red)}
   <p class="lead">あなたは10階にいる。出口は1階。<br>階ごとに規則は毎回ランダムに変わる。読み、守り、階段を降りろ。</p>
   <div class="how" id="how"></div>
   <div class="row"><button class="btn red" id="contBtn" style="display:none"></button><button class="btn red" id="startBtn">スタート</button><button class="btn ghost" id="modeBtn">モード</button><button class="btn ghost" id="achBtn">実績</button><button class="btn ghost" id="allBtn">規則を見る</button><button class="btn ghost" id="setBtn">設定</button></div>
-  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><p class="lead" style="margin-top:6px;font-size:13px;color:#e9e5da" id="rank"></p><div class="ver" style="text-align:center">v2.2.0</div>
+  <p class="lead" style="margin-top:20px;font-size:13px" id="best"></p><p class="lead" style="margin-top:6px;font-size:13px;color:#e9e5da" id="rank"></p><div class="ver" style="text-align:center">v2.2.1</div>
 </div></section>
 
 <section id="brief" class="screen"><div class="box">
@@ -272,7 +272,7 @@ h1 span{color:var(--red)}
   <div id="sndList"></div>
   <div class="hdr">キーボード / コントローラー</div>
   <div class="keys" id="keyHelp"></div>
-  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.2.0</div>
+  <div class="row" style="margin:18px 0 6px"><button class="btn" id="setClose">閉じる</button></div><div class="ver" style="text-align:center">規則を守れ! バージョン v2.2.1</div>
 </div></section>
 
 <script>
@@ -883,7 +883,7 @@ function buildRun(){
     preview:null,taps:[],tile:fl.start.y*GW+fl.start.x,ap:null,apI:0,dim:0,alarmA:0,lastCam:null};
   renderStance();
 }
-$("#goBtn").addEventListener("click",()=>{ audio(); G.run.started=true; G.mode="play"; showScreen(null); fit(); });
+$("#goBtn").addEventListener("click",()=>{ audio(); G.run.still=-2.5; G.run.started=true; G.mode="play"; showScreen(null); fit(); });
 
 /* ================= 設定・音 ================= */
 const SD=[["ui","ボタン","hand"],["tap","タップ","tile"],["step","足音","walk"],["pick","アイテム取得","key"],["down","階段を降りる","stairs"],["die","違反","bolt"],["alarm","警報","bell"],["chime","チャイム","clock"],["clear","脱出","exit"]];
